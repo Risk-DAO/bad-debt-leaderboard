@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/backstop-protocol/bad-debt-leaderboard#readme",
   "dependencies": {
+    "axios": "^0.27.2",
+    "node-libcurl": "^2.3.4",
     "web3": "^1.7.3"
   }
 }

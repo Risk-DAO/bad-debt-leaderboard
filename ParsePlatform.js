@@ -1,26 +1,32 @@
 const Addresses = require("./Addresses.js")
 
 class User {
-    constructor(marketsIn, borrowBalance, collateralBalace, error) {
+    constructor(user, marketsIn, borrowBalance, collateralBalace, error) {
         this.marketsIn = marketsIn
         this.borrowBalance = borrowBalance
         this.collateralBalace = collateralBalace
         this.error = error
+        this.user = user
     }
 
     getUserNetValue(web3, prices) {
+        //console.log(this.user, this.error, this.marketsIn, this.collateralBalace, this.prices)
+
         let netValue = web3.utils.toBN("0")
         const _1e18 = web3.utils.toBN(web3.utils.toWei("1"))
 
         for(const market of this.marketsIn) {
+            // ignore the account if no price or no collateral/debt values
+            // in IB there are assets that no longer appear in the market assets. but are part of asset in (go figure...)
+            if(this.collateralBalace[market] === undefined ||
+                prices[market].toString() === web3.utils.toBN("0").toString() ||
+                this.borrowBalance[market] === undefined ) return web3.utils.toBN("0")
             const plus = web3.utils.toBN(this.collateralBalace[market]).mul(prices[market]).div(_1e18)
             const minus = web3.utils.toBN(this.borrowBalance[market]).mul(prices[market]).div(_1e18)
             netValue = netValue.add(plus).sub(minus)
             //console.log("asset", market, "plus", plus.toString(), "minus", minus.toString(), this.collateralBalace[market].toString(), 
             //this.borrowBalance[market].toString(), prices[market].toString())
 
-            // ignore this account for now
-            if(prices[market].toString() === web3.utils.toBN("0").toString()) return web3.utils.toBN("0")
         }
 
         return netValue
@@ -38,6 +44,7 @@ class Compound {
       this.usdcAddress = Addresses.usdcAddress[network]
       this.deployBlock = compoundInfo[network].deployBlock
       this.blockStepInInit = compoundInfo[network].blockStepInInit
+      this.multicallSize = compoundInfo[network].multicallSize
 
       this.prices = {}
       this.markets = []
@@ -54,7 +61,7 @@ class Compound {
         const currBlock = await this.web3.eth.getBlockNumber() - 10
 
         await this.initPrices()
-        await this.collectAllUsers()
+        if(this.userList.length == 0) await this.collectAllUsers()
         await this.updateAllUsers()
 
         this.lastUpdateBlock = currBlock
@@ -141,6 +148,9 @@ class Compound {
         }
 
         console.log({accountsToUpdate})
+        for(const a of accountsToUpdate) {
+            if(! this.userList.includes(a)) this.userList.push(a)            
+        }
 
         await this.updateUsers(accountsToUpdate)
     }
@@ -149,10 +159,20 @@ class Compound {
         const currBlock = await this.web3.eth.getBlockNumber() - 10
         console.log({currBlock})
         for(let startBlock = this.deployBlock ; startBlock < currBlock ; startBlock += this.blockStepInInit) {
-            console.log({startBlock}, this.userList.length)
+            console.log({startBlock}, this.userList.length, this.blockStepInInit)
 
             const endBlock = (startBlock + this.blockStepInInit > currBlock) ? currBlock : startBlock + this.blockStepInInit
-            const events = await this.comptroller.getPastEvents("MarketEntered", {fromBlock: startBlock, toBlock:endBlock})
+            let events
+            try {
+                // Try to run this code
+                events = await this.comptroller.getPastEvents("MarketEntered", {fromBlock: startBlock, toBlock:endBlock})
+            }
+            catch(err) {
+                // if any error, Code throws the error
+                console.log("call failed, trying again", err.toString())
+                startBlock -= this.blockStepInInit // try again
+                continue
+            }
             for(const e of events) {
                 const a = e.returnValues.account
                 if(! this.userList.includes(a)) this.userList.push(a)
@@ -175,12 +195,18 @@ class Compound {
 
     async updateAllUsers() {
         const users = this.userList //require('./my.json')
-        const bulkSize = 500
+        const bulkSize = this.multicallSize
         for(let i = 0 ; i < users.length ; i+= bulkSize) {
             const start = i
             const end = i + bulkSize > users.length ? users.length : i + bulkSize
-            console.log("update", i)
-            await this.updateUsers(users.slice(start, end))
+            console.log("update", i.toString() + " / " + users.length.toString())
+            try {
+                await this.updateUsers(users.slice(start, end))
+            }
+            catch(err) {
+                console.log("update user failed, trying again", err)
+                i -= bulkSize
+            }
         }
         /*
         require('fs').writeFile(
@@ -209,9 +235,9 @@ class Compound {
             //console.log({user})
             //console.log(this.users[user])
             //const data = this.users[user]
-            const userData = new User(data.marketsIn, data.borrowBalance, data.collateralBalace, data.error)
+            const userData = new User(user, data.marketsIn, data.borrowBalance, data.collateralBalace, data.error)
             //console.log({user})
-            const netValue = userData.getUserNetValue(web3, this.prices)
+            const netValue = userData.getUserNetValue(this.web3, this.prices)
             if(this.web3.utils.toBN(netValue).lt(this.web3.utils.toBN("0"))) {
                 const result = await this.comptroller.methods.getAccountLiquidity(user).call()
                 console.log("bad debt for user", user, Number(netValue.toString())/1e6, {result})
@@ -290,16 +316,26 @@ class Compound {
                 globalIndex++
             }
 
-            const userData = new User(assetsIn, borrowBalances, collateralBalances, ! success)
+            const userData = new User(user, assetsIn, borrowBalances, collateralBalances, ! success)
             this.users[user] = userData
         }
     }
   }
 
 
+module.exports = { Compound }
+/*
+const Web3 = require("web3")
+
+
 
 async function test() {
-    const comp = new Compound(Addresses.rariTetranodeAddress, "ETH", web3)
+    //const comp = new Compound(Addresses.traderJoeAddress, "AVAX", web3)
+    //const comp = new Compound(Addresses.ironBankAddress, "AVAX", web3)
+    //const comp = new Compound(Addresses.ironBankAddress, "ETH", web3)
+    const comp = new Compound(Addresses.venusAddress, "BSC", web3)
+
+        
     await comp.main()
     //await comp.updateUsers(["0x6C09184c823CC246435d1287F0AA3948742830E0","0x16b134c44170d78e2f8cad567bb70462dbf05a04"])
     //await comp.collectAllUsers()
@@ -309,4 +345,4 @@ async function test() {
     //await comp.calcBadDebt()
  }
 
- test()
+ test()*/
