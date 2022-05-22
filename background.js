@@ -3,24 +3,38 @@ require('dotenv').config()
 
 const jobs = [
   {
-    file: 'CompoundParser',
-    addresses: 'ovixAddress',
-    chain: 'MATIC',
+    file: 'ParseOvix',
     name: 'polygon_ovix'
   },  
   {
     file: 'ParseVenus',
-    addresses: 'venusAddress',
-    chain: 'BSC',
     name: 'BSC_venus'
+  },  
+  {
+    file: 'ParseRari',
+    name: 'ethereum_rari'
+  },  
+  {
+    file: 'ParseTraderJoe',
+    name: 'avalanche_trader-joe'
+  },  
+  {
+    file: 'ParseCompound',
+    name: 'ethereum_compound'
+  },  
+  {
+    file: 'ParseIronBank',
+    name: 'ethereum_iron-bank'
+  },  
+  {
+    file: 'ParseBenqi',
+    name: 'avalanche_benqi'
   },
 ]
 
 for(let job of jobs) {
   const backgroundJobs = fork('./backgroundJobs/jobRuner.js', [
     '-f', job.file, 
-    '-a', job.addresses, 
-    '-c', job.chain,
     '-n', job.name,
   ]);
   backgroundJobs.on('error', err => console.error)

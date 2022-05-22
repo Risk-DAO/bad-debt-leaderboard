@@ -1,11 +1,16 @@
 const axios = require('axios');
 const Addresses = require("./Addresses.js")
 const Compound = require("./CompoundParser")
+const Web3 = require("web3")
+require('dotenv').config()
 
-class VenusParser extends Compound.Compound {
-    constructor(compoundInfo, network, web3, covalentApiKey) {
+
+class VenusParser extends Compound {
+    constructor() {
+        const compoundInfo = Addresses.venusAddress
+        const network = 'BSC'
+        const web3 = new Web3(process.env.BSC_NODE_URL)
         super(compoundInfo, network, web3, 24 * 5)
-        this.covalentApiKey = covalentApiKey
     }
 
     async collectAllUsers() {
