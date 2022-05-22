@@ -34,7 +34,7 @@ class User {
 }
 
 class Compound {
-    constructor(compoundInfo, network, web3) {
+    constructor(compoundInfo, network, web3, heavyUpdateInterval = 24) {
       this.web3 = web3
       this.network = network
       this.comptroller = new web3.eth.Contract(Addresses.comptrollerAbi, compoundInfo[network].comptroller)
@@ -55,33 +55,42 @@ class Compound {
       this.lastUpdateBlock = 0
 
       this.mainCntr = 0
+      this.usdcDecimals = 6
+      this.heavyUpdateInterval = heavyUpdateInterval
+
+      this.output = {}
     }
 
     async heavyUpdate() {
         const currBlock = await this.web3.eth.getBlockNumber() - 10
+        const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp        
 
         await this.initPrices()
         if(this.userList.length == 0) await this.collectAllUsers()
         await this.updateAllUsers()
-
-        this.lastUpdateBlock = currBlock
     }
 
     async lightUpdate() {
         const currBlock = await this.web3.eth.getBlockNumber() - 10
+        const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp
 
         await this.periodicUpdateUsers(this.lastUpdateBlock)
-        await this.calcBadDebt()
-
-        this.lastUpdateBlock = currBlock
+        //await this.calcBadDebt(currTime) 
     }
 
     async main() {
-        if(this.mainCntr % 24 == 0) await this.heavyUpdate()
+        const currBlock = await this.web3.eth.getBlockNumber() - 10
+        const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp
+
+        const usdcContract = new this.web3.eth.Contract(Addresses.cTokenAbi, this.usdcAddress)
+        this.usdcDecimals = Number(await usdcContract.methods.decimals().call())
+        console.log("usdc decimals", this.usdcDecimals)
+        if(this.mainCntr % this.heavyUpdateInterval == 0) await this.heavyUpdate()
         else await this.lightUpdate()
 
+
         console.log("calc bad debt")
-        await this.calcBadDebt()
+        await this.calcBadDebt(currTime)
         
         console.log("sleeping", this.mainCntr++)
 
@@ -223,32 +232,30 @@ class Compound {
         );*/        
     }
 
-    async calcBadDebt() {
-        // reset bad debt
+    async calcBadDebt(currTime) {
         this.sumOfBadDebt = this.web3.utils.toBN("0")
-        //this.users = require('./users.json')
-        //await this.updateUsers(["0xEaD38EC4220729bad12ec8A51E823b8BEBE0423E"])
-        //console.log(this.users["0xEaD38EC4220729bad12ec8A51E823b8BEBE0423E"])
+
+        const userWithBadDebt = []
         
         for(const [user, data] of Object.entries(this.users)) {
-            //if(user !== "0xEaD38EC4220729bad12ec8A51E823b8BEBE0423E") continue
-            //console.log({user})
-            //console.log(this.users[user])
-            //const data = this.users[user]
+
             const userData = new User(user, data.marketsIn, data.borrowBalance, data.collateralBalace, data.error)
             //console.log({user})
             const netValue = userData.getUserNetValue(this.web3, this.prices)
             if(this.web3.utils.toBN(netValue).lt(this.web3.utils.toBN("0"))) {
-                const result = await this.comptroller.methods.getAccountLiquidity(user).call()
-                console.log("bad debt for user", user, Number(netValue.toString())/1e6, {result})
+                //const result = await this.comptroller.methods.getAccountLiquidity(user).call()
+                console.log("bad debt for user", user, Number(netValue.toString())/1e6/*, {result}*/)
                 this.sumOfBadDebt = this.sumOfBadDebt.add(this.web3.utils.toBN(netValue), userData)
 
                 console.log("total bad debt", Number(this.sumOfBadDebt.toString()) / 1e6)
-                //sd
+                
+                userWithBadDebt.push({"user" : user, "badDebt" : netValue.toString()})
             }
         }
 
-        console.log("total bad debt", this.sumOfBadDebt.toString())
+        this.output = { "total" :  this.sumOfBadDebt.toString(), "updated" : currTime.toString(), "decimals" : this.usdcDecimals.toString(), "users" : userWithBadDebt }
+
+        console.log("total bad debt", this.sumOfBadDebt.toString(), {currTime})
 
         return this.sumOfBadDebt
     }
@@ -332,8 +339,8 @@ const Web3 = require("web3")
 async function test() {
     //const comp = new Compound(Addresses.traderJoeAddress, "AVAX", web3)
     //const comp = new Compound(Addresses.ironBankAddress, "AVAX", web3)
-    //const comp = new Compound(Addresses.ironBankAddress, "ETH", web3)
-    const comp = new Compound(Addresses.venusAddress, "BSC", web3)
+    const comp = new Compound(Addresses.ironBankAddress, "ETH", web3)
+    //const comp = new Compound(Addresses.venusAddress, "BSC", web3)
 
         
     await comp.main()
@@ -345,4 +352,5 @@ async function test() {
     //await comp.calcBadDebt()
  }
 
- test()*/
+ test()
+ */
