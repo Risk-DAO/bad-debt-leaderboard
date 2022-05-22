@@ -79,20 +79,26 @@ class Compound {
     }
 
     async main() {
-        const currBlock = await this.web3.eth.getBlockNumber() - 10
-        const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp
+        try {
+            const currBlock = await this.web3.eth.getBlockNumber() - 10
+            const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp
 
-        const usdcContract = new this.web3.eth.Contract(Addresses.cTokenAbi, this.usdcAddress)
-        this.usdcDecimals = Number(await usdcContract.methods.decimals().call())
-        console.log("usdc decimals", this.usdcDecimals)
-        if(this.mainCntr % this.heavyUpdateInterval == 0) await this.heavyUpdate()
-        else await this.lightUpdate()
+            const usdcContract = new this.web3.eth.Contract(Addresses.cTokenAbi, this.usdcAddress)
+            this.usdcDecimals = Number(await usdcContract.methods.decimals().call())
+            console.log("usdc decimals", this.usdcDecimals)
+            if(this.mainCntr % this.heavyUpdateInterval == 0) await this.heavyUpdate()
+            else await this.lightUpdate()
 
 
-        console.log("calc bad debt")
-        await this.calcBadDebt(currTime)
-        
-        console.log("sleeping", this.mainCntr++)
+            console.log("calc bad debt")
+            await this.calcBadDebt(currTime)
+
+            // don't  increase cntr, this way if heavy update is needed, it will be done again next time
+            console.log("sleeping", this.mainCntr++)
+        }
+        catch(err) {
+            console.log("main failed", {err})
+        }
 
         setTimeout(this.main.bind(this), 1000 * 60 * 60) // sleep for 1 hour
     }
@@ -255,6 +261,8 @@ class Compound {
 
         this.output = { "total" :  this.sumOfBadDebt.toString(), "updated" : currTime.toString(), "decimals" : this.usdcDecimals.toString(), "users" : userWithBadDebt }
 
+        console.log(JSON.stringify(this.output))
+
         console.log("total bad debt", this.sumOfBadDebt.toString(), {currTime})
 
         return this.sumOfBadDebt
@@ -352,5 +360,4 @@ async function test() {
     //await comp.calcBadDebt()
  }
 
- test()
- */
+ test()*/
