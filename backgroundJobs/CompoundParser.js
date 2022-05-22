@@ -330,7 +330,7 @@ class Compound {
   }
 
 
-module.exports = { Compound }
+module.exports = Compound
 /*
 const Web3 = require("web3")
 

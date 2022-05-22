@@ -1,11 +1,10 @@
 const axios = require('axios');
 const Addresses = require("./Addresses.js")
-const Compound = require("./ParsePlatform.js")
-
+const Compound = require("./CompoundParser")
 
 class VenusParser extends Compound.Compound {
     constructor(compoundInfo, network, web3, covalentApiKey) {
-        super(compoundInfo, network, web3)
+        super(compoundInfo, network, web3, 24 * 5)
         this.covalentApiKey = covalentApiKey
     }
 
@@ -44,13 +43,14 @@ class VenusParser extends Compound.Compound {
     }
 }
 
+module.exports = VenusParser
 
-async function test() {
-    const Web3 = require("web3")
-    const web3 = new Web3("https://bsc-dataseed1.defibit.io/")    
+// async function test() {
+//     const Web3 = require("web3")
+//     const web3 = new Web3("https://bsc-dataseed1.defibit.io/")    
 
-    const comp = new VenusParser(Addresses.venusAddress, "BSC", web3)
-    await comp.main()    
-}
+//     const comp = new VenusParser(Addresses.venusAddress, "BSC", web3)
+//     await comp.main()    
+// }
 
-test()
+// test()
