@@ -4,7 +4,7 @@ require('dotenv').config()
 const jobs = [
   {
     file: 'ParseOvix',
-    name: 'polygon_ovix'
+    name: 'polygon_0vix'
   },  
   {
     file: 'ParseVenus',
@@ -12,7 +12,7 @@ const jobs = [
   },  
   {
     file: 'ParseRari',
-    name: 'ethereum_rari'
+    name: 'ethereum_rari-capital'
   },  
   {
     file: 'ParseTraderJoe',
