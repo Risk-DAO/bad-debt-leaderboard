@@ -4,8 +4,12 @@ const app = express()
 const port = process.env.SERVER_PORT
 const {version} = require('./package.json')
 const badDebtCache = require('./badDebtCache')
+const cors = require('cors')
+
 
 const everyHour = 1000 * 60 * 60
+
+app.use(cors())
 
 app.get('/bad-debt', (req, res) => {
   try{
@@ -24,7 +28,7 @@ app.use(express.static('public'))
 
 const startServer = async ()=> {
   await badDebtCache.init()
-  setInterval(badDebtCache.init, everyHour)
+  setInterval(badDebtCache.init, everyHour)  
 
   app.listen(port, () => {
     console.log(`listening on port ${port}`)
