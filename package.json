@@ -20,6 +20,7 @@
     "aws-sdk": "^2.1140.0",
     "axios": "^0.27.2",
     "command-line-args": "^5.2.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "node-libcurl": "^2.3.4",
     "web3": "^1.7.3"
