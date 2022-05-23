@@ -1,10 +1,16 @@
 import { makeAutoObservable, runInAction } from "mobx"
 import axios from "axios"
+import web3Utils from "web3-utils"
+
+const deciamlNameMap = Object.assign({}, ...Object.entries(web3Utils.unitMap).map(([a,b]) => ({ [b]: a })))
+const isLocalHost = window.location.hostname === 'localhost'
+const apiUrl = isLocalHost ? 'http://localhost:8000' : ''
 
 class MainStore {
 
   tableData = []
   loading = true
+
 
   constructor () {
     makeAutoObservable(this)
@@ -12,11 +18,13 @@ class MainStore {
   }
 
   init = async () => {
-    const {data: badDebt} = await axios.get('http://localhost:8000/bad-debt')
-    debugger
+
+    const {data: badDebt} = await axios.get(apiUrl + '/bad-debt')
+    
     const promises = Object.entries(badDebt).map(async ([k, v])=> {
       const [chain, platform] = k.split('_')
-      const {total, updated, users} = v
+      const {total, updated, users, decimals} = v
+
       // ['Name', 'Blockchains', 'TVL', 'Bad Debt (USD)', 'last update', 'Details']
       let tvl;
       try{
@@ -24,11 +32,13 @@ class MainStore {
       } catch (e) {
         console.error(e)
       }
+      const decimalName = deciamlNameMap[Math.pow(10, decimals).toString()]
+      const totalDebt = Math.abs(parseFloat(web3Utils.fromWei(total, decimalName)))
       return {
         platform,
         chain,
         tvl,
-        total,
+        total: totalDebt,
         updated,
         users,
       }
