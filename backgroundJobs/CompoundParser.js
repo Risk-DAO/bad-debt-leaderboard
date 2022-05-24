@@ -178,8 +178,9 @@ class Compound {
             if(! this.userList.includes(a)) this.userList.push(a)            
         }
         // updating users in slices
-        for (let i = 0; i < accountsToUpdate.length; i = i + 10) {
-            const to = i + 10 > accountsToUpdate.length ? accountsToUpdate.length : i + 10
+        const bulkSize = this.multicallSize
+        for (let i = 0; i < accountsToUpdate.length; i = i + bulkSize) {
+            const to = i + bulkSize > accountsToUpdate.length ? accountsToUpdate.length : i + bulkSize
             const slice = accountsToUpdate.slice(i, to)
             await this.updateUsers(slice)
         }
