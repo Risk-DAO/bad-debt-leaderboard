@@ -15,7 +15,9 @@ function run() {
     const { file, } = options
     const CompoundParser = require(`./${file}`)
     comp = new CompoundParser()
-    comp.main() 
+    comp.main()
+    setInterval(comp.main, everyHour)
+    setInterval(writeOutput, everyHour)
 }
 
 function writeOutput (){
@@ -25,4 +27,3 @@ function writeOutput (){
 }
 
 run()
-setInterval(writeOutput, everyHour)

@@ -15,6 +15,7 @@ const init = async () => {
       const file = await getJsonFile(obj.Key)
       badDebtCache[obj.Key.replace('.json', '')] = JSON.parse(file.Body.toString())
     }
+    console.log('badDebtCache done')
   } catch (err) {
     console.error(err)
     process.exit(1)
