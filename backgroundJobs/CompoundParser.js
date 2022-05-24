@@ -133,7 +133,7 @@ class Compound {
 
     async getPastEventsInSteps(cToken, key, from, to){
         let totalEvents = []
-        for (let i = from; i < to; i = i + this.blockStepInInit){
+        for (let i = from; i < to; i = i + this.blockStepInInit) {
             const fromBlock = i
             const toBlock = i + this.blockStepInInit > to ? to : i + this.blockStepInInit
             const events = await cToken.getPastEvents(key, {fromBlock, toBlock})
@@ -177,8 +177,12 @@ class Compound {
         for(const a of accountsToUpdate) {
             if(! this.userList.includes(a)) this.userList.push(a)            
         }
-
-        await this.updateUsers(accountsToUpdate)
+        // updating users in slices
+        for (let i = 0; i < accountsToUpdate.length; i = i + 10) {
+            const to = i + 10 > accountsToUpdate.length ? accountsToUpdate.length : i + 10
+            const slice = accountsToUpdate.slice(i, to)
+            await this.updateUsers(slice)
+        }
     }
 
     async collectAllUsers() {
