@@ -131,6 +131,17 @@ class Compound {
         }
     }
 
+    async getPastEventsInSteps(cToken, key, from, to){
+        let totalEvents = []
+        for (let i = from; i < to; i = i + this.blockStepInInit) {
+            const fromBlock = i
+            const toBlock = i + this.blockStepInInit > to ? to : i + this.blockStepInInit
+            const events = await cToken.getPastEvents(key, {fromBlock, toBlock})
+            totalEvents = totalEvents.concat(events)
+        }
+        return totalEvents
+    }
+
     async periodicUpdateUsers(lastUpdatedBlock) {
         const accountsToUpdate = []
         const currBlock = await this.web3.eth.getBlockNumber() - 10
@@ -150,7 +161,7 @@ class Compound {
             for (const key of keys) {
                 const value = events[key]
                 console.log({key}, {value})
-                const newEvents = await ctoken.getPastEvents(key, {fromBlock: lastUpdatedBlock, toBlock:currBlock})
+                const newEvents = await this.getPastEventsInSteps(ctoken, key, lastUpdatedBlock, currBlock) 
                 for(const e of newEvents) {
                     for(const field of value) {
                         console.log({field})
@@ -166,8 +177,13 @@ class Compound {
         for(const a of accountsToUpdate) {
             if(! this.userList.includes(a)) this.userList.push(a)            
         }
-
-        await this.updateUsers(accountsToUpdate)
+        // updating users in slices
+        const bulkSize = this.multicallSize
+        for (let i = 0; i < accountsToUpdate.length; i = i + bulkSize) {
+            const to = i + bulkSize > accountsToUpdate.length ? accountsToUpdate.length : i + bulkSize
+            const slice = accountsToUpdate.slice(i, to)
+            await this.updateUsers(slice)
+        }
     }
 
     async collectAllUsers() {

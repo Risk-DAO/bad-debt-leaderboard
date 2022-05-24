@@ -11,7 +11,7 @@ function App() {
         <article>
           <h1>Compound Forks Bad Debt</h1>
           <p>
-            this risk table was made by Yaron Velner
+            this risk table was made by the Risk DAO
 
           </p>
         </article>
