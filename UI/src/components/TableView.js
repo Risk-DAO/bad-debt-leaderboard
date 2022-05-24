@@ -4,6 +4,7 @@ import ChainIcon from "./ChainIcon";
 import PlatformIcon from "./PlatformIcon";
 import LastUpdate from "./LastUpdate";
 import WhaleFriendly from "./WhaleFriendly";
+import BadDebtUsers from "./BadDebtUsers";
 
 class TableView extends Component {
 
@@ -42,7 +43,7 @@ class TableView extends Component {
                 return (<td><LastUpdate timestamp={v}/></td>)
               }               
               if (k === 'users'){
-                return (<td>{v.length}</td>)
+                return (<td><BadDebtUsers data={row}/></td>)
               }            
             })}
           </tr>)}

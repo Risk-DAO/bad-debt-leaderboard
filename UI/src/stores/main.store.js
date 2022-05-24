@@ -3,14 +3,14 @@ import axios from "axios"
 import web3Utils from "web3-utils"
 
 const deciamlNameMap = Object.assign({}, ...Object.entries(web3Utils.unitMap).map(([a,b]) => ({ [b]: a })))
-const isLocalHost = window.location.hostname === 'localhost'
-const apiUrl = isLocalHost ? 'http://localhost:8000' : ''
+
 
 class MainStore {
 
   tableData = []
   loading = true
-
+  isLocalHost = window.location.hostname === 'localhost'
+  apiUrl = this.isLocalHost ? 'http://localhost:8000' : ''
 
   constructor () {
     makeAutoObservable(this)
@@ -19,7 +19,7 @@ class MainStore {
 
   init = async () => {
 
-    const {data: badDebt} = await axios.get(apiUrl + '/bad-debt')
+    const {data: badDebt} = await axios.get(this.apiUrl + '/bad-debt')
     
     const promises = Object.entries(badDebt).map(async ([k, v])=> {
       const [chain, platform] = k.split('_')

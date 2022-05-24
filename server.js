@@ -13,7 +13,16 @@ app.use(cors())
 
 app.get('/bad-debt', (req, res) => {
   try{
-    const bd = badDebtCache.getBadDebt()
+    const platform = req.query.platform
+    let bd
+    if(platform){
+      bd = badDebtCache.getBadDebtBy(platform)
+    } else {
+      bd = badDebtCache.getBadDebt()
+    }
+    if(!bd){
+      res.send(404)
+    }
     res.json(bd)
   } catch(e){
     res.send(500)

@@ -12,7 +12,7 @@ class WhaleFriendly extends Component {
     if(!this.props.num){
       wfn = 'N/A'
     }else if(this.props.num  <= 500) {
-      wfn = this.props.num
+      wfn = this.props.num.toFixed(2)
     }else if(this.props.num / 1000 <= 500) {
       wfn = (this.props.num / 1000).toFixed(2) + 'K'
     } else if(this.props.num / 1000000 <= 500) {

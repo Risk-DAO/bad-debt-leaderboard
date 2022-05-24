@@ -21,6 +21,10 @@ const init = async () => {
   }
 }
 
+const getBadDebtBy = (platfrom) => { 
+  return badDebtCache[platfrom]
+}
+
 const getBadDebt = () => { 
   return badDebtCache
 }
@@ -28,4 +32,5 @@ const getBadDebt = () => {
 module.exports = {
   init,
   getBadDebt,
+  getBadDebtBy
 }
