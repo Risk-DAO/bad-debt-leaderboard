@@ -131,6 +131,17 @@ class Compound {
         }
     }
 
+    async getPastEventsInSteps(cToken, key, from, to){
+        let totalEvents = []
+        for (let i = from; i < to; i = i + this.blockStepInInit){
+            const fromBlock = i
+            const toBlock = i + this.blockStepInInit > to ? to : i + this.blockStepInInit
+            const events = await cToken.getPastEvents(key, {fromBlock, toBlock})
+            totalEvents = totalEvents.concat(events)
+        }
+        return totalEvents
+    }
+
     async periodicUpdateUsers(lastUpdatedBlock) {
         const accountsToUpdate = []
         const currBlock = await this.web3.eth.getBlockNumber() - 10
@@ -150,7 +161,7 @@ class Compound {
             for (const key of keys) {
                 const value = events[key]
                 console.log({key}, {value})
-                const newEvents = await ctoken.getPastEvents(key, {fromBlock: lastUpdatedBlock, toBlock:currBlock})
+                const newEvents = await this.getPastEventsInSteps(ctoken, key, lastUpdatedBlock, currBlock) 
                 for(const e of newEvents) {
                     for(const field of value) {
                         console.log({field})
