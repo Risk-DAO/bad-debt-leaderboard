@@ -33,14 +33,22 @@ const jobs = [
 ]
 
 for(let job of jobs) {
-  const backgroundJobs = fork('./backgroundJobs/jobRuner.js', [
-    '-f', job.file, 
-    '-n', job.name,
-  ]);
-  backgroundJobs.on('error', err => console.error)
-  backgroundJobs.on('data', err => console.log)
-  backgroundJobs.on('exit', code => {
-    console.err(new Error('background jobs exited'))
+  const backgroundJob = fork('./backgroundJobs/jobRuner.js', [
+      '-f', job.file, 
+      '-n', job.name,
+    ],
+    { silent: true }
+  );
+  backgroundJob.stdout.on('data', (data) => {
+    console.log(`${job.name} ${new Date().toLocaleString()} : ${data}`);
+  });
+  
+  backgroundJob.stderr.on('data', (data) => {
+    console.error(`err ${job.name} ${new Date().toLocaleString()} : ${data}`);
+  });
+  
+  backgroundJob.on('exit', code => {
+    console.err(new Error(job.name + ' background job exited'))
     process.exit(code)
   })
 }
