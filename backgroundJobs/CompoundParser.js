@@ -1,5 +1,27 @@
 const Addresses = require("./Addresses.js")
 
+/**
+ * a small retry wrapper with an incrameting 5s sleep delay
+ * @param {*} fn 
+ * @param {*} params 
+ * @param {*} retries 
+ * @returns 
+ */
+async function retry(fn, params, retries = 0) {
+    try {
+        const res = await  fn(...params)
+        if(retries){
+            console.log(`retry success after ${retries} retries`)
+        }
+        return res
+    } catch (e) {
+        retries++
+        console.log(`retry #${retries}`)
+        await new Promise(resolve => setTimeout(resolve, 1000 * 5 * retries))
+        return retry(fn, params, retries)
+    }
+}
+
 class User {
     constructor(user, marketsIn, borrowBalance, collateralBalace, error) {
         this.marketsIn = marketsIn
@@ -136,7 +158,7 @@ class Compound {
         for (let i = from; i < to; i = i + this.blockStepInInit) {
             const fromBlock = i
             const toBlock = i + this.blockStepInInit > to ? to : i + this.blockStepInInit
-            const events = await cToken.getPastEvents(key, {fromBlock, toBlock})
+            const events = await retry(cToken.getPastEvents, [key, {fromBlock, toBlock}])
             totalEvents = totalEvents.concat(events)
         }
         return totalEvents
@@ -182,7 +204,7 @@ class Compound {
         for (let i = 0; i < accountsToUpdate.length; i = i + bulkSize) {
             const to = i + bulkSize > accountsToUpdate.length ? accountsToUpdate.length : i + bulkSize
             const slice = accountsToUpdate.slice(i, to)
-            await this.updateUsers(slice)
+            await retry(this.updateUsers, [slice])
         }
     }
 
