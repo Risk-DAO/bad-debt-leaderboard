@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {observer} from "mobx-react"
 
+const tenth = 100
 class WhaleFriendly extends Component {
 
   constructor(props) {
@@ -11,19 +12,19 @@ class WhaleFriendly extends Component {
     let wfn
     if(!this.props.num){
       wfn = 'N/A'
-    }else if(this.props.num  <= 500) {
-      wfn = this.props.num.toFixed(2)
-    }else if(this.props.num / 1000 <= 500) {
-      wfn = (this.props.num / 1000).toFixed(2) + 'K'
-    } else if(this.props.num / 1000000 <= 500) {
-      wfn = (this.props.num / 1000000).toFixed(2) + 'M'
+    }else if(this.props.num  <= tenth) {
+      wfn = Number(this.props.num.toFixed(2))
+    }else if(this.props.num / 1000 <= tenth) {
+      wfn = Number((this.props.num / 1000).toFixed(2)) + 'K'
+    } else if(this.props.num / 1000000 <= tenth) {
+      wfn = Number((this.props.num / 1000000).toFixed(2)) + 'M'
     } else {
-      wfn = (this.props.num / 1000000000).toFixed(2) + 'B'
+      wfn = Number((this.props.num / 1000000000).toFixed(2)) + 'B'
     }
     return (
-      <div>
+      <span>
         {wfn}
-      </div>
+      </span>
     )
   }
 }

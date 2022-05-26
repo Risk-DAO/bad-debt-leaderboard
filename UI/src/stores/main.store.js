@@ -44,7 +44,9 @@ class MainStore {
       }
     })
 
-    const results = await Promise.all(promises)
+    const results = (await Promise.all(promises)).sort((a, b) => {
+      return Number(b.tvl) - Number(a.tvl)
+     })
     
     runInAction(() => {
       this.tableData = results
