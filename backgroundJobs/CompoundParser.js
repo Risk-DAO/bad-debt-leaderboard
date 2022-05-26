@@ -241,19 +241,6 @@ class Compound {
                 if(! this.userList.includes(a)) this.userList.push(a)
             }
         }
-        /*
-        require('fs').writeFile(
-
-            './my.json',
-        
-            JSON.stringify(this.userList),
-        
-            function (err) {
-                if (err) {
-                    console.error('Crap happens');
-                }
-            }
-        );*/        
     }
 
     async updateAllUsers() {
@@ -271,19 +258,6 @@ class Compound {
                 i -= bulkSize
             }
         }
-        /*
-        require('fs').writeFile(
-
-            './users.json',
-        
-            JSON.stringify(this.users),
-        
-            function (err) {
-                if (err) {
-                    console.error('Crap happens');
-                }
-            }
-        );*/        
     }
 
     async calcBadDebt(currTime) {
@@ -385,27 +359,4 @@ class Compound {
     }
   }
 
-
 module.exports = Compound
-/*
-const Web3 = require("web3")
-
-
-
-async function test() {
-    //const comp = new Compound(Addresses.traderJoeAddress, "AVAX", web3)
-    //const comp = new Compound(Addresses.ironBankAddress, "AVAX", web3)
-    const comp = new Compound(Addresses.ironBankAddress, "ETH", web3)
-    //const comp = new Compound(Addresses.venusAddress, "BSC", web3)
-
-        
-    await comp.main()
-    //await comp.updateUsers(["0x6C09184c823CC246435d1287F0AA3948742830E0","0x16b134c44170d78e2f8cad567bb70462dbf05a04"])
-    //await comp.collectAllUsers()
-    //await comp.updateUsers(["0xb3fbE25Be2e8CA097e9ac924e94aF000DD3A5663"])
-    //await comp.updateAllUsers()
-    //await comp.periodicUpdate(14788673 - 1000)
-    //await comp.calcBadDebt()
- }
-
- test()*/
