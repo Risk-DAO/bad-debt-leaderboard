@@ -12,9 +12,12 @@ async function retry(fn, params, retries = 0) {
         const res = await  fn(...params)
         if(retries){
             console.log(`retry success after ${retries} retries`)
+        } else {
+            console.log(`success on first try`)
         }
         return res
     } catch (e) {
+        console.error(e)
         retries++
         console.log(`retry #${retries}`)
         await new Promise(resolve => setTimeout(resolve, 1000 * 5 * retries))
@@ -108,10 +111,15 @@ class Compound {
             const usdcContract = new this.web3.eth.Contract(Addresses.cTokenAbi, this.usdcAddress)
             this.usdcDecimals = Number(await usdcContract.methods.decimals().call())
             console.log("usdc decimals", this.usdcDecimals)
-            if(this.mainCntr % this.heavyUpdateInterval == 0) await this.heavyUpdate()
-            else await this.lightUpdate()
-
-
+            if(this.mainCntr % this.heavyUpdateInterval == 0) {
+                console.log("heavyUpdate start")
+                await this.heavyUpdate()
+                console.log('heavyUpdate success')
+            } else {
+                console.log("lightUpdate start")
+                await this.lightUpdate()
+                console.log('lightUpdate success')
+            }
             console.log("calc bad debt")
             await this.calcBadDebt(currTime)
 
@@ -122,7 +130,7 @@ class Compound {
             console.log("main failed", {err})
         }
 
-        setTimeout(this.main.bind(this), 1000 * 60 * 60) // sleep for 1 hour
+        setTimeout(this.main.bind(this), 1000 * 60 * 30) // sleep for 1 hour
     }
 
     async initPrices() {
@@ -158,7 +166,8 @@ class Compound {
         for (let i = from; i < to; i = i + this.blockStepInInit) {
             const fromBlock = i
             const toBlock = i + this.blockStepInInit > to ? to : i + this.blockStepInInit
-            const events = await retry(cToken.getPastEvents, [key, {fromBlock, toBlock}])
+            const fn = (...args) => cToken.getPastEvents(...args)
+            const events = await retry(fn, [key, {fromBlock, toBlock}])
             totalEvents = totalEvents.concat(events)
         }
         return totalEvents
@@ -204,7 +213,8 @@ class Compound {
         for (let i = 0; i < accountsToUpdate.length; i = i + bulkSize) {
             const to = i + bulkSize > accountsToUpdate.length ? accountsToUpdate.length : i + bulkSize
             const slice = accountsToUpdate.slice(i, to)
-            await retry(this.updateUsers, [slice])
+            const fn = (...args) => this.updateUsers(...args)
+            await retry(fn, [slice])
         }
     }
 
