@@ -122,6 +122,8 @@ class Compound {
             }
             console.log("calc bad debt")
             await this.calcBadDebt(currTime)
+            
+            this.lastUpdateBlock = currBlock
 
             // don't  increase cntr, this way if heavy update is needed, it will be done again next time
             console.log("sleeping", this.mainCntr++)
