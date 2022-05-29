@@ -136,6 +136,9 @@ class Compound {
     }
 
     async initPrices() {
+        if(this.network === 'ETH'){
+            return this.initPricesETH() 
+        }
         console.log("get markets")
         this.markets = await this.comptroller.methods.getAllMarkets().call()
         console.log(this.markets)
@@ -160,6 +163,42 @@ class Compound {
 
             this.prices[market] = this.web3.utils.toBN(price)
             console.log(market, price.toString())
+        }
+    }
+
+    async initPricesETH() {
+        try {
+            // TODO: toBN(toWei(res)).mul(toBN('1).pow(18 - underlying.decimal))
+            this.markets = await this.comptroller.methods.getAllMarkets().call()
+            console.log(this.markets)
+
+            for (const market of this.markets) {
+                let price
+                if (this.web3.utils.toChecksumAddress(market) === this.web3.utils.toChecksumAddress(this.cETHAddress)) {
+                    const { data } = await axios.get("https://pricing-prod.krystal.team/v1/market?addresses=0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee&chain=ethereum@1&sparkline=false")
+                    const apiPrice = data.marketData[0] ? data.marketData[0].price : 0
+                    console.log({ apiPrice })
+                    price = toBN(toWei(apiPrice.toString()))
+                }
+                else {
+                    const ctoken = new this.web3.eth.Contract(Addresses.cTokenAbi, market)
+                    //console.log("getting underlying")
+                    const underlying = await ctoken.methods.underlying().call()
+                    const token = new this.web3.eth.Contract(Addresses.ERC20, underlying)
+                    const decimal = await token.methods.decimals().call()
+                    console.log({ decimal })
+                    const { data } = await axios.get(`https://pricing-prod.krystal.team/v1/market?addresses=${underlying.toLowerCase()}&chain=ethereum@1&sparkline=false`)
+                    const apiPrice = data.marketData[0] ? data.marketData[0].price : 0
+                    const normlizer = (18 - decimal).toString()
+                    console.log({ apiPrice })
+                    price = toBN(toWei(apiPrice.toString())).mul(toBN('10').pow(toBN(normlizer)))
+                }
+                this.prices[market] = this.web3.utils.toBN(price)
+                //output[market] = { newPrice : this.prices[market].div(toBN('10').pow(toBN('12'))).toString() }
+                //console.log(market, price.toString())
+            }
+        } catch (e) {
+            console.error(e)
         }
     }
 
