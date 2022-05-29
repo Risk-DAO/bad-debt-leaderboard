@@ -48,7 +48,7 @@ for(let job of jobs) {
   });
   
   backgroundJob.on('exit', code => {
-    console.err(new Error(job.name + ' background job exited'))
+    console.error(new Error(job.name + ' background job exited'))
     process.exit(code)
   })
 }

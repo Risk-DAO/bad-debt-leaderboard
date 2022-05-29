@@ -132,7 +132,7 @@ class Compound {
             console.log("main failed", {err})
         }
 
-        setTimeout(this.main.bind(this), 1000 * 60 * 30) // sleep for 1 hour
+        setTimeout(this.main.bind(this), 1000 * 60 * 60) // sleep for 1 hour
     }
 
     async initPrices() {
