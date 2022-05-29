@@ -29,7 +29,7 @@ const rariTetranodeAddress = { "ETH" : { "comptroller" : "0x814b02C1ebc9164972D8
     "deployBlock" : 12860109, "blockStepInInit" : 50000, "multicallSize" : 500}}
 
 const venusAddress = { "BSC" : { "comptroller" : "0xfD36E2c2a6789Db23113685031d7F16329158384", "cETH" : "0xA07c5b74C9B40447a954e1466938b865b6BBea36",
-    "deployBlock" : 2471512, "blockStepInInit" : 50000, "multicallSize" : 20}}
+    "deployBlock" : 2471512, "blockStepInInit" : 5000, "multicallSize" : 20}}
 
 const traderJoeAddress = { "AVAX" : { "comptroller" : "0xdc13687554205E5b89Ac783db14bb5bba4A1eDaC", "cETH" : "0xdc13687554205E5b89Ac783db14bb5bba4A1eDaC",
     "deployBlock" : 5449252, "blockStepInInit" : 2048, "multicallSize" : 100}}

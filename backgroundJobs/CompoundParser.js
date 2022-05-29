@@ -1,5 +1,30 @@
 const Addresses = require("./Addresses.js")
 
+/**
+ * a small retry wrapper with an incrameting 5s sleep delay
+ * @param {*} fn 
+ * @param {*} params 
+ * @param {*} retries 
+ * @returns 
+ */
+async function retry(fn, params, retries = 0) {
+    try {
+        const res = await  fn(...params)
+        if(retries){
+            console.log(`retry success after ${retries} retries`)
+        } else {
+            console.log(`success on first try`)
+        }
+        return res
+    } catch (e) {
+        console.error(e)
+        retries++
+        console.log(`retry #${retries}`)
+        await new Promise(resolve => setTimeout(resolve, 1000 * 5 * retries))
+        return retry(fn, params, retries)
+    }
+}
+
 class User {
     constructor(user, marketsIn, borrowBalance, collateralBalace, error) {
         this.marketsIn = marketsIn
@@ -86,10 +111,15 @@ class Compound {
             const usdcContract = new this.web3.eth.Contract(Addresses.cTokenAbi, this.usdcAddress)
             this.usdcDecimals = Number(await usdcContract.methods.decimals().call())
             console.log("usdc decimals", this.usdcDecimals)
-            if(this.mainCntr % this.heavyUpdateInterval == 0) await this.heavyUpdate()
-            else await this.lightUpdate()
-
-
+            if(this.mainCntr % this.heavyUpdateInterval == 0) {
+                console.log("heavyUpdate start")
+                await this.heavyUpdate()
+                console.log('heavyUpdate success')
+            } else {
+                console.log("lightUpdate start")
+                await this.lightUpdate()
+                console.log('lightUpdate success')
+            }
             console.log("calc bad debt")
             await this.calcBadDebt(currTime)
             
@@ -138,7 +168,8 @@ class Compound {
         for (let i = from; i < to; i = i + this.blockStepInInit) {
             const fromBlock = i
             const toBlock = i + this.blockStepInInit > to ? to : i + this.blockStepInInit
-            const events = await cToken.getPastEvents(key, {fromBlock, toBlock})
+            const fn = (...args) => cToken.getPastEvents(...args)
+            const events = await retry(fn, [key, {fromBlock, toBlock}])
             totalEvents = totalEvents.concat(events)
         }
         return totalEvents
@@ -184,7 +215,8 @@ class Compound {
         for (let i = 0; i < accountsToUpdate.length; i = i + bulkSize) {
             const to = i + bulkSize > accountsToUpdate.length ? accountsToUpdate.length : i + bulkSize
             const slice = accountsToUpdate.slice(i, to)
-            await this.updateUsers(slice)
+            const fn = (...args) => this.updateUsers(...args)
+            await retry(fn, [slice])
         }
     }
 
@@ -211,19 +243,6 @@ class Compound {
                 if(! this.userList.includes(a)) this.userList.push(a)
             }
         }
-        /*
-        require('fs').writeFile(
-
-            './my.json',
-        
-            JSON.stringify(this.userList),
-        
-            function (err) {
-                if (err) {
-                    console.error('Crap happens');
-                }
-            }
-        );*/        
     }
 
     async updateAllUsers() {
@@ -241,19 +260,6 @@ class Compound {
                 i -= bulkSize
             }
         }
-        /*
-        require('fs').writeFile(
-
-            './users.json',
-        
-            JSON.stringify(this.users),
-        
-            function (err) {
-                if (err) {
-                    console.error('Crap happens');
-                }
-            }
-        );*/        
     }
 
     async calcBadDebt(currTime) {
@@ -355,8 +361,8 @@ class Compound {
     }
   }
 
-
 module.exports = Compound
+
 /*
 const Web3 = require("web3")
 
@@ -379,3 +385,4 @@ async function test() {
  }
 
  test()*/
+

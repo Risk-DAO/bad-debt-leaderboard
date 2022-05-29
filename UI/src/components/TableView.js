@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {observer} from "mobx-react"
 import ChainIcon from "./ChainIcon";
 import PlatformIcon from "./PlatformIcon";
+import PlatformName from "./PlatformName";
 import LastUpdate from "./LastUpdate";
 import WhaleFriendly from "./WhaleFriendly";
 import BadDebtUsers from "./BadDebtUsers";
@@ -28,16 +29,16 @@ class TableView extends Component {
           {body.map(row=> <tr>
             {Object.entries(row).map(([k, v])=> {
               if (k === 'platform'){
-                return (<td><PlatformIcon name={v}c/> {v}</td>)
+                return (<td><PlatformIcon name={v}c/> <PlatformName name={v}/></td>)
               }
               if (k === 'chain'){
                 return (<td><ChainIcon chain={v}/></td>)
               }
               if (k === 'tvl'){
-                return (<td><WhaleFriendly num={v}/></td>)
+                return (<td>$<WhaleFriendly num={v}/></td>)
               }                   
               if (k === 'total'){
-                return (<td><WhaleFriendly num={v}/></td>)
+                return (<td>$<WhaleFriendly num={v}/></td>)
               }                  
               if (k === 'updated'){
                 return (<td><LastUpdate timestamp={v}/></td>)

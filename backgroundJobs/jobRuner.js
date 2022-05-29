@@ -7,21 +7,26 @@ const options = commandLineArgs([
   { name: 'name', alias: 'n', type: String },
 ])
 const {uploadJsonFile} = require('../s3Client')
-const everyHour = 1000 * 60 * 60
+const every5Minutes = 1000 * 60 * 5
 
 let comp
+let lastUpdate
 
 function run() {
     const { file, } = options
     const CompoundParser = require(`./${file}`)
     comp = new CompoundParser()
     comp.main()
-    setInterval(writeOutput, everyHour)
+    setInterval(writeOutput, every5Minutes)
 }
 
 function writeOutput (){
-  if(comp && comp.output && comp.output.updated){
+  if(comp && comp.output && comp.output.updated && comp.output.updated != lastUpdate){
     uploadJsonFile(JSON.stringify(comp.output), options.name + '.json')
+    lastUpdate = comp.output.updated
+    console.log('output uploaded to S3')
+  } else {
+    console.log('nothing to upload to S3')
   }
 }
 
