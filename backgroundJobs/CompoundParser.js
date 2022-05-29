@@ -1,3 +1,4 @@
+const Web3 = require('web3')
 const { toBN, toWei } = Web3.utils
 const axios = require('axios')
 const Addresses = require("./Addresses.js")
