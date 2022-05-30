@@ -16,6 +16,36 @@ const specialAssetPriceFetchers = {
   },
   AVAX_0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7: () => {
     return 0
+  },  
+  ETH_0x26FA3fFFB6EfE8c1E69103aCb4044C26B9A106a9: () => {
+    return 0
+  },  
+  ETH_0xF3A43307DcAFa93275993862Aae628fCB50dC768: () => {
+    return 0
+  },  
+  ETH_0x1985365e9f78359a9B6AD760e32412f4a445E862: () => {
+    return 0
+  },  
+  ETH_0x9cA85572E6A3EbF24dEDd195623F188735A5179f: () => {
+    return 0
+  },  
+  ETH_0x81d66D255D47662b6B16f3C5bbfBb15283B05BC2: () => {
+    return 0
+  },  
+  ETH_0x69681f8fde45345C3870BCD5eaf4A05a60E7D227: () => {
+    return 0
+  },  
+  ETH_0xFAFdF0C4c1CB09d430Bf88c75D88BB46DAe09967: () => {
+    return 0
+  },  
+  ETH_0x5555f75e3d5278082200Fb451D1b6bA946D8e13b: () => {
+    return 0
+  },  
+  ETH_0x95dFDC8161832e4fF7816aC4B6367CE201538253: () => {
+    return 0
+  },  
+  ETH_0x1CC481cE2BD2EC7Bf67d1Be64d4878b16078F309: () => {
+    return 0
   },
 }
 
@@ -24,15 +54,24 @@ const getPrice = async (network, address, web3) => {
     const { Contract } = web3.eth
     const token = new Contract(Addresses.erc20Abi, address)
     const decimal = await token.methods.decimals().call()
-    const symbol = await token.methods.symbol().call()
+    //console.log({decimal})
+    const symbol = await token.methods.symbol().call().catch(err => '???')
+    //console.log({symbol})
     let apiPrice
-    const coinGeckoApiCall = `https://api.coingecko.com/api/v3/simple/token_price/${coinGeckoChainIdMap[network]}?contract_addresses=${address}&vs_currencies=USD`
-    console.log({coinGeckoApiCall})
+
     try{
       const specialPriceFetcher = specialAssetPriceFetchers[`${network}_${address}`]
       if(specialPriceFetcher){
         apiPrice = specialPriceFetcher()
+      } else if (network === 'ETH') {
+        const krystalApiCall = `https://pricing-prod.krystal.team/v1/market?addresses=${address.toLowerCase()}&chain=ethereum@1&sparkline=false`
+        console.log({krystalApiCall})
+        const { data } = await axios.get(krystalApiCall)
+        //console.log(data)
+        apiPrice = data.marketData[0].price || 0
       } else {
+        const coinGeckoApiCall = `https://api.coingecko.com/api/v3/simple/token_price/${coinGeckoChainIdMap[network]}?contract_addresses=${address}&vs_currencies=USD`
+        console.log({coinGeckoApiCall})
         const {data} = await axios.get(coinGeckoApiCall)
         //console.log(data)
         apiPrice = Object.values(data)[0].usd || 0
