@@ -2,7 +2,7 @@ const Web3 = require('web3')
 const { toBN, toWei } = Web3.utils
 const axios = require('axios')
 const Addresses = require("./Addresses.js")
-const { getPrice } = require('./priceFetcher')
+const { getPrice, getCethPrice } = require('./priceFetcher')
 
 /**
  * a small retry wrapper with an incrameting 5s sleep delay
@@ -147,8 +147,7 @@ class Compound {
         for(const market of this.markets) {
             let price
             if(this.web3.utils.toChecksumAddress(market) === this.web3.utils.toChecksumAddress(this.cETHAddress)) {
-                price = await this.priceOracle.methods.getRateToEth(this.usdcAddress, false).call()
-                price = (this.web3.utils.toBN("10")).pow(this.web3.utils.toBN(36)).div(this.web3.utils.toBN(price))
+                price = await getCethPrice(this.network, market, this.web3)
             }
             else {
                 const ctoken = new this.web3.eth.Contract(Addresses.cTokenAbi, market)

@@ -19,11 +19,12 @@ const oneInchOracleAddress = {
     "XDAI" : "0x142DB045195CEcaBe415161e1dF1CF0337A4d02E"
 }
 
+//TODO: add "NEAR"
 const multicallAddress = { "ETH" : "0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696", "BSC" : "0xcb6E2F66DF0493b4dD23ac7727D1677D1208b697",
     "AVAX" : "0xcb6E2F66DF0493b4dD23ac7727D1677D1208b697",
     "MATIC" : "0xe539B93620570A92EF90eF7E60c79d9fAee91186" }
 const usdcAddress = {"ETH" : "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "BSC" : "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
-    "AVAX" : "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E", "MATIC" : "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"}
+    "AVAX" : "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E", "MATIC" : "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174","NEAR": "0xB12BFcA5A55806AaF64E99521918A4bf0fC40802"}
 
 const compoundAddress = { "ETH" : { "comptroller" : "0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B", "cETH" : "0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5",    
     "deployBlock" : 7710671, "blockStepInInit" : 50000, "multicallSize" : 200} }
@@ -46,10 +47,12 @@ const ironBankAddress = { "ETH" : { "comptroller" : "0xAB1c342C7bf5Ec5F02ADEA1c2
 const ovixAddress = { "MATIC" : { "comptroller" : "0x8849f1a0cB6b5D6076aB150546EddEe193754F1C", "cETH" : "0xE554E874c9c60E45F1Debd479389C76230ae25A8",
     "deployBlock" : 26312398, "blockStepInInit" : 10000, "multicallSize" : 100}}
     
+const bastionAddress = { "NEAR" : { "comptroller": "0x6De54724e128274520606f038591A00C5E94a1F6", "cETH": "0x4E8fE8fd314cFC09BDb0942c5adCC37431abDCD0",    
+    "deployBlock" : 60837829, "blockStepInInit" : 10000, "multicallSize" : 100}}
 
     
 module.exports = {
     oneInchOracleAbi, cTokenAbi, comptrollerAbi, multicallAbi,
-    compoundAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress,
+    compoundAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress,
     ironBankAddress, ovixAddress, erc20Abi: erc20Abi
 }

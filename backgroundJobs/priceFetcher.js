@@ -1,6 +1,6 @@
 const Addresses = require("./Addresses.js")
 const Web3 = require("web3")
-const { toBN, toWei } = Web3.utils
+const { toBN, toWei, toChecksumAddress } = Web3.utils
 const axios = require('axios')
 
 const coinGeckoChainIdMap = {
@@ -8,6 +8,7 @@ const coinGeckoChainIdMap = {
   AVAX: 'avalanche',
   MATIC: 'polygon-pos',
   BSC: 'binance-smart-chain',
+  NEAR: 'aurora'
 }
 
 const specialAssetPriceFetchers = {
@@ -96,6 +97,68 @@ const getPrice = async (network, address, web3) => {
   }
 }
 
+const chainTokenFetchers = {
+  NEAR: async () => {
+    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD')
+    const res = Object.values(data)[0].usd
+    console.log({res})
+    return {
+      price: res,
+      decimal: 18
+    }
+  },  
+  ETH: async () => {
+    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD')
+    const res = Object.values(data)[0].usd
+    console.log({res})
+    return {
+      price: res,
+      decimal: 18
+    }
+  },  
+  AVAX: async () => {
+    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=avalanche-2&vs_currencies=USD')
+    const res = Object.values(data)[0].usd
+    console.log({res})
+    return {
+      price: res,
+      decimal: 18
+    }
+  },  
+  MATIC: async () => {
+    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=USD')
+    const res = Object.values(data)[0].usd
+    console.log({res})
+    return {
+      price: res,
+      decimal: 18
+    }
+  },  
+  BSC: async () => {
+    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=USD')
+    const res = Object.values(data)[0].usd
+    console.log({res})
+    return {
+      price: res,
+      decimal: 18
+    }
+  },
+}
+
+const getCethPrice = async (network, address, web3) => {
+  try{
+    const { price: apiPrice, decimal } = await chainTokenFetchers[`${network}`]()
+    const normlizer = (18 - decimal).toString()
+    console.log({ apiPrice })
+    const price = toBN(toWei(apiPrice.toString())).mul(toBN('10').pow(toBN(normlizer)))
+    return price
+  } catch (e) {
+    console.error(e)
+    return 0
+  }
+}
+
 module.exports = {
-  getPrice
+  getPrice, 
+  getCethPrice
 }
