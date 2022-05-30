@@ -10,7 +10,7 @@ class MainStore {
   tableData = []
   loading = true
   isLocalHost = window.location.hostname === 'localhost'
-  apiUrl = this.isLocalHost ? 'http://localhost:8000' : ''
+  apiUrl = 'http://localhost:8000'
 
   constructor () {
     makeAutoObservable(this)

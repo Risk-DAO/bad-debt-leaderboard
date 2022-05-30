@@ -1,4 +1,8 @@
+const Web3 = require('web3')
+const { toBN, toWei } = Web3.utils
+const axios = require('axios')
 const Addresses = require("./Addresses.js")
+const { getPrice } = require('./priceFetcher')
 
 /**
  * a small retry wrapper with an incrameting 5s sleep delay
@@ -150,12 +154,7 @@ class Compound {
                 const ctoken = new this.web3.eth.Contract(Addresses.cTokenAbi, market)
                 console.log("getting underlying")
                 const underlying = await ctoken.methods.underlying().call()
-                if(this.web3.utils.toChecksumAddress(underlying) === this.web3.utils.toChecksumAddress(this.usdcAddress)) {
-                    price = this.web3.utils.toWei("1")
-                }
-                else {
-                    price = await this.priceOracle.methods.getRate(underlying, this.usdcAddress, false).call()
-                }
+                price = await getPrice(this.network, underlying, this.web3)
             }
 
             this.prices[market] = this.web3.utils.toBN(price)
