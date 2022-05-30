@@ -2,6 +2,7 @@ const Web3 = require('web3')
 const { toBN, toWei } = Web3.utils
 const axios = require('axios')
 const Addresses = require("./Addresses.js")
+const { getPrice } = require('./priceFetcher')
 
 /**
  * a small retry wrapper with an incrameting 5s sleep delay
@@ -156,12 +157,7 @@ class Compound {
                 const ctoken = new this.web3.eth.Contract(Addresses.cTokenAbi, market)
                 console.log("getting underlying")
                 const underlying = await ctoken.methods.underlying().call()
-                if(this.web3.utils.toChecksumAddress(underlying) === this.web3.utils.toChecksumAddress(this.usdcAddress)) {
-                    price = this.web3.utils.toWei("1")
-                }
-                else {
-                    price = await this.priceOracle.methods.getRate(underlying, this.usdcAddress, false).call()
-                }
+                price = await getPrice(this.network, underlying, this.web3)
             }
 
             this.prices[market] = this.web3.utils.toBN(price)
@@ -171,7 +167,6 @@ class Compound {
 
     async initPricesETH() {
         try {
-            // TODO: toBN(toWei(res)).mul(toBN('1).pow(18 - underlying.decimal))
             this.markets = await this.comptroller.methods.getAllMarkets().call()
             console.log(this.markets)
 
@@ -187,7 +182,7 @@ class Compound {
                     const ctoken = new this.web3.eth.Contract(Addresses.cTokenAbi, market)
                     //console.log("getting underlying")
                     const underlying = await ctoken.methods.underlying().call()
-                    const token = new this.web3.eth.Contract(Addresses.ERC20, underlying)
+                    const token = new this.web3.eth.Contract(Addresses.erc20Abi, underlying)
                     const decimal = await token.methods.decimals().call()
                     console.log({ decimal })
                     const { data } = await axios.get(`https://pricing-prod.krystal.team/v1/market?addresses=${underlying.toLowerCase()}&chain=ethereum@1&sparkline=false`)
