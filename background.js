@@ -2,33 +2,37 @@ const { fork } = require('node:child_process');
 require('dotenv').config()
 
 const jobs = [
+  // {
+  //   file: 'ParseOvix',
+  //   name: 'polygon_0vix'
+  // },  
+  // {
+  //   file: 'ParseVenus',
+  //   name: 'BSC_venus'
+  // },  
+  // {
+  //   file: 'ParseRari',
+  //   name: 'ethereum_rari-capital'
+  // },  
+  // {
+  //   file: 'ParseTraderJoe',
+  //   name: 'avalanche_trader-joe'
+  // },  
+  // {
+  //   file: 'ParseCompound',
+  //   name: 'ethereum_compound'
+  // },  
+  // {
+  //   file: 'ParseIronBank',
+  //   name: 'ethereum_iron-bank'
+  // },  
+  // {
+  //   file: 'ParseBenqi',
+  //   name: 'avalanche_benqi'
+  // },  
   {
-    file: 'ParseOvix',
-    name: 'polygon_0vix'
-  },  
-  {
-    file: 'ParseVenus',
-    name: 'BSC_venus'
-  },  
-  {
-    file: 'ParseRari',
-    name: 'ethereum_rari-capital'
-  },  
-  {
-    file: 'ParseTraderJoe',
-    name: 'avalanche_trader-joe'
-  },  
-  {
-    file: 'ParseCompound',
-    name: 'ethereum_compound'
-  },  
-  {
-    file: 'ParseIronBank',
-    name: 'ethereum_iron-bank'
-  },  
-  {
-    file: 'ParseBenqi',
-    name: 'avalanche_benqi'
+    file: 'ParseBastion',
+    name: 'aurora_bastion'
   },
 ]
 
