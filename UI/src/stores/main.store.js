@@ -10,7 +10,7 @@ class MainStore {
   tableData = []
   loading = true
   isLocalHost = window.location.hostname === 'localhost'
-  apiUrl = this.isLocalHost ? 'http://localhost:8000' : ''
+  apiUrl = this.isLocalHost ? 'http://localhost:8000' : 'http://bad-debt-stag.eba-nvixbcm9.eu-central-1.elasticbeanstalk.com'
 
   constructor () {
     makeAutoObservable(this)
