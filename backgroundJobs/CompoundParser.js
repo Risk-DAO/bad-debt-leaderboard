@@ -281,7 +281,7 @@ class Compound {
             }
         }
 
-        this.output = { "total" :  this.sumOfBadDebt.toString(), "updated" : currTime.toString(), "decimals" : this.usdcDecimals.toString(), "users" : userWithBadDebt }
+        this.output = { "total" :  this.sumOfBadDebt.toString(), "updated" : currTime.toString(), "decimals" : "18", "users" : userWithBadDebt }
 
         console.log(JSON.stringify(this.output))
 
