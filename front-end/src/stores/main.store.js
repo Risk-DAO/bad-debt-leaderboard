@@ -10,7 +10,7 @@ class MainStore {
   tableData = []
   loading = true
   isLocalHost = window.location.hostname === 'localhost'
-  apiUrl = 'http://localhost:8000'
+  apiUrl = this.isLocalHost ? 'http://localhost:8000' : 'https://api.riskdao.org'
 
   constructor () {
     makeAutoObservable(this)

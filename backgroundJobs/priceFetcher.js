@@ -12,10 +12,13 @@ const coinGeckoChainIdMap = {
 }
 
 const specialAssetPriceFetchers = {
-  AVAX_0x57319d41F71E81F3c65F2a47CA4e001EbAFd4F33: () => {
+  AVAX_0x57319d41F71E81F3c65F2a47CA4e001EbAFd4F33: async() => {
     return 0
   },
   AVAX_0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7: () => {
+    return 0
+  },    
+  BSC_0x20bff4bbEDa07536FF00e073bd8359E5D80D733d: () => {
     return 0
   },  
   ETH_0x26FA3fFFB6EfE8c1E69103aCb4044C26B9A106a9: () => {

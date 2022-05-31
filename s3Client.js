@@ -1,10 +1,9 @@
 const AWS = require('aws-sdk')
 const s3 = new AWS.S3()
 
-const BUCKET_NAME = 'bad-debt'
+const BUCKET_NAME = process.env.BUCKET_NAME
 
 const uploadJsonFile = (jsonString, fileName) => {
-  console.log("========================uploadJsonFile")
   return new Promise((resolve, reject) => {
      // Read content from the file
      
