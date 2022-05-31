@@ -4,13 +4,13 @@ import web3Utils from "web3-utils"
 
 const deciamlNameMap = Object.assign({}, ...Object.entries(web3Utils.unitMap).map(([a,b]) => ({ [b]: a })))
 
-
 class MainStore {
 
   tableData = []
+  tableRowDetails = null
   loading = true
   isLocalHost = window.location.hostname === 'localhost'
-  apiUrl = this.isLocalHost ? 'http://localhost:8000' : 'https://api.riskdao.org'
+  apiUrl = 'https://api.riskdao.org'
 
   constructor () {
     makeAutoObservable(this)
@@ -52,6 +52,14 @@ class MainStore {
       this.tableData = results
       this.loading = false
     })
+  }
+
+  openTableRowDetails = (name)=> {
+    if(this.tableRowDetails === name){
+      this.tableRowDetails = null
+      return
+    }
+    this.tableRowDetails = name
   }
 }
 
