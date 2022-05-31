@@ -13,6 +13,7 @@ const coinGeckoChainIdMap = {
 }
 
 const specialAssetPriceFetchers = {
+
   AVAX_0x57319d41F71E81F3c65F2a47CA4e001EbAFd4F33: async (web3, network, stakedTokenAddress) => {
     // xJoe
     const stakedTokenContract = new web3.eth.Contract(PriceAddresses.xJoeAbi, stakedTokenAddress)
@@ -38,6 +39,7 @@ const specialAssetPriceFetchers = {
     //console.log(data)
     const apiPrice = Object.values(data)[0].usd || 0
     return apiPrice
+
   },  
   ETH_0x26FA3fFFB6EfE8c1E69103aCb4044C26B9A106a9: async (web3, network, stakedTokenAddress) => {
     // sSPELL
