@@ -25,10 +25,8 @@ const specialAssetPriceFetchers = {
 
     const underlyingPrice = await getPrice(network, tokenAddress, web3)
 
-    const decFactor = toBN("10").pow(toBN(18 - stakedDecimals))
-
     // balance * price * 10 ^(18-decimals) / total supply    
-    return fromWei(toBN(stakedTokenUnderlyingBalance).mul(underlyingPrice).mul(decFactor).div(toBN(stakedTokenTotalSupply)))
+    return fromWei(toBN(stakedTokenUnderlyingBalance).mul(underlyingPrice).div(toBN(stakedTokenTotalSupply)))
   },
 
   AVAX_0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7: async (web3, network, address) => {
@@ -160,9 +158,19 @@ const getPrice = async (network, address, web3) => {
       console.error(e)
       apiPrice = 0
     }
-    const normlizer = (18 - decimal).toString()
+
+    let price
+    if(decimal > 18) {
+      const normlizer = decimal - 18
+      price = toBN(toWei(apiPrice.toString())).div(toBN('10').pow(toBN(normlizer)))
+    }
+    else {
+      const normlizer = 18 -decimal
+      price = toBN(toWei(apiPrice.toString())).mul(toBN('10').pow(toBN(normlizer)))
+    }
+
     console.log({ apiPrice })
-    const price = toBN(toWei(apiPrice.toString())).mul(toBN('10').pow(toBN(normlizer)))
+    
     console.log({
       address,
       symbol,
