@@ -1,27 +1,19 @@
 import '@picocss/pico'
 import {observer} from "mobx-react"
-
-import TableView from './components/TableView'
-import mainStore from './stores/main.store'
+import CompoundFroksBadDebt from "./components/CompoundFroksBadDebt"
+import ComingSoon from "./components/ComingSoon"
+import Hero from './components/Hero'
+import Footer from './components/Footer'
 
 function App() {
   return (
     <div className="App">
-      <div className="container">
-        <article>
-          <h1>Compound Forks Bad Debt</h1>
-          <p>
-            this risk table was made by the Risk DAO
-
-          </p>
-        </article>
-        {mainStore.loading && <div>
-          <article aria-busy="true"></article>
-        </div>}
-        {!mainStore.loading &&  <article>
-          <TableView data={mainStore.tableData}/>
-        </article>}
+      <Hero/>
+      <div className="container page">
+        {!process.env.REACT_APP_COMING_SOON && <CompoundFroksBadDebt/>}
+        {process.env.REACT_APP_COMING_SOON && <ComingSoon/>}
       </div>
+      <Footer/>
     </div>
   );
 }

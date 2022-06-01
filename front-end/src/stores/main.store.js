@@ -11,10 +11,18 @@ class MainStore {
   loading = true
   isLocalHost = window.location.hostname === 'localhost'
   apiUrl = 'https://api.riskdao.org'
+  blackMode =  null
 
   constructor () {
     makeAutoObservable(this)
     this.init()
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // dark mode
+      this.blackMode = true
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      this.blackMode = !!e.matches
+    });
   }
 
   init = async () => {
