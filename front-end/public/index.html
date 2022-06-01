@@ -2,13 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/risk-dao-black.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="Risk DAO | bad-bebt dashboard"
     />
+    <link id="faviconTag" rel="icon" href="%PUBLIC_URL%/risk-dao-black.svg" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/risk-dao-black.svg" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -25,6 +25,23 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Risk DAO | bad-bebt dashboard</title>
+    <script>
+      const changeFavicon = () => {
+        const faviconTag = document.getElementById("faviconTag");
+        const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        console.log({isDark})
+        if (isDark) {
+          faviconTag.href = "%PUBLIC_URL%/risk-dao-white.svg";
+        } else {
+          faviconTag.href = "%PUBLIC_URL%/risk-dao-black.svg";
+        }
+      };
+
+      changeFavicon()
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        changeFavicon()
+      });
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

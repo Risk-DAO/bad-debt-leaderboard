@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {observer} from "mobx-react"
-import mainStore from "../stores/main.store";
-const platformDetails = require('../platform-details.json')
+import platformDetails from "../lending-platfroms-details/index"
+
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -16,23 +16,9 @@ class PlatformDetails extends Component {
   render () {
     const { name } = this.props
     const content = platformDetails[name]
-    debugger
     return (
       <div style={{padding: '5px'}}>
-        {content.map((item)=> {
-          const {title, subtitle, text} = item
-
-          if(title){
-            return (<h5>{title}</h5>)
-          }          
-          if(subtitle){
-            return (<h6>{subtitle}</h6>)
-          }          
-          if(text){
-            return (<p>{text}</p>)
-          }
-
-        })}
+        {content()}
       </div>
     )
   }
