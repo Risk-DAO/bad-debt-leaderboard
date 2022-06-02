@@ -178,6 +178,8 @@ const getPrice = async (network, address, web3) => {
   }
 }
 
+
+
 const chainTokenFetchers = {
   NEAR: async () => {
     const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD')
@@ -270,6 +272,39 @@ const getUniV2LPTokenPrice = async (network, address, web3) => {
   }
 }
 
+const fetchZapperTotal = async (address) => {
+  const options = {
+    method: 'get',
+    url: 'https://api.zapper.fi/v2/balances',
+    params: {
+      'addresses[]': address,
+      useNewBalancesFormat: 'true',
+      bundled: 'false',
+      'addresses%5B%5D': address
+    },
+    headers: {
+      'Cache-Control': 'no-cache',
+      Authorization: 'Basic OTZlMGNjNTEtYTYyZS00MmNhLWFjZWUtOTEwZWE3ZDJhMjQxOg==',
+      accept: 'application/json'
+    }
+  };
+
+  const res = await axios(options)
+  const netCollateral = res.data.split("event: balance\ndata: ")
+    .filter(b => b != "")
+    .map(b => b.split("\n")[0])
+    .map(b => JSON.parse(b))
+    .map(b=> {
+      if(b.appId == 'tokens' || b.appId == 'nft'){
+        return b.totals.reduce((a, b)=> a.balanceUSD + b.balanceUSD, {balanceUSD: 0})
+      } else {
+        return b.app.meta.total
+      }
+    })
+    .reduce((a, b)=> a + b, 0)
+  return netCollateral
+}
+
 
 const get1InchPrice = async (network, address, web3) => {
   const oneInch = new web3.eth.Contract(Addresses.oneInchOracleAbi, Addresses.oneInchOracleAddress[network])
@@ -339,5 +374,6 @@ async function testLPTokenPrice() {
 module.exports = {
   getPrice, 
   getUniV2LPTokenPrice,
-  getEthPrice
+  getEthPrice,
+  fetchZapperTotal
 }

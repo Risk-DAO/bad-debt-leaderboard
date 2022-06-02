@@ -1,16 +1,18 @@
 const Addresses = require("./Addresses.js")
 const Compound = require("./CompoundParser")
-const { getPrice, getCethPrice, getUniV2LPTokenPrice } = require('./priceFetcher')
+const User = require("./User")
+const { getPrice, fetchZapperTotal, getUniV2LPTokenPrice } = require('./priceFetcher')
 const Web3 = require("web3")
 const { toBN, toWei, fromWei } = Web3.utils
 require('dotenv').config()
+
 
 class IronBankParser extends Compound {
   constructor(web3Url = undefined) {
     const compoundInfo = Addresses.ironBankAddress
     const network = 'ETH'
     const web3 = new Web3(web3Url ? web3Url : process.env.ETH_NODE_URL)
-    super(compoundInfo, network, web3, 24 * 5)
+    super(compoundInfo, network, web3, 24 * 1)
   }
 
   async balanceValue(token, user) {
@@ -33,27 +35,9 @@ class IronBankParser extends Compound {
     }
     else if(userAddress === "0xba5eBAf3fc1Fcca67147050Bf80462393814E54B") {
       console.log("alpha homora v2")
-      const alphaHomoraLpTokens = [
-        "0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc",
-        "0x3041CbD36888bECc7bbCBc0045E3B1f144466f5f",
-        "0xAE461cA67B15dc8dc81CE7615e0320dA1A9aB8D5",
-        "0xA478c2975Ab1Ea89e8196811F51A7B7Ade33eB11"
-      ]
-
-      let sum = toBN("0")
-      
       const alphaHomoraLPTokenNFT = "0x06799a1e4792001AA9114F0012b9650cA28059a3"
-      for(const lpToken of alphaHomoraLpTokens) {
-        const lpTokenContract = new this.web3.eth.Contract(Addresses.erc20Abi, lpToken)
-        const balance = await lpTokenContract.methods.balanceOf(alphaHomoraLPTokenNFT).call()
-        const price = await getUniV2LPTokenPrice(this.network, lpToken, this.web3)
-
-        const _1e18 = toBN(toWei("1"))
-        const value = toBN(balance).mul(price).div(_1e18)
-        sum = sum.add(value)
-      }
-
-      return sum
+      const result = await fetchZapperTotal(alphaHomoraLPTokenNFT)
+      return toBN(toWei(result.toString()))
     }
     else if(userAddress === "0xcDDBA405f8129e5bAe101045aa45aCa11C03b1c8") {
       console.log("cream")
@@ -71,12 +55,37 @@ class IronBankParser extends Compound {
       return await this.balanceValue(ftmTokenAddress, userAddress)
     }
     else if(userAddress === "0x8338Aa899fB3168598D871Edc1FE2B4F0Ca6BBEF") {
-      // TODO - yearm and fixed forex
-      return toBN("0")      
+      // yearm and fixed forex
+      // first get debt of yearn and fixed forex 2, and substruct it from the extra collateral
+      const otherYearnUser = "0x0a0B06322825cb979678C722BA9932E0e4B5fd90"
+      let otherDebt = toBN("0")
+      const data = this.users[otherYearnUser]
+      if(data) {
+        const userData = new User(otherYearnUser, data.marketsIn, data.borrowBalance, data.collateralBalace, data.error)  
+        const userValue = userData.getUserNetValue(this.web3, this.prices)
+        otherDebt = userValue.debt
+        console.log("other debt", otherDebt.toString())  
+      }
+
+      const zapperResult = await fetchZapperTotal("0x0D5Dc686d0a2ABBfDaFDFb4D0533E886517d4E83")
+
+      return toBN(toWei(zapperResult.toString())).sub(toBN(otherDebt.toString()))
     }
     else if(userAddress === "0x0a0B06322825cb979678C722BA9932E0e4B5fd90") {
-      // TODO - yearn and fixed forex 2
-      return toBN("0")
+      // fixed forex 2
+      const otherYearnUser = "0x8338Aa899fB3168598D871Edc1FE2B4F0Ca6BBEF"
+      let otherDebt = toBN("0")
+      const data = this.users[otherYearnUser]
+      if(data) {
+        const userData = new User(otherYearnUser, data.marketsIn, data.borrowBalance, data.collateralBalace, data.error)  
+        const userValue = userData.getUserNetValue(this.web3, this.prices)
+        otherDebt = userValue.debt
+        console.log("other debt", otherDebt.toString())  
+      }
+
+      const zapperResult = await fetchZapperTotal("0x0D5Dc686d0a2ABBfDaFDFb4D0533E886517d4E83")
+
+      return toBN(toWei(zapperResult.toString())).sub(toBN(otherDebt.toString()))
     }
     else {
       return toBN("0")
@@ -96,6 +105,8 @@ async function test() {
   ]
 
   const ironBank = new IronBankParser("https://cloudflare-eth.com")
+  //await ironBank.main()
+  
   const results = []
 
   for(const user of addresses) {
