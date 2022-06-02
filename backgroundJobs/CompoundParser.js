@@ -51,7 +51,13 @@ class User {
             // in IB there are assets that no longer appear in the market assets. but are part of asset in (go figure...)
             if(this.collateralBalace[market] === undefined ||
                 prices[market].toString() === web3.utils.toBN("0").toString() ||
-                this.borrowBalance[market] === undefined ) return web3.utils.toBN("0")
+                this.borrowBalance[market] === undefined ) {
+                    console.log("zero price for market", {market})
+                    return { "netValue" : web3.utils.toBN("0"),
+                             "collateral" : web3.utils.toBN("0"),
+                             "debt" : web3.utils.toBN("0") }
+                }
+
             const plus = web3.utils.toBN(this.collateralBalace[market]).mul(prices[market]).div(_1e18)
             const minus = web3.utils.toBN(this.borrowBalance[market]).mul(prices[market]).div(_1e18)
             netValue = netValue.add(plus).sub(minus)
@@ -263,6 +269,10 @@ class Compound {
         }
     }
 
+    async additionalCollateralBalance(userAddress) {
+        return this.web3.utils.toBN("0")
+    }
+
     async calcBadDebt(currTime) {
         this.sumOfBadDebt = this.web3.utils.toBN("0")
         let deposits = this.web3.utils.toBN("0")
@@ -275,13 +285,15 @@ class Compound {
 
             const userData = new User(user, data.marketsIn, data.borrowBalance, data.collateralBalace, data.error)
             //console.log({user})
+            const additionalCollateral = await this.additionalCollateralBalance(user)
             const userValue = userData.getUserNetValue(this.web3, this.prices)
 
-            deposits = deposits.add(userValue.collateral)
+            //console.log("XXX", user, userValue.collateral.toString(), additionalCollateral.toString())
+            deposits = deposits.add(userValue.collateral).add(additionalCollateral)
             borrows = borrows.add(userValue.debt)
 
-            const netValue = userValue.netValue
-            tvl = tvl.add(netValue)
+            const netValue = this.web3.utils.toBN(userValue.netValue).add(additionalCollateral)
+            tvl = tvl.add(netValue).add(additionalCollateral)
 
             if(this.web3.utils.toBN(netValue).lt(this.web3.utils.toBN("0"))) {
                 //const result = await this.comptroller.methods.getAccountLiquidity(user).call()

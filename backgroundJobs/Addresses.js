@@ -49,7 +49,7 @@ const ovixAddress = { "MATIC" : { "comptroller" : "0x8849f1a0cB6b5D6076aB150546E
     "deployBlock" : 26312398, "blockStepInInit" : 10000, "multicallSize" : 100}}
     
 const bastionAddress = { "NEAR" : { "comptroller": "0x6De54724e128274520606f038591A00C5E94a1F6", "cETH": "0x4E8fE8fd314cFC09BDb0942c5adCC37431abDCD0",    
-    "deployBlock" : 60837829, "blockStepInInit" : 10000, "multicallSize" : 100}}
+    "deployBlock" : 60837829, "blockStepInInit" : 10000, "multicallSize" : 20}}
 
     
 module.exports = {
