@@ -1,4 +1,21 @@
-# Getting Started with Create React App
+# Risk DAO
+### Bad Debt Dashboard
+
+
+## Lending Platforms Explainers
+if you wish to add information about your lending platform
+explaining about debt and risk releated things
+please do
+
+folow these steps
+- create a new component at lending-platform-details directory
+- use a simple function component rendering simple HTML markup you can follow an example
+- register your component in the index.js file at that same directory
+- run the project to see it render in the Dashboard
+  
+for any questios feel free to reach out at our [risk dao](Discord) 
+
+## creat react app
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

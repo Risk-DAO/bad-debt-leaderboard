@@ -21,7 +21,7 @@ const jobs = [
   {
     file: 'ParseCompound',
     name: 'ethereum_compound'
-  },  
+  },
   {
     file: 'ParseIronBank',
     name: 'ethereum_iron-bank'
@@ -29,6 +29,10 @@ const jobs = [
   {
     file: 'ParseBenqi',
     name: 'avalanche_benqi'
+  },  
+  {
+    file: 'ParseBastion',
+    name: 'aurora_bastion'
   },
 ]
 

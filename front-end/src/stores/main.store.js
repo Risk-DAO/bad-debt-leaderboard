@@ -4,17 +4,25 @@ import web3Utils from "web3-utils"
 
 const deciamlNameMap = Object.assign({}, ...Object.entries(web3Utils.unitMap).map(([a,b]) => ({ [b]: a })))
 
-
 class MainStore {
 
   tableData = []
+  tableRowDetails = null
   loading = true
   isLocalHost = window.location.hostname === 'localhost'
-  apiUrl = 'http://localhost:8000'
+  apiUrl = 'https://api.riskdao.org'
+  blackMode =  null
 
   constructor () {
     makeAutoObservable(this)
     this.init()
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // dark mode
+      this.blackMode = true
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      this.blackMode = !!e.matches
+    });
   }
 
   init = async () => {
@@ -52,6 +60,14 @@ class MainStore {
       this.tableData = results
       this.loading = false
     })
+  }
+
+  openTableRowDetails = (name)=> {
+    if(this.tableRowDetails === name){
+      this.tableRowDetails = null
+      return
+    }
+    this.tableRowDetails = name
   }
 }
 
