@@ -2,7 +2,7 @@ const Web3 = require('web3')
 const { toBN, toWei } = Web3.utils
 const axios = require('axios')
 const Addresses = require("./Addresses.js")
-const { getPrice, getCethPrice } = require('./priceFetcher')
+const { getPrice, getEthPrice } = require('./priceFetcher')
 
 /**
  * a small retry wrapper with an incrameting 5s sleep delay
@@ -156,7 +156,7 @@ class Compound {
         for(const market of this.markets) {
             let price
             if(this.web3.utils.toChecksumAddress(market) === this.web3.utils.toChecksumAddress(this.cETHAddress)) {
-                price = await getCethPrice(this.network, market, this.web3)
+                price = await getEthPrice(this.network)
             }
             else {
                 const ctoken = new this.web3.eth.Contract(Addresses.cTokenAbi, market)

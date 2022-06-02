@@ -49,7 +49,7 @@ class TableView extends Component {
               }            
             })}
           </tr>
-          {row.platform === mainStore.tableRowDetails && <tr><td colspan='7'><PlatformDetails name={row.platform}/></td></tr>}
+          {row.platform === mainStore.tableRowDetails && <tr><td colSpan='7'><PlatformDetails name={row.platform}/></td></tr>}
           </Fragment>)}
         </tbody>
         </table>

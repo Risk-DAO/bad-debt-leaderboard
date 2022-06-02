@@ -18,7 +18,10 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "BUILD_PATH='../public' react-app-rewired build",
+    "start-coming-soon": "REACT_APP_COMING_SOON=true react-app-rewired start",
+    "build-server": "BUILD_PATH='../public' react-app-rewired build",
+    "build": "react-app-rewired build",
+    "build-coming-soon": "REACT_APP_COMING_SOON=true react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"
   },

@@ -226,7 +226,7 @@ const chainTokenFetchers = {
   },
 }
 
-const getCethPrice = async (network, address, web3) => {
+const getEthPrice = async (network) => {
   try{
     const { price: apiPrice, decimal } = await chainTokenFetchers[`${network}`]()
     const normlizer = (18 - decimal).toString()
@@ -338,6 +338,6 @@ async function testLPTokenPrice() {
 
 module.exports = {
   getPrice, 
-  getCethPrice,
   getUniV2LPTokenPrice
+  getEthPrice
 }
