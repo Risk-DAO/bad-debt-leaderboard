@@ -338,6 +338,6 @@ async function testLPTokenPrice() {
 
 module.exports = {
   getPrice, 
-  getUniV2LPTokenPrice
+  getUniV2LPTokenPrice,
   getEthPrice
 }
