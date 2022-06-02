@@ -12,6 +12,17 @@ const coinGeckoChainIdMap = {
   NEAR: 'aurora'
 }
 
+const getChainlinkPrice = async (web3, feedAddress) => {
+  const feed = new web3.eth.Contract(PriceAddresses.chainlinkAbi, feedAddress)
+
+  const answer = await feed.methods.latestAnswer().call()
+  const decimals = await feed.methods.decimals().call()
+  const factor = toBN("10").pow(toBN(18 - Number(decimals)))
+
+  return Number(fromWei(toBN(answer).mul(factor)))
+}
+
+
 const specialAssetPriceFetchers = {
 
   AVAX_0x57319d41F71E81F3c65F2a47CA4e001EbAFd4F33: async (web3, network, stakedTokenAddress) => {
@@ -86,45 +97,27 @@ const specialAssetPriceFetchers = {
   },  
   ETH_0x81d66D255D47662b6B16f3C5bbfBb15283B05BC2: async (web3, network, address) => {
     // ibZAR
-    const apiCall = `https://free.currconv.com/api/v7/convert?q=USD_ZAR&compact=ultra&apiKey=66771e34ef6815203ee5`
-    console.log({apiCall})
-    const result = await axios.get(apiCall)
-    return (1 / result.data["USD_ZAR"]).toFixed(10)
+    return getChainlinkPrice(web3, PriceAddresses.zarPriceFeedAddress)
    },  
   ETH_0x69681f8fde45345C3870BCD5eaf4A05a60E7D227: async (web3, network, address) => {
     // ibGBP
-    const apiCall = `https://free.currconv.com/api/v7/convert?q=USD_GBP&compact=ultra&apiKey=66771e34ef6815203ee5`
-    console.log({apiCall})
-    const result = await axios.get(apiCall)
-    return (1 / result.data["USD_GBP"]).toFixed(10)
+    return getChainlinkPrice(web3, PriceAddresses.gbpPriceFeedAddress)    
   },  
   ETH_0xFAFdF0C4c1CB09d430Bf88c75D88BB46DAe09967: async (web3, network, address) => {
     // ibAUD
-    const apiCall = `https://free.currconv.com/api/v7/convert?q=USD_AUD&compact=ultra&apiKey=66771e34ef6815203ee5`
-    console.log({apiCall})
-    const result = await axios.get(apiCall)
-    return (1 / result.data["USD_AUD"]).toFixed(10)
+    return getChainlinkPrice(web3, PriceAddresses.audPriceFeedAddress)    
   },  
   ETH_0x5555f75e3d5278082200Fb451D1b6bA946D8e13b: async (web3, network, address) => {
     // ibJPY
-    const apiCall = `https://free.currconv.com/api/v7/convert?q=USD_JPY&compact=ultra&apiKey=66771e34ef6815203ee5`
-    console.log({apiCall})
-    const result = await axios.get(apiCall)
-    return (1 / result.data["USD_JPY"]).toFixed(10)
+    return getChainlinkPrice(web3, PriceAddresses.jpyPriceFeedAddress)    
   },  
   ETH_0x95dFDC8161832e4fF7816aC4B6367CE201538253: async (web3, network, address) => {
     // ibKRW
-    const apiCall = `https://free.currconv.com/api/v7/convert?q=USD_KRW&compact=ultra&apiKey=66771e34ef6815203ee5`
-    console.log({apiCall})
-    const result = await axios.get(apiCall)
-    return (1 / result.data["USD_KRW"]).toFixed(10)
+    return getChainlinkPrice(web3, PriceAddresses.krwPriceFeedAddress)    
   },  
   ETH_0x1CC481cE2BD2EC7Bf67d1Be64d4878b16078F309: async (web3, network, address) => {
     // ibCHF
-    const apiCall = `https://free.currconv.com/api/v7/convert?q=USD_CHF&compact=ultra&apiKey=66771e34ef6815203ee5`
-    console.log({apiCall})
-    const result = await axios.get(apiCall)
-    return (1 / result.data["USD_CHF"]).toFixed(10)
+    return getChainlinkPrice(web3, PriceAddresses.chfPriceFeedAddress)
   },
 }
 
@@ -242,9 +235,41 @@ const getCethPrice = async (network, address, web3) => {
     return price
   } catch (e) {
     console.error(e)
-    return 0
+    return toBN("0")
   }
 }
+
+const getUniV2LPTokenPrice = async (network, address, web3) => {
+  try {
+    const lptoken = new web3.eth.Contract(PriceAddresses.uniswapV2PairAbi, address)
+    const token0Address = await lptoken.methods.token0().call()
+    const token1Address = await lptoken.methods.token1().call()
+    const totalSupply = await lptoken.methods.totalSupply().call()
+
+    const token0 = new web3.eth.Contract(PriceAddresses.erc20Abi, token0Address)
+    const token1 = new web3.eth.Contract(PriceAddresses.erc20Abi, token1Address)
+
+    const bal0 = await token0.methods.balanceOf(address).call()
+    const bal1 = await token1.methods.balanceOf(address).call()
+
+    const price0 = await getPrice(network, token0Address, web3)
+    const price1 = await getPrice(network, token1Address, web3)
+
+    const _1e18 = toBN(toWei("1"))
+    
+    const token0Val = toBN(bal0).mul(toBN(price0))
+    const token1Val = toBN(bal1).mul(toBN(price1))
+    
+    const lpValue = (token0Val.add(token1Val)).div(toBN(totalSupply))
+
+    return lpValue
+  }
+  catch (e) {
+    console.error(e)
+    return toBN("0")
+  }
+}
+
 
 const get1InchPrice = async (network, address, web3) => {
   const oneInch = new web3.eth.Contract(Addresses.oneInchOracleAbi, Addresses.oneInchOracleAddress[network])
@@ -264,7 +289,7 @@ async function testPrices() {
   "0x5555f75e3d5278082200Fb451D1b6bA946D8e13b",
   "0x95dFDC8161832e4fF7816aC4B6367CE201538253",
   "0x1CC481cE2BD2EC7Bf67d1Be64d4878b16078F309" ]
-
+  
   // free public nodes
   const web3Eth = new Web3("https://cloudflare-eth.com")
   const web3Avax = new Web3("https://api.avax.network/ext/bc/C/rpc")
@@ -293,9 +318,26 @@ async function testPrices() {
   }  
 }
 
+async function testLPTokenPrice() {
+  const alphaHomoraLpTokens = [
+    "0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc",
+    "0x3041CbD36888bECc7bbCBc0045E3B1f144466f5f",
+    "0xAE461cA67B15dc8dc81CE7615e0320dA1A9aB8D5",
+    "0xA478c2975Ab1Ea89e8196811F51A7B7Ade33eB11"
+  ]
+
+  const web3Eth = new Web3("https://cloudflare-eth.com")
+  for(const token of alphaHomoraLpTokens) {
+    const price = await getUniV2LPTokenPrice("ETH", token, web3Eth)
+    console.log("testLPTokenPrice:", {token}, web3Eth.utils.fromWei(price.toString()))
+  }
+}
+
+//testLPTokenPrice()
 //testPrices()
 
 module.exports = {
   getPrice, 
-  getCethPrice
+  getCethPrice,
+  getUniV2LPTokenPrice
 }
