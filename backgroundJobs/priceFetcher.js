@@ -79,7 +79,7 @@ const specialAssetPriceFetchers = {
   ETH_0x1985365e9f78359a9B6AD760e32412f4a445E862: async (web3, network, address) => {
     // old REP
     // return price of new rep
-    return await getPrice(network, "0x221657776846890989a759BA2973e427DfF5C9bB", web3)
+    return Number(fromWei(await getPrice(network, "0x221657776846890989a759BA2973e427DfF5C9bB", web3)))
   },  
   ETH_0x9cA85572E6A3EbF24dEDd195623F188735A5179f: async  (web3, network, address) => {
     // y3Crv
