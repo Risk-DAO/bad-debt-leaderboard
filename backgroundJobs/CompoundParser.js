@@ -1,5 +1,5 @@
 const Web3 = require('web3')
-const { toBN, toWei } = Web3.utils
+const { toBN, toWei, fromWei } = Web3.utils
 const axios = require('axios')
 const Addresses = require("./Addresses.js")
 const { getPrice, getEthPrice } = require('./priceFetcher')
@@ -54,6 +54,9 @@ class Compound {
       this.mainCntr = 0
       this.usdcDecimals = 6
       this.heavyUpdateInterval = heavyUpdateInterval
+
+      this.tvl = toBN("0")
+      this.totalBorrows = toBN("0")
 
       this.output = {}
     }
@@ -112,22 +115,44 @@ class Compound {
         this.markets = await this.comptroller.methods.getAllMarkets().call()
         console.log(this.markets)
 
+        let tvl = toBN("0")
+        let totalBorrows = toBN("0")
+
         for(const market of this.markets) {
             let price
+            let balance
+            let borrows
+
+            const ctoken = new this.web3.eth.Contract(Addresses.cTokenAbi, market)
+
             if(this.web3.utils.toChecksumAddress(market) === this.web3.utils.toChecksumAddress(this.cETHAddress)) {
                 price = await getEthPrice(this.network)
+                balance = await this.web3.eth.getBalance(market)
             }
             else {
-                const ctoken = new this.web3.eth.Contract(Addresses.cTokenAbi, market)
                 console.log("getting underlying")
                 const underlying = await ctoken.methods.underlying().call()
                 price = await getPrice(this.network, underlying, this.web3)
+                const token = new this.web3.eth.Contract(Addresses.cTokenAbi, underlying)
+                balance = await token.methods.balanceOf(market).call()
             }
-
+            
             this.prices[market] = this.web3.utils.toBN(price)
             console.log(market, price.toString())
+
+            borrows = await ctoken.methods.totalBorrows().call()
+
+            const _1e18 = toBN(toWei("1"))
+            tvl = tvl.add(  (toBN(balance)).mul(toBN(price)).div(_1e18)  )
+            totalBorrows = totalBorrows.add(  (toBN(borrows)).mul(toBN(price)).div(_1e18)  )
         }
+
+        this.tvl = tvl
+        this.totalBorrows = totalBorrows
+
+        console.log("init prices: tvl ", fromWei(tvl.toString()), " total borrows ", fromWei(this.totalBorrows.toString()))
     }
+
 
     async getPastEventsInSteps(cToken, key, from, to){
         let totalEvents = []
@@ -266,7 +291,8 @@ class Compound {
         }
 
         this.output = { "total" :  this.sumOfBadDebt.toString(), "updated" : currTime.toString(), "decimals" : "18", "users" : userWithBadDebt,
-                        "tvl" : tvl.toString(), "deposits" : deposits.toString(), "borrows" : borrows.toString() }
+                        "tvl" : this.tvl.toString(), "deposits" : deposits.toString(), "borrows" : borrows.toString(),
+                        "calculatedBorrows" : this.totalBorrows.toString()}
 
         console.log(JSON.stringify(this.output))
 
