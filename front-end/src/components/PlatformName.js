@@ -5,6 +5,10 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+const nameMaps = {
+  "rari-capital": "Rari (tetra node pool)"
+}
+
 class PlatformName extends Component {
 
   constructor(props) {
@@ -12,7 +16,8 @@ class PlatformName extends Component {
   }
 
   render () {
-    const txt = this.props.name.split("-").map(capitalizeFirstLetter).join(" ")
+    const displayName = nameMaps[this.props.name]
+    const txt = !displayName ? this.props.name.split("-").map(capitalizeFirstLetter).join(" ") : displayName
     return (
       <span>{txt}</span>
     )

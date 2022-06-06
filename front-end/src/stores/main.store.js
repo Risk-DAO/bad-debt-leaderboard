@@ -2,6 +2,8 @@ import { makeAutoObservable, runInAction } from "mobx"
 import axios from "axios"
 import web3Utils from "web3-utils"
 
+const {fromWei} = web3Utils
+
 const deciamlNameMap = Object.assign({}, ...Object.entries(web3Utils.unitMap).map(([a,b]) => ({ [b]: a })))
 
 class MainStore {
@@ -31,21 +33,14 @@ class MainStore {
     
     const promises = Object.entries(badDebt).map(async ([k, v])=> {
       const [chain, platform] = k.split('_')
-      const {total, updated, users, decimals} = v
+      const {total, updated, users, decimals, tvl} = v
 
-      // ['Name', 'Blockchains', 'TVL', 'Bad Debt (USD)', 'last update', 'Details']
-      let tvl;
-      try{
-        tvl = (await axios.get('https://api.llama.fi/tvl/' + platform)).data
-      } catch (e) {
-        console.error(e)
-      }
       const decimalName = deciamlNameMap[Math.pow(10, decimals).toString()]
-      const totalDebt = Math.abs(parseFloat(web3Utils.fromWei(total, decimalName)))
+      const totalDebt = Math.abs(parseFloat(fromWei(total, decimalName)))
       return {
         platform,
         chain,
-        tvl,
+        tvl: fromWei(tvl),
         total: totalDebt,
         updated,
         users,
