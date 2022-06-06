@@ -32,8 +32,10 @@ app.get('/bad-debt', (req, res) => {
 app.get('/health', (req, res) => {
   res.json({version})
 })
+app.get('/', (req, res) => {
+  res.json({version})
+})
 
-app.use(express.static('public'))
 
 const startServer = async ()=> {
   await badDebtCache.init()
