@@ -24,7 +24,6 @@ const getChainlinkPrice = async (web3, feedAddress) => {
 
 
 const specialAssetPriceFetchers = {
-
   AVAX_0x57319d41F71E81F3c65F2a47CA4e001EbAFd4F33: async (web3, network, stakedTokenAddress) => {
     // xJoe
     const stakedTokenContract = new web3.eth.Contract(PriceAddresses.xJoeAbi, stakedTokenAddress)
@@ -40,7 +39,6 @@ const specialAssetPriceFetchers = {
     // balance * price * 10 ^(18-decimals) / total supply    
     return fromWei(toBN(stakedTokenUnderlyingBalance).mul(underlyingPrice).div(toBN(stakedTokenTotalSupply)))
   },
-
   AVAX_0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7: async (web3, network, address) => {
     // AVAX usdt
     // return ETH usdt price
@@ -51,7 +49,11 @@ const specialAssetPriceFetchers = {
     const apiPrice = Object.values(data)[0].usd || 0
     return apiPrice
 
-  },  
+  },
+  BSC_0x20bff4bbEDa07536FF00e073bd8359E5D80D733d: async (web3, network, stakedTokenAddress) => {
+    //CAN (cannon)
+    return "0.0000000000000001"
+  },
   ETH_0x26FA3fFFB6EfE8c1E69103aCb4044C26B9A106a9: async (web3, network, stakedTokenAddress) => {
     // sSPELL
     const stakedTokenContract = new web3.eth.Contract(PriceAddresses.stakedTokenAbi, stakedTokenAddress)
@@ -304,7 +306,6 @@ const fetchZapperTotal = async (address) => {
     .reduce((a, b)=> a + b, 0)
   return netCollateral
 }
-
 
 const get1InchPrice = async (network, address, web3) => {
   const oneInch = new web3.eth.Contract(Addresses.oneInchOracleAbi, Addresses.oneInchOracleAddress[network])
