@@ -36,6 +36,9 @@ const rariTetranodeAddress = { "ETH" : { "comptroller" : "0x814b02C1ebc9164972D8
 const venusAddress = { "BSC" : { "comptroller" : "0xfD36E2c2a6789Db23113685031d7F16329158384", "cETH" : "0xA07c5b74C9B40447a954e1466938b865b6BBea36",
     "deployBlock" : 2471512, "blockStepInInit" : 5000, "multicallSize" : 20}}
 
+const creamAddress = { "BSC" : { "comptroller" : "0x589DE0F0Ccf905477646599bb3E5C622C84cC0BA", "cETH" : "0x1Ffe17B99b439bE0aFC831239dDECda2A790fF3A",
+    "deployBlock" : 100320, "blockStepInInit" : 5000, "multicallSize" : 20}}
+
 const traderJoeAddress = { "AVAX" : { "comptroller" : "0xdc13687554205E5b89Ac783db14bb5bba4A1eDaC", "cETH" : "0xdc13687554205E5b89Ac783db14bb5bba4A1eDaC",
     "deployBlock" : 5449252, "blockStepInInit" : 2048, "multicallSize" : 100}}
 
@@ -54,6 +57,6 @@ const bastionAddress = { "NEAR" : { "comptroller": "0x6De54724e128274520606f0385
     
 module.exports = {
     oneInchOracleAbi, cTokenAbi, comptrollerAbi, multicallAbi,
-    compoundAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress,
+    compoundAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, creamAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress,
     ironBankAddress, ovixAddress, erc20Abi: erc20Abi
 }

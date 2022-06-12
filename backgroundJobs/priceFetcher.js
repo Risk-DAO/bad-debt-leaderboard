@@ -54,6 +54,86 @@ const specialAssetPriceFetchers = {
     //CAN (cannon)
     return "0.0000000000000001"
   },
+  BSC_0xd4CB328A82bDf5f03eB737f37Fa6B370aef3e888: async (web3, network, stakedTokenAddress) => {
+    // CREAM
+    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=cream-2&vs_currencies=USD')
+    return Number(Object.values(data)[0].usd)
+  },  
+  BSC_0xAD6cAEb32CD2c308980a548bD0Bc5AA4306c6c18: async (web3, network, stakedTokenAddress) => {
+    // BAND
+    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=band-protocol&vs_currencies=USD')
+    return Number(Object.values(data)[0].usd)
+  },  
+  BSC_0x16939ef78684453bfDFb47825F8a5F714f12623a: async (web3, network, stakedTokenAddress) => {
+    // tezos
+    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=tezos&vs_currencies=USD')
+    return Number(Object.values(data)[0].usd)
+  },  
+  BSC_0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e: async (web3, network, stakedTokenAddress) => {
+    // yearn-finance
+    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=yearn-finance&vs_currencies=USD')
+    return Number(Object.values(data)[0].usd)
+  },  
+  BSC_0x101d82428437127bF1608F699CD651e6Abf9766E: async (web3, network, stakedTokenAddress) => {
+    // basic-attention-token
+    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=basic-attention-token&vs_currencies=USD')
+    return Number(Object.values(data)[0].usd)
+  },  
+  BSC_0x695FD30aF473F2960e81Dc9bA7cB67679d35EDb7: async (web3, network, stakedTokenAddress) => {
+    // renzec
+    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=renzec&vs_currencies=USD')
+    return Number(Object.values(data)[0].usd)
+  },  
+  BSC_0xA527a61703D82139F8a06Bc30097cC9CAA2df5A6: async (web3, network, stakedTokenAddress) => {
+    // Pancake LPs (Cake-LP)
+    // TODO:
+    return Number(0)
+  },
+  BSC_0x1B96B92314C44b159149f7E0303511fB2Fc4774f: async (web3, network, stakedTokenAddress) => {
+    // Pancake LPs (Cake-LP)
+    // TODO:
+    return Number(0)
+  },
+  BSC_0x7561EEe90e24F3b348E1087A005F78B4c8453524: async (web3, network, stakedTokenAddress) => {
+    // Pancake LPs (Cake-LP)
+    // TODO:
+    return Number(0)
+  },
+  BSC_0x70D8929d04b60Af4fb9B58713eBcf18765aDE422: async (web3, network, stakedTokenAddress) => {
+    // Pancake LPs (Cake-LP)
+    // TODO:
+    return Number(0)
+  },
+  BSC_0xc15fa3E22c912A276550F3E5FE3b0Deb87B55aCd: async (web3, network, stakedTokenAddress) => {
+    // Pancake LPs (Cake-LP)
+    // TODO:
+    return Number(0)
+  },
+  BSC_0x0eD7e52944161450477ee417DE9Cd3a859b14fD0: async (web3, network, stakedTokenAddress) => {
+    // Pancake LPs (Cake-LP)
+    // TODO:
+    return Number(0)
+  },
+  BSC_0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16: async (web3, network, stakedTokenAddress) => {
+    // Pancake LPs (Cake-LP)
+    // TODO:
+    return Number(0)
+  },
+  BSC_0x61EB789d75A95CAa3fF50ed7E47b96c132fEc082: async (web3, network, stakedTokenAddress) => {
+    // Pancake LPs (Cake-LP)
+    // TODO:
+    return Number(0)
+  },
+  BSC_0x74E4716E431f45807DCF19f284c7aA99F18a4fbc: async (web3, network, stakedTokenAddress) => {
+    // Pancake LPs (Cake-LP)
+    // TODO:
+    return Number(0)
+  },
+  BSC_0x7EFaEf62fDdCCa950418312c6C91Aef321375A00: async (web3, network, stakedTokenAddress) => {
+    // Pancake LPs (Cake-LP)
+    // TODO:
+    return Number(0)
+  },
   ETH_0x26FA3fFFB6EfE8c1E69103aCb4044C26B9A106a9: async (web3, network, stakedTokenAddress) => {
     // sSPELL
     const stakedTokenContract = new web3.eth.Contract(PriceAddresses.stakedTokenAbi, stakedTokenAddress)

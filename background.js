@@ -3,6 +3,10 @@ require('dotenv').config()
 
 const jobs = [
   {
+    file: 'ParseCream',
+    name: 'BSC_cream'
+  },  
+  {
     file: 'ParseOvix',
     name: 'polygon_0vix'
   },  
