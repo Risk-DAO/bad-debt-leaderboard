@@ -66,7 +66,7 @@ const inverseAddress = { "ETH" : { "comptroller" : "0x4dCf7407AE5C07f8681e1659f6
                      "0x697b4acAa24430F254224eB794d2a85ba1Fa1FB8"]} }
 
 module.exports = {
-    oneInchOracleAbi, cTokenAbi, comptrollerAbi, multicallAbi, erc20Abi: erc20Abi
+    oneInchOracleAbi, cTokenAbi, comptrollerAbi, multicallAbi, erc20Abi: erc20Abi,
     compoundAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress,
     ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress
 }

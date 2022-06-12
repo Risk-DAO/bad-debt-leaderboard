@@ -307,7 +307,7 @@ const fetchZapperTotal = async (address) => {
       if(b.appId == 'tokens' || b.appId == 'nft'){
         //console.log("b total", b.totals)
         if(b.totals.length === 0) return 0
-        return b.totals.reduce((a, b)=> a.balanceUSD + b.balanceUSD, {balanceUSD: 0})
+        return b.totals.reduce((a, b)=> a + (b.balanceUSD || 0), 0)
       } else {
         return b.app.meta.total
       }
