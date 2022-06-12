@@ -2,7 +2,7 @@ const Web3 = require('web3')
 const { toBN, toWei, fromWei } = Web3.utils
 const axios = require('axios')
 const Addresses = require("./Addresses.js")
-const { getPrice, getEthPrice } = require('./priceFetcher')
+const { getPrice, getEthPrice, getCTokenPriceFromZapper } = require('./priceFetcher')
 const User = require("./User.js")
 
 /**
@@ -35,7 +35,16 @@ class Compound {
       this.web3 = web3
       this.network = network
       this.comptroller = new web3.eth.Contract(Addresses.comptrollerAbi, compoundInfo[network].comptroller)
-      this.cETHAddress = compoundInfo[network].cETH
+
+      this.cETHAddresses = [compoundInfo[network].cETH]
+      if(compoundInfo[network].cETH2) this.cETHAddresses.push(compoundInfo[network].cETH2)
+
+      this.nonBorrowableMarkets = []
+      if(compoundInfo[network].nonBorrowableMarkets) this.nonBorrowableMarkets = compoundInfo[network].nonBorrowableMarkets
+
+      this.rektMarkets = []
+      if(compoundInfo[network].rektMarkets) this.rektMarkets = compoundInfo[network].rektMarkets
+
       this.priceOracle = new web3.eth.Contract(Addresses.oneInchOracleAbi, Addresses.oneInchOracleAddress[network])
       this.multicall = new web3.eth.Contract(Addresses.multicallAbi, Addresses.multicallAddress[network])
       this.usdcAddress = Addresses.usdcAddress[network]
@@ -122,10 +131,10 @@ class Compound {
             let price
             let balance
             let borrows
-
+            console.log({market})
             const ctoken = new this.web3.eth.Contract(Addresses.cTokenAbi, market)
 
-            if(this.web3.utils.toChecksumAddress(market) === this.web3.utils.toChecksumAddress(this.cETHAddress)) {
+            if(this.cETHAddresses.includes(market)) {
                 price = await getEthPrice(this.network)
                 balance = await this.web3.eth.getBalance(market)
             }
@@ -133,6 +142,10 @@ class Compound {
                 console.log("getting underlying")
                 const underlying = await ctoken.methods.underlying().call()
                 price = await getPrice(this.network, underlying, this.web3)
+                if(price.toString() == "0") {
+                    console.log("trying with zapper")
+                    price = await getCTokenPriceFromZapper(market, underlying, this.web3, this.network)
+                }
                 const token = new this.web3.eth.Contract(Addresses.cTokenAbi, underlying)
                 balance = await token.methods.balanceOf(market).call()
             }
@@ -140,7 +153,12 @@ class Compound {
             this.prices[market] = this.web3.utils.toBN(price)
             console.log(market, price.toString())
 
-            borrows = await ctoken.methods.totalBorrows().call()
+            if(this.nonBorrowableMarkets.includes(market)) {
+                borrows = toBN("0")
+            }
+            else {
+                borrows = await ctoken.methods.totalBorrows().call()
+            }
 
             const _1e18 = toBN(toWei("1"))
             tvl = tvl.add(  (toBN(balance)).mul(toBN(price)).div(_1e18)  )
@@ -327,8 +345,20 @@ class Compound {
     
                 collatCall["target"] = market
                 borrowCall["target"] = market
-                collatCall["callData"] = ctoken.methods.balanceOfUnderlying(user).encodeABI()
-                borrowCall["callData"] = ctoken.methods.borrowBalanceCurrent(user).encodeABI()
+                if(this.rektMarkets.includes(market)) {
+                    // encode something that will return 0
+                    collatCall["callData"] = ctoken.methods.balanceOf(market).encodeABI()
+                }
+                else {
+                    collatCall["callData"] = ctoken.methods.balanceOfUnderlying(user).encodeABI()
+                }
+                if(this.nonBorrowableMarkets.includes(market)) {
+                    // encode something that will return 0
+                    borrowCall["callData"] = ctoken.methods.balanceOf(market).encodeABI()
+                }
+                else {
+                    borrowCall["callData"] = ctoken.methods.borrowBalanceCurrent(user).encodeABI()
+                }
 
                 collateralBalanceCalls.push(collatCall)
                 borrowBalanceCalls.push(borrowCall)
