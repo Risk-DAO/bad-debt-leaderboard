@@ -51,9 +51,22 @@ const ovixAddress = { "MATIC" : { "comptroller" : "0x8849f1a0cB6b5D6076aB150546E
 const bastionAddress = { "NEAR" : { "comptroller": "0x6De54724e128274520606f038591A00C5E94a1F6", "cETH": "0x4E8fE8fd314cFC09BDb0942c5adCC37431abDCD0",    
     "deployBlock" : 60837829, "blockStepInInit" : 10000, "multicallSize" : 20}}
 
-    
+const apeSwapAddress = { "BSC" : { "comptroller" : "0xAD48B2C9DC6709a560018c678e918253a65df86e", "cETH" : "0x34878F6a484005AA90E7188a546Ea9E52b538F6f",
+    "deployBlock" :  12871489, "blockStepInInit" : 50000, "multicallSize" : 20}}
+
+const rikkiAddress = { "BSC" : { "comptroller" : "0x4f3e801Bd57dC3D641E72f2774280b21d31F64e4", "cETH" : "0x157822aC5fa0Efe98daa4b0A55450f4a182C10cA",
+    "deployBlock" :  15341030, "blockStepInInit" : 50000, "multicallSize" : 20}}      
+
+const inverseAddress = { "ETH" : { "comptroller" : "0x4dCf7407AE5C07f8681e1659f626E114A7667339", "cETH" : "0x8e103Eb7a0D01Ab2b2D29C91934A9aD17eB54b86", 
+    "cETH2" : "0x697b4acAa24430F254224eB794d2a85ba1Fa1FB8",
+    "nonBorrowableMarkets" : ["0x65b35d6Eb7006e0e607BC54EB2dFD459923476fE", "0x1637e4e9941D55703a7A5E7807d6aDA3f7DCD61B"], 
+    "deployBlock" : 11915867, "blockStepInInit" : 50000, "multicallSize" : 200,
+    "rektMarkets" : ["0x17786f3813E6bA35343211bd8Fe18EC4de14F28b",
+                     "0xde2af899040536884e062D3a334F2dD36F34b4a4",
+                     "0x697b4acAa24430F254224eB794d2a85ba1Fa1FB8"]} }
+
 module.exports = {
-    oneInchOracleAbi, cTokenAbi, comptrollerAbi, multicallAbi,
+    oneInchOracleAbi, cTokenAbi, comptrollerAbi, multicallAbi, erc20Abi: erc20Abi
     compoundAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress,
-    ironBankAddress, ovixAddress, erc20Abi: erc20Abi
+    ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress
 }

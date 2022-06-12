@@ -3,6 +3,7 @@ const PriceAddresses = require("./PriceAddresses.js")
 const Web3 = require("web3")
 const { toBN, toWei, fromWei, toChecksumAddress } = Web3.utils
 const axios = require('axios')
+const assert = require('assert'); 
 
 const coinGeckoChainIdMap = {
   ETH: 'ethereum',
@@ -52,6 +53,10 @@ const specialAssetPriceFetchers = {
   },
   BSC_0x20bff4bbEDa07536FF00e073bd8359E5D80D733d: async (web3, network, stakedTokenAddress) => {
     //CAN (cannon)
+    return "0.0000000000000001"
+  },
+  ETH_0x43f11c02439e2736800433b4594994Bd43Cd066D:  async (web3, network, stakedTokenAddress) => {
+    //FOLKI
     return "0.0000000000000001"
   },
   ETH_0x26FA3fFFB6EfE8c1E69103aCb4044C26B9A106a9: async (web3, network, stakedTokenAddress) => {
@@ -122,6 +127,7 @@ const specialAssetPriceFetchers = {
     return getChainlinkPrice(web3, PriceAddresses.chfPriceFeedAddress)
   },
 }
+
 
 const getPrice = async (network, address, web3) => {
   try {
@@ -292,12 +298,15 @@ const fetchZapperTotal = async (address) => {
   };
 
   const res = await axios(options)
+  //console.log(res.data.toString())
   const netCollateral = res.data.split("event: balance\ndata: ")
     .filter(b => b != "")
     .map(b => b.split("\n")[0])
     .map(b => JSON.parse(b))
     .map(b=> {
       if(b.appId == 'tokens' || b.appId == 'nft'){
+        //console.log("b total", b.totals)
+        if(b.totals.length === 0) return 0
         return b.totals.reduce((a, b)=> a.balanceUSD + b.balanceUSD, {balanceUSD: 0})
       } else {
         return b.app.meta.total
@@ -369,6 +378,33 @@ async function testLPTokenPrice() {
   }
 }
 
+async function getCTokenPriceFromZapper(ctoken, underlying, web3, network) {
+  assert(network === "ETH", "getCTokenPriceFromZapper: only ETH is supported")
+
+  const totalBalanceInUSD = (await fetchZapperTotal(ctoken)).toString()
+  //console.log({totalBalanceInUSD})
+  const underlyingContract = new web3.eth.Contract(Addresses.erc20Abi, underlying)
+
+  const decimals = await underlyingContract.methods.decimals().call()
+  const balance = await underlyingContract.methods.balanceOf(ctoken).call()
+
+  if(balance.toString() === "0") return toBN("0")
+
+  const normalizedUSDValue = toBN(toWei(totalBalanceInUSD)).mul(toBN(10).pow(toBN(decimals))).div(toBN(balance))
+
+  return normalizedUSDValue
+}
+
+async function testCTokenFromZapper() {
+  const ctoken = "0xc528b0571D0BE4153AEb8DdB8cCeEE63C3Dd7760"
+  const underlying = "0xAA5A67c256e27A5d80712c51971408db3370927D"
+
+  const web3Eth = new Web3("https://cloudflare-eth.com")
+
+  console.log((await getCTokenPriceFromZapper(ctoken, underlying, web3Eth, "ETH")).toString())
+}
+  
+//testCTokenFromZapper()
 //testLPTokenPrice()
 //testPrices()
 
@@ -376,5 +412,6 @@ module.exports = {
   getPrice, 
   getUniV2LPTokenPrice,
   getEthPrice,
-  fetchZapperTotal
+  fetchZapperTotal,
+  getCTokenPriceFromZapper
 }
