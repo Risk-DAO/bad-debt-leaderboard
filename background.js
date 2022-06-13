@@ -37,6 +37,18 @@ const jobs = [
   {
     file: 'ParseBastion',
     name: 'aurora_bastion'
+  },  
+  {
+    file: 'ParseRikki',
+    name: 'BSC_rikki'
+  },  
+  {
+    file: 'ParseApeswap',
+    name: 'BSC_apeswap'
+  },
+  {
+    file: 'ParseInverse',
+    name: 'ethereum_inverse'
   },
 ]
 

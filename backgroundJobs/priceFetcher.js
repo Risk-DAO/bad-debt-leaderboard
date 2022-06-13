@@ -3,6 +3,7 @@ const PriceAddresses = require("./PriceAddresses.js")
 const Web3 = require("web3")
 const { toBN, toWei, fromWei, toChecksumAddress } = Web3.utils
 const axios = require('axios')
+const assert = require('assert'); 
 
 const coinGeckoChainIdMap = {
   ETH: 'ethereum',
@@ -86,53 +87,57 @@ const specialAssetPriceFetchers = {
   },  
   BSC_0xA527a61703D82139F8a06Bc30097cC9CAA2df5A6: async (web3, network, stakedTokenAddress) => {
     // Pancake LPs (Cake-LP)
-    // TODO:
-    return Number(0)
+    const res = await getUniV2LPTokenPrice(network, stakedTokenAddress, web3)
+    return Number(fromWei(res.toString()))
   },
   BSC_0x1B96B92314C44b159149f7E0303511fB2Fc4774f: async (web3, network, stakedTokenAddress) => {
     // Pancake LPs (Cake-LP)
-    // TODO:
-    return Number(0)
+    const res = await getUniV2LPTokenPrice(network, stakedTokenAddress, web3)
+    return Number(fromWei(res.toString()))
   },
   BSC_0x7561EEe90e24F3b348E1087A005F78B4c8453524: async (web3, network, stakedTokenAddress) => {
     // Pancake LPs (Cake-LP)
-    // TODO:
-    return Number(0)
+    const res = await getUniV2LPTokenPrice(network, stakedTokenAddress, web3)
+    return Number(fromWei(res.toString()))
   },
   BSC_0x70D8929d04b60Af4fb9B58713eBcf18765aDE422: async (web3, network, stakedTokenAddress) => {
     // Pancake LPs (Cake-LP)
-    // TODO:
-    return Number(0)
+    const res = await getUniV2LPTokenPrice(network, stakedTokenAddress, web3)
+    return Number(fromWei(res.toString()))
   },
   BSC_0xc15fa3E22c912A276550F3E5FE3b0Deb87B55aCd: async (web3, network, stakedTokenAddress) => {
     // Pancake LPs (Cake-LP)
-    // TODO:
-    return Number(0)
+    const res = await getUniV2LPTokenPrice(network, stakedTokenAddress, web3)
+    return Number(fromWei(res.toString()))
   },
   BSC_0x0eD7e52944161450477ee417DE9Cd3a859b14fD0: async (web3, network, stakedTokenAddress) => {
     // Pancake LPs (Cake-LP)
-    // TODO:
-    return Number(0)
+    const res = await getUniV2LPTokenPrice(network, stakedTokenAddress, web3)
+    return Number(fromWei(res.toString()))
   },
   BSC_0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16: async (web3, network, stakedTokenAddress) => {
     // Pancake LPs (Cake-LP)
-    // TODO:
-    return Number(0)
+    const res = await getUniV2LPTokenPrice(network, stakedTokenAddress, web3)
+    return Number(fromWei(res.toString()))
   },
   BSC_0x61EB789d75A95CAa3fF50ed7E47b96c132fEc082: async (web3, network, stakedTokenAddress) => {
     // Pancake LPs (Cake-LP)
-    // TODO:
-    return Number(0)
+    const res = await getUniV2LPTokenPrice(network, stakedTokenAddress, web3)
+    return Number(fromWei(res.toString()))
   },
   BSC_0x74E4716E431f45807DCF19f284c7aA99F18a4fbc: async (web3, network, stakedTokenAddress) => {
     // Pancake LPs (Cake-LP)
-    // TODO:
-    return Number(0)
+    const res = await getUniV2LPTokenPrice(network, stakedTokenAddress, web3)
+    return Number(fromWei(res.toString()))
   },
   BSC_0x7EFaEf62fDdCCa950418312c6C91Aef321375A00: async (web3, network, stakedTokenAddress) => {
     // Pancake LPs (Cake-LP)
-    // TODO:
-    return Number(0)
+    const res = await getUniV2LPTokenPrice(network, stakedTokenAddress, web3)
+    return Number(fromWei(res.toString()))
+  },
+  ETH_0x43f11c02439e2736800433b4594994Bd43Cd066D:  async (web3, network, stakedTokenAddress) => {
+    //FOLKI
+    return "0.0000000000000001"
   },
   ETH_0x26FA3fFFB6EfE8c1E69103aCb4044C26B9A106a9: async (web3, network, stakedTokenAddress) => {
     // sSPELL
@@ -202,6 +207,7 @@ const specialAssetPriceFetchers = {
     return getChainlinkPrice(web3, PriceAddresses.chfPriceFeedAddress)
   },
 }
+
 
 const getPrice = async (network, address, web3) => {
   try {
@@ -372,13 +378,16 @@ const fetchZapperTotal = async (address) => {
   };
 
   const res = await axios(options)
+  //console.log(res.data.toString())
   const netCollateral = res.data.split("event: balance\ndata: ")
     .filter(b => b != "")
     .map(b => b.split("\n")[0])
     .map(b => JSON.parse(b))
     .map(b=> {
       if(b.appId == 'tokens' || b.appId == 'nft'){
-        return b.totals.reduce((a, b)=> a.balanceUSD + b.balanceUSD, {balanceUSD: 0})
+        //console.log("b total", b.totals)
+        if(b.totals.length === 0) return 0
+        return b.totals.reduce((a, b)=> a + (b.balanceUSD || 0), 0)
       } else {
         return b.app.meta.total
       }
@@ -449,6 +458,33 @@ async function testLPTokenPrice() {
   }
 }
 
+async function getCTokenPriceFromZapper(ctoken, underlying, web3, network) {
+  assert(network === "ETH", "getCTokenPriceFromZapper: only ETH is supported")
+
+  const totalBalanceInUSD = (await fetchZapperTotal(ctoken)).toString()
+  //console.log({totalBalanceInUSD})
+  const underlyingContract = new web3.eth.Contract(Addresses.erc20Abi, underlying)
+
+  const decimals = await underlyingContract.methods.decimals().call()
+  const balance = await underlyingContract.methods.balanceOf(ctoken).call()
+
+  if(balance.toString() === "0") return toBN("0")
+
+  const normalizedUSDValue = toBN(toWei(totalBalanceInUSD)).mul(toBN(10).pow(toBN(decimals))).div(toBN(balance))
+
+  return normalizedUSDValue
+}
+
+async function testCTokenFromZapper() {
+  const ctoken = "0xc528b0571D0BE4153AEb8DdB8cCeEE63C3Dd7760"
+  const underlying = "0xAA5A67c256e27A5d80712c51971408db3370927D"
+
+  const web3Eth = new Web3("https://cloudflare-eth.com")
+
+  console.log((await getCTokenPriceFromZapper(ctoken, underlying, web3Eth, "ETH")).toString())
+}
+  
+//testCTokenFromZapper()
 //testLPTokenPrice()
 //testPrices()
 
@@ -456,5 +492,6 @@ module.exports = {
   getPrice, 
   getUniV2LPTokenPrice,
   getEthPrice,
-  fetchZapperTotal
+  fetchZapperTotal,
+  getCTokenPriceFromZapper
 }
