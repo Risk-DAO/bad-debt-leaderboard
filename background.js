@@ -46,6 +46,10 @@ const jobs = [
     file: 'ParseInverse',
     name: 'ethereum_inverse'
   },
+  {
+    file: 'ParseJPEGd',
+    name: 'ethereum_jpegd'
+  },  
 ]
 
 for(let job of jobs) {
