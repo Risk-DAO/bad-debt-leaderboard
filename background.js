@@ -46,6 +46,10 @@ const jobs = [
     file: 'ParseInverse',
     name: 'ethereum_inverse'
   },
+  {
+    file: 'ParseAurigami',
+    name: 'aurora_aurigami'
+  },
 ]
 
 for(let job of jobs) {
