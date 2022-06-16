@@ -146,6 +146,10 @@ class Compound {
                     console.log("trying with zapper")
                     price = await getCTokenPriceFromZapper(market, underlying, this.web3, this.network)
                 }
+                // if(price.toString() === "0"){  // test and handle price is zero 
+                //     console.log({ underlying, price })
+                //     process.exit(0)
+                // }
                 const token = new this.web3.eth.Contract(Addresses.cTokenAbi, underlying)
                 balance = await token.methods.balanceOf(market).call()
             }
