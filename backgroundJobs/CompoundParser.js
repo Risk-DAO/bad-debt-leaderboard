@@ -119,6 +119,10 @@ class Compound {
         setTimeout(this.main.bind(this), 1000 * 60 * 60) // sleep for 1 hour
     }
 
+    async getFallbackPrice(market) {
+        return toBN("0") // todo - override in each market
+    }
+
     async initPrices() {
         console.log("get markets")
         this.markets = await this.comptroller.methods.getAllMarkets().call()
@@ -148,6 +152,10 @@ class Compound {
                 }
                 const token = new this.web3.eth.Contract(Addresses.cTokenAbi, underlying)
                 balance = await token.methods.balanceOf(market).call()
+            }
+
+            if(price.toString() === "0") {
+                price = await this.getFallbackPrice(market)
             }
             
             this.prices[market] = this.web3.utils.toBN(price)
