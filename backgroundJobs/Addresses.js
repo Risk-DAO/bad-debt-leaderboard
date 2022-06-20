@@ -69,8 +69,18 @@ const inverseAddress = { "ETH" : { "comptroller" : "0x4dCf7407AE5C07f8681e1659f6
                      "0xde2af899040536884e062D3a334F2dD36F34b4a4",
                      "0x697b4acAa24430F254224eB794d2a85ba1Fa1FB8"]} }
 
+const aurigamiAddress = {
+    "NEAR": {
+        "comptroller": "0x817af6cfAF35BdC1A634d6cC94eE9e4c68369Aeb",
+        "cETH": "0xca9511B610bA5fc7E311FDeF9cE16050eE4449E9",
+        "deployBlock": 60501454,
+        "blockStepInInit": 10000,
+        "multicallSize": 20
+    }
+}
+
 module.exports = {
     oneInchOracleAbi, cTokenAbi, comptrollerAbi, multicallAbi, erc20Abi: erc20Abi, compoundOracleAbi,
     compoundAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress,
-    ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress
+    ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, aurigamiAddress,
 }
