@@ -3,68 +3,61 @@ require('dotenv').config()
 
 const jobs = [
   {
-    file: 'ParseOvix',
-    name: 'polygon_0vix'
+    file: 'ParseMim',
+    name: 'ethereum_MIM',
+    multiple: true
   },  
   {
-    file: 'ParseVenus',
-    name: 'BSC_venus'
+    file: 'ParseMim_BSC',
+    name: 'BSC_MIM',
+    multiple: true
   },  
   {
-    file: 'ParseRari',
-    name: 'ethereum_rari-capital'
+    file: 'ParseMim_FTM',
+    name: 'FTM_MIM',
+    multiple: true
   },  
   {
-    file: 'ParseTraderJoe',
-    name: 'avalanche_trader-joe'
+    file: 'ParseMim_Arbitrum',
+    name: 'arbitrum_MIM',
+    multiple: true
   },  
   {
-    file: 'ParseCompound',
-    name: 'ethereum_compound'
-  },
-  {
-    file: 'ParseIronBank',
-    name: 'ethereum_iron-bank'
-  },  
-  {
-    file: 'ParseBenqi',
-    name: 'avalanche_benqi'
-  },  
-  {
-    file: 'ParseBastion',
-    name: 'aurora_bastion'
-  },  
-  {
-    file: 'ParseRikki',
-    name: 'BSC_rikki'
-  },  
-  {
-    file: 'ParseApeswap',
-    name: 'BSC_apeswap'
-  },
-  {
-    file: 'ParseInverse',
-    name: 'ethereum_inverse'
+    file: 'ParseMim_AVAX',
+    name: 'avalanche_MIM',
+    multiple: true
   },
 ]
 
-for(let job of jobs) {
+const runJob = (job) => {
   const backgroundJob = fork('./backgroundJobs/jobRuner.js', [
       '-f', job.file, 
       '-n', job.name,
+      '-i', job.i,
     ],
     { silent: true }
   );
   backgroundJob.stdout.on('data', (data) => {
     console.log(`${job.name} ${new Date().toLocaleString()} : ${data}`);
   });
-  
+
   backgroundJob.stderr.on('data', (data) => {
     console.error(`err ${job.name} ${new Date().toLocaleString()} : ${data}`);
   });
-  
+
   backgroundJob.on('exit', code => {
     console.error(new Error(job.name + ' background job exited'))
     process.exit(code)
   })
+}
+
+for(let job of jobs) {
+  if(job.multiple){    
+    console.log(`./backgroundJobs/${job.file}`)
+    let {subJobs} = require(`./backgroundJobs/${job.file}`)
+    subJobs = subJobs.map((subJob, i) => Object.assign({}, job, { name: job.name + '_' + subJob.name, i }))
+    subJobs.forEach(runJob);
+  } else {
+    runJob(job)
+  }
 }

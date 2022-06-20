@@ -5,6 +5,7 @@ const commandLineArgs = require('command-line-args')
 const options = commandLineArgs([
   { name: 'file', alias: 'f', type: String },
   { name: 'name', alias: 'n', type: String },
+  { name: 'index', alias: 'i', type: Number },
 ])
 const {uploadJsonFile} = require('../s3Client')
 const every5Minutes = 1000 * 60 * 5
@@ -13,9 +14,9 @@ let comp
 let lastUpdate
 
 function run() {
-    const { file, } = options
-    const CompoundParser = require(`./${file}`)
-    comp = new CompoundParser()
+    const { file, index } = options
+    const {Parser} = require(`./${file}`)
+    comp = new Parser(index)
     comp.main()
     setInterval(writeOutput, every5Minutes)
 }
