@@ -4,7 +4,7 @@ const MimParser = require("./MimParser.js")
 const ethCalderons =
 [
     { "name" : "yvDAI", "address" : "0x7Ce7D9ED62B9A6c5aCe1c6Ec9aeb115FA3064757", "deployBlock" : 14580479},
-    { "name" : "ALCX", "address" : "0x7b7473a76D6ae86CE19f7352A1E89F6C9dc39020", "deployBlock" : 13127188}, /*
+    { "name" : "ALCX", "address" : "0x7b7473a76D6ae86CE19f7352A1E89F6C9dc39020", "deployBlock" : 13127188},
     { "name" : "yvCVXETH", "address" : "0xf179fe36a36B32a4644587B8cdee7A23af98ed37", "deployBlock" : 14262369},
     { "name" : "FTM", "address" : "0x05500e2Ee779329698DF35760bEdcAAC046e7C27", "deployBlock" : 13127890},
     { "name" : "wsOHM", "address" : "0x003d5A75d284824Af736df51933be522DE9Eed0f", "deployBlock" : 13071089},
@@ -31,7 +31,7 @@ const ethCalderons =
     { "name" : "yvYFI", "address" : "0xFFbF4892822e0d552CFF317F65e1eE7b5D3d9aE6", "deployBlock" : 12558943},
     { "name" : "cvx3pool (old)", "address" : "0x806e16ec797c69afa8590A55723CE4CC1b54050E", "deployBlock" : 13148516},
     { "name" : "cvx3pool (new)", "address" : "0x6371EfE5CD6e3d2d7C477935b7669401143b7985", "deployBlock" : 13505014},
-    { "name" : "UST (Degenbox)", "address" : "0xbc36FdE44A7FD8f545d459452EF9539d7A14dd63", "deployBlock" : 13486613}*/
+    { "name" : "UST (Degenbox)", "address" : "0xbc36FdE44A7FD8f545d459452EF9539d7A14dd63", "deployBlock" : 13486613}
 ]
 
 
