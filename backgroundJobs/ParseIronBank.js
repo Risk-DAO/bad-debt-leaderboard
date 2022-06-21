@@ -124,4 +124,4 @@ async function test() {
 //test()
 
 
-module.exports = IronBankParser
+module.exports = { Parser: IronBankParser }

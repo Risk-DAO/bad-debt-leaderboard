@@ -19,4 +19,4 @@ async function test() {
 
 //test()
 
-module.exports = ParseRikki
+module.exports = { Parser: ParseRikki }

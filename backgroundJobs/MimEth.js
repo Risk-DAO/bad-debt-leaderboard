@@ -1,8 +1,7 @@
 const MimParser = require("./MimParser.js")
 
 
-const ethCalderons =
-[
+const ethCalderons = [
     { "name" : "yvDAI", "address" : "0x7Ce7D9ED62B9A6c5aCe1c6Ec9aeb115FA3064757", "deployBlock" : 14580479},
     { "name" : "ALCX", "address" : "0x7b7473a76D6ae86CE19f7352A1E89F6C9dc39020", "deployBlock" : 13127188},
     { "name" : "yvCVXETH", "address" : "0xf179fe36a36B32a4644587B8cdee7A23af98ed37", "deployBlock" : 14262369},
@@ -35,8 +34,7 @@ const ethCalderons =
 ]
 
 
-const ftmCalderons = 
-[
+const ftmCalderons =  [
     { "name" : "FTM/MIM Spirit", "address" : "0x7208d9F9398D7b02C5C22c334c2a7A3A98c0A45d", "deployBlock" : 31494241},
     { "name" : "FTM/MIM Spooky", "address" : "0x4fdfFa59bf8dda3F4d5b38F260EAb8BFaC6d7bC1", "deployBlock" : 31497878},
     { "name" : "wFTM (3.5% interest)", "address" : "0x8E45Af6743422e488aFAcDad842cE75A09eaEd34", "deployBlock" : 11536771},
@@ -45,8 +43,7 @@ const ftmCalderons =
     { "name" : "xBOO", "address" : "0xa3Fc1B4b7f06c2391f7AD7D4795C1cD28A59917e", "deployBlock" :3124064 }
 ]
 
-const avaxCalderons =
-[
+const avaxCalderons = [
     { "name" : "AVAX", "address" : "0x3CFEd0439aB822530b1fFBd19536d897EF30D2a2", "deployBlock" :3709091 },
     { "name" : "wMEMO (deprecated)", "address" : "0x56984F04d2d04B2F63403f0EbeDD3487716bA49d", "deployBlock" : 5046414},
     { "name" : "xJOE", "address" : "0x3b63f81Ad1fc724E44330b4cf5b5B6e355AD964B", "deployBlock" : 6414426},
@@ -57,13 +54,11 @@ const avaxCalderons =
     { "name" : "MIM/AVAX SLP", "address" : "0xAcc6821d0F368b02d223158F8aDA4824dA9f28E3", "deployBlock" : 9512704}
 ]
 
-const arbitrumCalderons =
-[
+const arbitrumCalderons = [
     { "name" : "ETH", "address" : "0xC89958B03A55B5de2221aCB25B58B89A000215E6", "deployBlock" :5896 }
 ]
 
-const bscCalderons =
-[
+const bscCalderons = [
     { "name" : "CAKE", "address" : "0xF8049467F3A9D50176f4816b20cDdd9bB8a93319", "deployBlock" :12765698 },
     { "name" : "BNB", "address" : "0x692CF15F80415D83E8c0e139cAbcDA67fcc12C90", "deployBlock" :12763666 }    
 ]

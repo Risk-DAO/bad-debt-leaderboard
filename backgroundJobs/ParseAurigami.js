@@ -12,4 +12,4 @@ class AurigamiParser extends Compound {
   }
 }
 
-module.exports = AurigamiParser
+module.exports = { Parser: AurigamiParser }

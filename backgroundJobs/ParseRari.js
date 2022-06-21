@@ -12,4 +12,4 @@ class RariParser extends Compound {
   }
 }
 
-module.exports = RariParser
+module.exports = { Parser: RariParser }

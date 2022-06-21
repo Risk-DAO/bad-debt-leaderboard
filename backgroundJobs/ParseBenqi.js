@@ -12,4 +12,4 @@ class BenqiParser extends Compound {
   }
 }
 
-module.exports = BenqiParser
+module.exports = { Parser: BenqiParser }
