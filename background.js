@@ -27,6 +27,10 @@ const jobs = [
     name: 'avalanche_MIM',
     multiple: true
   },
+  {
+    file: 'ParseAurigami',
+    name: 'aurora_aurigami'
+  },
 ]
 
 const runJob = (job) => {

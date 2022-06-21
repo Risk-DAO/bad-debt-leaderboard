@@ -403,37 +403,3 @@ class MimParser {
 
 module.exports = MimParser
 
-async function test() {
-
-    const ethCalderons = [
-        //{"address" : "0x5ec47EE69BEde0b6C2A2fC0D9d094dF16C192498", "deployBlock" : 13941597, "name" : "wbtc"}, // wbtc
-        {"address" : "0x7Ce7D9ED62B9A6c5aCe1c6Ec9aeb115FA3064757", "deployBlock" : 14580479, "name" : "yvDAI"} // yvDAI
-    ]
-
-    const mimInfo = { "ETH" : { "blockStepInInit": 50000,
-                                "multicallSize" : 200,
-                                "calderons" : ethCalderons } }
-    const web3 = new Web3("https://mainnet.infura.io/v3/516f946979bc4fa187edcdc164e0bac0")
-    const mim = new MimParser(mimInfo, "ETH", web3)
-    await mim.main()
-    //await mim.initPrices()
-    //await mim.updateUsers(["0x4b63fff1eacb6DAa7D819194A583EcdE5fB073b5"])
-    /*
-    constructor(mimInfo, network, web3, heavyUpdateInterval = 24)
-    //const comp = new Compound(Addresses.traderJoeAddress, "AVAX", web3)
-    //const comp = new Compound(Addresses.ironBankAddress, "AVAX", web3)
-    const comp = new Compound(Addresses.ironBankAddress, "ETH", web3)
-    //const comp = new Compound(Addresses.venusAddress, "BSC", web3)
-
-        
-    await comp.main()*/
-    //await comp.updateUsers(["0x6C09184c823CC246435d1287F0AA3948742830E0","0x16b134c44170d78e2f8cad567bb70462dbf05a04"])
-    //await comp.collectAllUsers()
-    //await comp.updateUsers(["0xb3fbE25Be2e8CA097e9ac924e94aF000DD3A5663"])
-    //await comp.updateAllUsers()
-    //await comp.periodicUpdate(14788673 - 1000)
-    //await comp.calcBadDebt()
- }
-
-// test()
-

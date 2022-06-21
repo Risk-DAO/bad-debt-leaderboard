@@ -126,6 +126,14 @@ const specialAssetPriceFetchers = {
     // ibCHF
     return getChainlinkPrice(web3, PriceAddresses.chfPriceFeedAddress)
   },
+  NEAR_0x5183e1B1091804BC2602586919E6880ac1cf2896: async (web3, network, address) => {
+    // fetch USN price from coingecko simple price API
+    const coingeckoCall = "https://api.coingecko.com/api/v3/simple/price?ids=usn&vs_currencies=USD"
+
+    const {data} = await axios.get(coingeckoCall)
+    const apiPrice = Object.values(data)[0].usd || 0
+    return apiPrice
+  }
 }
 
 
