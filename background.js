@@ -50,6 +50,10 @@ const jobs = [
     file: 'ParseAurigami',
     name: 'aurora_aurigami'
   },
+  {
+    file: 'ParseMaker',
+    name: 'ethereum_maker'
+  },
 ]
 
 for(let job of jobs) {
