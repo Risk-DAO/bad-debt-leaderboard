@@ -19,7 +19,7 @@ const init = async () => {
       } else {
         const key = obj.Key.replace('.json', '').replace('subjob', '')
         const platform = key.split('_')[1]
-        const platformSubJobs = badDebtSubJobsCache[platfrom] = badDebtSubJobsCache[platform] || {}
+        const platformSubJobs = badDebtSubJobsCache[platform] = badDebtSubJobsCache[platform] || {}
         platformSubJobs[key] = JSON.parse(file.Body.toString())
       }
     }
@@ -30,16 +30,16 @@ const init = async () => {
   }
 }
 
-const getBadDebtBy = (platfrom) => { 
-  return badDebtCache[platfrom]
+const getBadDebtBy = (platform) => { 
+  return badDebtCache[platform]
 }
 
 const getBadDebt = () => { 
   return badDebtCache
 }
 
-const getBadDebtSubJobsBy = (platfrom) => { 
-  return badDebtSubJobsCache[platfrom]
+const getBadDebtSubJobsBy = (platform) => { 
+  return badDebtSubJobsCache[platform]
 }
 
 const getBadDebtSubJobs = () => { 
