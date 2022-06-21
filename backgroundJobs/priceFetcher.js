@@ -5,6 +5,31 @@ const { toBN, toWei, fromWei, toChecksumAddress } = Web3.utils
 const axios = require('axios')
 const assert = require('assert'); 
 
+/**
+ * a small retry wrapper with an incrameting 5s sleep delay
+ * @param {*} fn 
+ * @param {*} params 
+ * @param {*} retries 
+ * @returns 
+ */
+ async function retry(fn, params, retries = 0) {
+  try {
+      const res = await  fn(...params)
+      if(retries){
+          console.log(`retry success after ${retries} retries`)
+      } else {
+          //console.log(`success on first try`)
+      }
+      return res
+  } catch (e) {
+      console.error(e)
+      retries++
+      console.log(`retry #${retries}`)
+      await new Promise(resolve => setTimeout(resolve, 1000 * 5 * retries))
+      return retry(fn, params, retries)
+  }
+}
+
 const coinGeckoChainIdMap = {
   ETH: 'ethereum',
   AVAX: 'avalanche',
@@ -45,7 +70,7 @@ const specialAssetPriceFetchers = {
     // return ETH usdt price
 
     const coingeckoCall = "https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=0xdAC17F958D2ee523a2206206994597C13D831ec7&vs_currencies=USD"
-    const {data} = await axios.get(coingeckoCall)
+    const {data} = await retry(axios.get, [coingeckoCall])
     //console.log(data)
     const apiPrice = Object.values(data)[0].usd || 0
     return apiPrice
@@ -130,7 +155,7 @@ const specialAssetPriceFetchers = {
     // fetch USN price from coingecko simple price API
     const coingeckoCall = "https://api.coingecko.com/api/v3/simple/price?ids=usn&vs_currencies=USD"
 
-    const {data} = await axios.get(coingeckoCall)
+    const {data} = await retry(axios.get, [coingeckoCall])
     const apiPrice = Object.values(data)[0].usd || 0
     return apiPrice
   }
@@ -154,13 +179,13 @@ const getPrice = async (network, address, web3) => {
       } else if (network === 'ETH') {
         const krystalApiCall = `https://pricing-prod.krystal.team/v1/market?addresses=${address.toLowerCase()}&chain=ethereum@1&sparkline=false`
         console.log({krystalApiCall})
-        const { data } = await axios.get(krystalApiCall)
+        const { data } = await retry(axios.get, [krystalApiCall])
         //console.log(data)
         apiPrice = data.marketData[0].price || 0
       } else {
         const coinGeckoApiCall = `https://api.coingecko.com/api/v3/simple/token_price/${coinGeckoChainIdMap[network]}?contract_addresses=${address}&vs_currencies=USD`
         console.log({coinGeckoApiCall})
-        const {data} = await axios.get(coinGeckoApiCall)
+        const { data } = await retry(axios.get, [coinGeckoApiCall])
         //console.log(data)
         apiPrice = Object.values(data)[0].usd || 0
       }
@@ -198,7 +223,7 @@ const getPrice = async (network, address, web3) => {
 
 const chainTokenFetchers = {
   NEAR: async () => {
-    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD')
+    const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
     console.log({res})
     return {
@@ -207,7 +232,7 @@ const chainTokenFetchers = {
     }
   },  
   ETH: async () => {
-    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD')
+    const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
     console.log({res})
     return {
@@ -216,7 +241,7 @@ const chainTokenFetchers = {
     }
   },  
   AVAX: async () => {
-    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=avalanche-2&vs_currencies=USD')
+    const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=avalanche-2&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
     console.log({res})
     return {
@@ -225,7 +250,7 @@ const chainTokenFetchers = {
     }
   },  
   MATIC: async () => {
-    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=USD')
+    const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
     console.log({res})
     return {
@@ -234,7 +259,7 @@ const chainTokenFetchers = {
     }
   },  
   BSC: async () => {
-    const {data} = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=USD')
+    const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
     console.log({res})
     return {
