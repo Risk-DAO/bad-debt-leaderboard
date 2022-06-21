@@ -14,7 +14,7 @@ class VenusParser extends BSCParser {
     }
 }
 
-module.exports = VenusParser
+module.exports = { Parser: VenusParser }
 
 // async function test() {
 //     const Web3 = require("web3")

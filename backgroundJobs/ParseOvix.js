@@ -12,4 +12,4 @@ class OvixParser extends Compound {
   }
 }
 
-module.exports = OvixParser
+module.exports = { Parser: OvixParser }

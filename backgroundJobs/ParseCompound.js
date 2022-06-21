@@ -12,4 +12,4 @@ class CompoundParser extends Compound {
   }
 }
 
-module.exports = CompoundParser
+module.exports = { Parser: CompoundParser }
