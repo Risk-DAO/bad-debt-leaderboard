@@ -43,6 +43,7 @@ class MakerParser {
       this.totalBorrows = toBN("0")
 
       this.vat = new web3.eth.Contract(Addresses.vatAbi, Addresses.vatEthAddress["ETH"].address)
+      this.spotter = new web3.eth.Contract(Addresses.spotterAbi, Addresses.vatEthAddress["ETH"].spotterAddress)
       this.lastUpdateBlock = this.deployBlock = Addresses.vatEthAddress["ETH"].deployBlock
       this.multicallSize = Addresses.vatEthAddress["ETH"].multicallSize
       this.multicall = new web3.eth.Contract(Addresses.multicallAbi, Addresses.multicallAddress["ETH"])
@@ -89,6 +90,11 @@ class MakerParser {
     async initPrices() {
         for(const ilk of this.ilks) {
             this.ilkData[ilk] = await this.vat.methods.ilks(ilk).call()
+            const pipData = await this.spotter.methods.ilks(ilk).call()
+            const mat = pipData.mat
+            console.log({mat},{ilk})
+            const ray = toBN("10").pow(toBN("27"))
+            this.ilkData[ilk].spot = toBN(this.ilkData[ilk].spot).mul(toBN(mat)).div(ray)
         }
     }
 
@@ -116,7 +122,7 @@ class MakerParser {
     }
 
     async collectAllUsersFromEvents(chainId, eventTopic, ilkIndex, urnIndices) { 
-        const currBlock = /*this.deployBlock + 50000 // */ await this.web3.eth.getBlockNumber() - 10
+        const currBlock = /*this.deployBlock + 50000 //*/  await this.web3.eth.getBlockNumber() - 10
         console.log({currBlock})
         for(let startBlock = this.lastUpdateBlock ; startBlock < currBlock ; startBlock += this.blockStepInInit) {
             const endBlock = (startBlock + this.blockStepInInit > currBlock) ? currBlock : startBlock + this.blockStepInInit
@@ -165,7 +171,7 @@ class MakerParser {
 
         //console.log(this.users)
         for(const user of this.userList) {
-            console.log({user})
+            //console.log({user})
             const userObj = JSON.parse(user)
             const ilk = userObj.ilk
             const ilkData = this.ilkData[ilk]
@@ -236,4 +242,3 @@ async function test() {
  }
 
 //test()
-
