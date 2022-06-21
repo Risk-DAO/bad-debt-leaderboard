@@ -1,6 +1,7 @@
 const {listJsonFiles, getJsonFile} = require('./s3Client')
 
 const badDebtCache = {}
+const badDebtSubJobsCache = {}
 
 /**
  * reads bad debt from disk or s3 
@@ -13,7 +14,14 @@ const init = async () => {
     const { Contents: fileNames } = await listJsonFiles()
     for(obj of fileNames){
       const file = await getJsonFile(obj.Key)
-      badDebtCache[obj.Key.replace('.json', '')] = JSON.parse(file.Body.toString())
+      if(obj.Key.indexOf('subjob') === -1){
+        badDebtCache[obj.Key.replace('.json', '')] = JSON.parse(file.Body.toString())
+      } else {
+        const key = obj.Key.replace('.json', '').replace('subjob', '')
+        const platform = key.split('_')[1]
+        const platformSubJobs = badDebtSubJobsCache[platfrom] = badDebtSubJobsCache[platform] || {}
+        platformSubJobs[key] = JSON.parse(file.Body.toString())
+      }
     }
     console.log('badDebtCache done')
   } catch (err) {
@@ -30,8 +38,18 @@ const getBadDebt = () => {
   return badDebtCache
 }
 
+const getBadDebtSubJobsBy = (platfrom) => { 
+  return badDebtSubJobsCache[platfrom]
+}
+
+const getBadDebtSubJobs = () => { 
+  return badDebtSubJobsCache
+}
+
 module.exports = {
   init,
   getBadDebt,
-  getBadDebtBy
+  getBadDebtBy,
+  getBadDebtSubJobsBy,
+  getBadDebtSubJobs
 }
