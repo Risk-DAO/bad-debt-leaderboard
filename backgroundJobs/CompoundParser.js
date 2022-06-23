@@ -147,9 +147,20 @@ class Compound {
                 console.log("getting underlying")
                 const underlying = await ctoken.methods.underlying().call()
                 price = await getPrice(this.network, underlying, this.web3)
-                if(price.toString() == "0") {
+                if(price.toString() == "0" && this.network === "ETH") {
                     console.log("trying with zapper")
                     price = await getCTokenPriceFromZapper(market, underlying, this.web3, this.network)
+                }
+                if(price.toString() === "0"){  // test and handle price is zero 
+                    // we should not get here but if we do the process exits 
+                    // & so bad debt will not be calulated without a real price
+                    console.log({ 
+                        underlying, 
+                        price, 
+                        message: "no price was obtained, exiting the process"
+                    })
+                    throw new Error('no price was obtained, exiting the process')
+                    process.exit(0)
                 }
                 const token = new this.web3.eth.Contract(Addresses.cTokenAbi, underlying)
                 balance = await token.methods.balanceOf(market).call()

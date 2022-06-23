@@ -83,6 +83,10 @@ const jobs = [
     file: 'ParseAave',
     name: 'ethereum_aave'
   },
+  {
+    file: 'ParseCream',
+    name: 'BSC_cream'
+  },
 ]
 
 const runJob = (job) => {
