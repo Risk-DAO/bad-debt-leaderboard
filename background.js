@@ -54,6 +54,10 @@ const jobs = [
     file: 'ParseMaker',
     name: 'ethereum_maker'
   },
+  {
+    file: 'ParseAave',
+    name: 'ethereum_aave'
+  },
 ]
 
 for(let job of jobs) {

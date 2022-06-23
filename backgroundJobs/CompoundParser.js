@@ -74,7 +74,6 @@ class Compound {
         const currBlock = await this.web3.eth.getBlockNumber() - 10
         const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp        
 
-        await this.initPrices()
         if(this.userList.length == 0) await this.collectAllUsers()
         await this.updateAllUsers()
     }
@@ -89,6 +88,8 @@ class Compound {
 
     async main() {
         try {
+            await this.initPrices()
+                        
             const currBlock = await this.web3.eth.getBlockNumber() - 10
             const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp
 
@@ -308,7 +309,7 @@ class Compound {
             if(this.web3.utils.toBN(netValue).lt(this.web3.utils.toBN("0"))) {
                 //const result = await this.comptroller.methods.getAccountLiquidity(user).call()
                 console.log("bad debt for user", user, Number(netValue.toString())/1e6/*, {result}*/)
-                this.sumOfBadDebt = this.sumOfBadDebt.add(this.web3.utils.toBN(netValue), userData)
+                this.sumOfBadDebt = this.sumOfBadDebt.add(this.web3.utils.toBN(netValue))
 
                 console.log("total bad debt", Number(this.sumOfBadDebt.toString()) / 1e6)
                 
