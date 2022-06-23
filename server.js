@@ -29,6 +29,26 @@ app.get('/bad-debt', (req, res) => {
   }
 })
 
+app.get('/bad-debt-sub-jobs', (req, res) => {
+  try{
+    const { platform, market} = req.query
+    let bd
+    if(market){
+      bd = badDebtCache.getBadDebtSubJobsByMarket(market)
+    } else if(platform){
+      bd = badDebtCache.getBadDebtSubJobsBy(platform)
+    } else {
+      bd = badDebtCache.getBadDebtSubJobs()
+    }
+    if(!bd){
+      res.send(404)
+    }
+    res.json(bd)
+  } catch(e){
+    res.send(500)
+  }
+})
+
 app.get('/health', (req, res) => {
   res.json({version})
 })

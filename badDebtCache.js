@@ -30,8 +30,25 @@ const getBadDebt = () => {
   return badDebtCache
 }
 
+const getBadDebtSubJobsBy = (platform) => { 
+  return badDebtSubJobsCache[platform]
+}
+
+const getBadDebtSubJobsByMarket = (market) => { 
+  const [,platform,] = market.split('_')
+  const cached = badDebtSubJobsCache[platform] || {}
+  return cached[market]
+}
+
+const getBadDebtSubJobs = () => { 
+  return badDebtSubJobsCache
+}
+
 module.exports = {
   init,
   getBadDebt,
-  getBadDebtBy
+  getBadDebtBy,
+  getBadDebtSubJobsBy,
+  getBadDebtSubJobsByMarket,
+  getBadDebtSubJobs
 }
