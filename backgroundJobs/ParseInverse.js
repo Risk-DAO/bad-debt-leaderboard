@@ -7,11 +7,10 @@ require('dotenv').config()
 
 
 class InverseParser extends Compound {
-  constructor(web3Url = undefined) {
+  constructor(web3Url) {
     const compoundInfo = Addresses.inverseAddress
     const network = 'ETH'
-    const url = web3Url == undefined ? process.env.ETH_NODE_URL : web3Url
-    console.log({url})
+    const url = web3Url ? web3Url : process.env.ETH_NODE_URL
     const web3 = new Web3(url)
     super(compoundInfo, network, web3, 24 * 5)
   }
