@@ -18,7 +18,7 @@ let lastUpdate
 function run() {
     const { file, index } = options
     const {Parser} = require(`./${file}`)
-    comp = new Parser(index)
+    comp = isSubJob ? new Parser(index) : new Parser()
     comp.main()
     setInterval(writeOutput, every5Minutes)
 }
