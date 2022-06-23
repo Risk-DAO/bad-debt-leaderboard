@@ -78,6 +78,8 @@ const jobs = [
     file: 'ParseMim_AVAX',
     name: 'avalanche_MIM',
     multiple: true
+  },
+  {
     file: 'ParseAave',
     name: 'ethereum_aave'
   },
