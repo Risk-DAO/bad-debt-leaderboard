@@ -19,4 +19,4 @@ async function test() {
 
 test()
 
-module.exports = ParseApeswap
+module.exports = { Parser: ParseApeswap }

@@ -10,4 +10,4 @@ class ParseMaker extends Maker {
   }
 }
 
-module.exports = ParseMaker
+module.exports = { Parser: ParseMaker }

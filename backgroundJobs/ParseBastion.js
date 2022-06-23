@@ -12,4 +12,4 @@ class BastionParser extends Compound {
   }
 }
 
-module.exports = BastionParser
+module.exports = { Parser: BastionParser }

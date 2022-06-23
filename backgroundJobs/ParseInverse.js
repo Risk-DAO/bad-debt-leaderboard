@@ -37,4 +37,4 @@ async function test() {
 
 test()
 */
-module.exports = InverseParser
+module.exports = { Parser: InverseParser }

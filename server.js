@@ -7,7 +7,7 @@ const badDebtCache = require('./badDebtCache')
 const cors = require('cors')
 
 
-const everyHour = 1000 * 60 * 60
+const everyHalfHour = 1000 * 60 * 30
 
 app.use(cors())
 
@@ -31,6 +31,7 @@ app.get('/bad-debt', (req, res) => {
 
 app.get('/bad-debt-sub-jobs', (req, res) => {
   try{
+
     const { platform, market} = req.query
     let bd
     if(market){
@@ -59,7 +60,7 @@ app.get('/', (req, res) => {
 
 const startServer = async ()=> {
   await badDebtCache.init()
-  setInterval(badDebtCache.init, everyHour)  
+  setInterval(badDebtCache.init, everyHalfHour)  
 
   app.listen(port, () => {
     console.log(`listening on port ${port}`)

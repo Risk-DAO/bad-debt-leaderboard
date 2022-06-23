@@ -12,4 +12,4 @@ class TraderJoeParser extends Compound {
   }
 }
 
-module.exports = TraderJoeParser
+module.exports = { Parser: TraderJoeParser }

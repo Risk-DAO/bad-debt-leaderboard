@@ -194,7 +194,7 @@ class MimParser {
                 "&sender-address=" + calderonAddress + "&page-number="
                     + pageNumber.toString() + 
                     "&key=ckey_2d9319e5566c4c63b7b62ccf862"                 
-                const result = await axios.get(url)
+                const result = await retry(axios.get, [url])
                 const data = result.data.data
                 for(const item of data.items) {
                     //console.log({item})
