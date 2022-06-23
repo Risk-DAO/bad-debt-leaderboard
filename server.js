@@ -31,9 +31,12 @@ app.get('/bad-debt', (req, res) => {
 
 app.get('/bad-debt-sub-jobs', (req, res) => {
   try{
-    const platform = req.query.platform
+
+    const { platform, market} = req.query
     let bd
-    if(platform){
+    if(market){
+      bd = badDebtCache.getBadDebtSubJobsByMarket(market)
+    } else if(platform){
       bd = badDebtCache.getBadDebtSubJobsBy(platform)
     } else {
       bd = badDebtCache.getBadDebtSubJobs()
