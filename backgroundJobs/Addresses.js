@@ -102,6 +102,10 @@ const aurigamiAddress = {
     }
 }
 
+
+const creamAddress = { "BSC" : { "comptroller" : "0x589DE0F0Ccf905477646599bb3E5C622C84cC0BA", "cETH" : "0x1Ffe17B99b439bE0aFC831239dDECda2A790fF3A",
+    "deployBlock" : 100320, "blockStepInInit" : 5000, "multicallSize" : 20}}
+
 const aaveAddress =
 { "ETH":
     { "lendingPoolAddressesProviderAddress" : "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5", "deployBlock" : 11362579, "blockStepInInit" : 5000,   "multicallSize" : 200 }
@@ -112,5 +116,5 @@ module.exports = {
     calderonAbi, bentoboxAbi, vatAbi, spotterAbi, lendingPoolAddressesProviderAbi, lendingPoolAbi,
     compoundAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress,
     ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, vatEthAddress, aurigamiAddress,
-    ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, aurigamiAddress, aaveAddress
+    ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, aurigamiAddress, aaveAddress, creamAddress
 }
