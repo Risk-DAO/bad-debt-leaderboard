@@ -159,8 +159,7 @@ class Compound {
                         price, 
                         message: "no price was obtained, exiting the process"
                     })
-                    throw new Error('no price was obtained, exiting the process')
-                    process.exit(0)
+
                 }
                 const token = new this.web3.eth.Contract(Addresses.cTokenAbi, underlying)
                 balance = await token.methods.balanceOf(market).call()

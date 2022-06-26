@@ -11,4 +11,4 @@ class ParseAave extends Aave {
   }
 }
 
-module.exports = ParseAave
+module.exports = { Parser: ParseAave }
