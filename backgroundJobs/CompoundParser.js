@@ -157,7 +157,7 @@ class Compound {
                     console.log({ 
                         underlying, 
                         price, 
-                        message: "no price was obtained, exiting the process"
+                        message: "no price was obtained"
                     })
 
                 }

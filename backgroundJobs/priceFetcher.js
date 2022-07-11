@@ -393,40 +393,48 @@ const getUniV2LPTokenPrice = async (network, address, web3) => {
   }
 }
 
+let base64ZapperKey = Buffer.from(process.env.ZAPPER_KEY).toString('base64')
 const fetchZapperTotal = async (address) => {
-  const options = {
-    method: 'get',
-    url: 'https://api.zapper.fi/v2/balances',
-    params: {
-      'addresses[]': address,
-      useNewBalancesFormat: 'true',
-      bundled: 'false',
-      'addresses%5B%5D': address
-    },
-    headers: {
-      'Cache-Control': 'no-cache',
-      Authorization: 'Basic OTZlMGNjNTEtYTYyZS00MmNhLWFjZWUtOTEwZWE3ZDJhMjQxOg==',
-      accept: 'application/json'
-    }
-  };
-
-  const res = await axios(options)
-  //console.log(res.data.toString())
-  const netCollateral = res.data.split("event: balance\ndata: ")
-    .filter(b => b != "")
-    .map(b => b.split("\n")[0])
-    .map(b => JSON.parse(b))
-    .map(b=> {
-      if(b.appId == 'tokens' || b.appId == 'nft'){
-        //console.log("b total", b.totals)
-        if(b.totals.length === 0) return 0
-        return b.totals.reduce((a, b)=> a + (b.balanceUSD || 0), 0)
-      } else {
-        return b.app.meta.total
+  try {    
+    const options = {
+      method: 'get',
+      url: 'https://api.zapper.fi/v2/balances',
+      params: {
+        'addresses[]': address,
+        useNewBalancesFormat: 'true',
+        bundled: 'false',
+        'addresses%5B%5D': address
+      },
+      headers: {
+        'Cache-Control': 'no-cache',
+        Authorization: `Basic ${base64ZapperKey}`,
+        accept: 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'
       }
-    })
-    .reduce((a, b)=> a + b, 0)
-  return netCollateral
+    };
+
+    const res = await retry(axios, [options])
+    //console.log(res.data.toString())
+    const netCollateral = res.data.split("event: balance\ndata: ")
+      .filter(b => b != "")
+      .map(b => b.split("\n")[0])
+      .map(b => JSON.parse(b))
+      .map(b=> {
+        if(b.appId == 'tokens' || b.appId == 'nft'){
+          //console.log("b total", b.totals)
+          if(b.totals.length === 0) return 0
+          return b.totals.reduce((a, b)=> a + (b.balanceUSD || 0), 0)
+        } else {
+          return b.app.meta.total
+        }
+      })
+      .reduce((a, b)=> a + b, 0)
+    return netCollateral
+  } catch (e) {
+    console.error(`fetchZapperTotal for ${address} failed`)
+    console.error(e)
+    return '0'
+  }
 }
 
 const get1InchPrice = async (network, address, web3) => {
