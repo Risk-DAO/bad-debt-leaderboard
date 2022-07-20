@@ -111,10 +111,15 @@ const aaveAddress =
     { "lendingPoolAddressesProviderAddress" : "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5", "deployBlock" : 11362579, "blockStepInInit" : 5000,   "multicallSize" : 200 }
 }
 
+const granaryAddress =
+{ "FTM":
+    { "lendingPoolAddressesProviderAddress" : "0x8b9D58E2Dc5e9b5275b62b1F30b3c0AC87138130", "deployBlock" : 32461920, "blockStepInInit" : 5000,   "multicallSize" : 200 }
+}
+
 module.exports = {
     oneInchOracleAbi, cTokenAbi, comptrollerAbi, multicallAbi, erc20Abi: erc20Abi, compoundOracleAbi,
     calderonAbi, bentoboxAbi, vatAbi, spotterAbi, lendingPoolAddressesProviderAbi, lendingPoolAbi,
     compoundAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress,
     ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, vatEthAddress, aurigamiAddress,
-    ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, aurigamiAddress, aaveAddress, creamAddress
+    ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, aurigamiAddress, aaveAddress, creamAddress, granaryAddress
 }
