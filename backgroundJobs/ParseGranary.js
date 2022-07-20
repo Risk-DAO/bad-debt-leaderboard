@@ -1,9 +1,9 @@
 const Addresses = require("./Addresses.js")
-const Granary = require("./GranaryParser")
+const Aave = require("./AaveParser")
 const Web3 = require("web3")
 require('dotenv').config()
 
-class ParseGranary extends Granary {
+class ParseGranary extends Aave {
   constructor() {
     const network = 'FTM'
     const web3 = new Web3(process.env.FTM_NODE_URL)
