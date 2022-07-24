@@ -347,6 +347,15 @@ const chainTokenFetchers = {
       decimal: 18
     }
   },
+  FTM: async () => {
+    const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=fantom&vs_currencies=USD'])
+    const res = Object.values(data)[0].usd
+    console.log({res})
+    return {
+      price: res,
+      decimal: 18
+    }
+  }, 
 }
 
 const getEthPrice = async (network) => {
