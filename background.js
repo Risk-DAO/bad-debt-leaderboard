@@ -27,6 +27,10 @@ const jobs = [
     name: 'ethereum_iron-bank'
   },  
   {
+    file: 'ParseGranary',
+    name: 'FTM_granary'
+  },  
+  {
     file: 'ParseBenqi',
     name: 'avalanche_benqi'
   },  
