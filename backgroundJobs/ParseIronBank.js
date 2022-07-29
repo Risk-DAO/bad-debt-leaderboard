@@ -38,9 +38,7 @@ class IronBankParser extends Compound {
       ]
       let additionalCollaterals = 0;
       for (const collateralToken of collateralTokens) {
-        const value = await fetchZapperTotal(collateralToken)
-        additionalCollaterals += value
-        console.log(collateralToken, value)
+        additionalCollaterals += await fetchZapperTotal(collateralToken)
       }
       return toBN(toWei(additionalCollaterals.toString()))
     } else if(userAddress === "0x560A8E3B79d23b0A525E15C6F3486c6A293DDAd2") {
