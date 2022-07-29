@@ -25,22 +25,30 @@ class IronBankParser extends Compound {
   }
 
   async additionalCollateralBalance(userAddress) {
-    
+
     if(userAddress === "0x5f5Cd91070960D13ee549C9CC47e7a4Cd00457bb") {
       console.log("alpha homora v1 incident")
+      // below are the 5 collateral tokens after iterating the positionId of all positions in v1
+      const collateralTokens = [
+        "0xfdB4f97953150e47C8606758C13e70b5a789a7ec",
+        "0xe28D9dF7718b0b5Ba69E01073fE82254a9eD2F98",
+        "0x373ae78a14577682591E088F2E78EF1417612c68",
+        "0xC4635854480ffF80F742645da0310e9e59795c63",
+        "0x713df2DDDA9C7d7bDa98A9f8fCd82c06c50fbd90"
+      ]
+      let additionalCollaterals = 0;
+      for (const collateralToken of collateralTokens) {
+        const value = await fetchZapperTotal(collateralToken)
+        additionalCollaterals += value
+        console.log(collateralToken, value)
+      }
+      return toBN(toWei(additionalCollaterals.toString()))
+    } else if(userAddress === "0x560A8E3B79d23b0A525E15C6F3486c6A293DDAd2") {
+      console.log("alpha homora v1 incident exploiter contract")
       const alphaTokenAddress = "0xa1faa113cbE53436Df28FF0aEe54275c13B40975"
       const alphaEscrowAddress = "0xB80C75B574715404dB4B5097688B3338fE637953"
-      const alphaTokenCollateralValue = await this.balanceValue(alphaTokenAddress, alphaEscrowAddress)
-      let exploiterContractData;
-      const exploiterContractAddress = "0x560A8E3B79d23b0A525E15C6F3486c6A293DDAd2"
-      for(const [user, data] of Object.entries(this.users)) {
-        if (user == exploiterContractAddress){
-          exploiterContractData = new User(user, data.marketsIn, data.borrowBalance, data.collateralBalace, data.error)
-          break;
-        }
-      }
-      const exploiterContractNetValue = exploiterContractData.getUserNetValue(this.web3, this.prices);
-      return alphaTokenCollateralValue.add(exploiterContractNetValue.netValue);
+      const alphaTokenCollateralValue = await this.balanceValue(alphaTokenAddress, alphaEscrowAddress);
+      return alphaTokenCollateralValue;
     }
     else if(userAddress === "0xba5eBAf3fc1Fcca67147050Bf80462393814E54B") {
       console.log("alpha homora v2")

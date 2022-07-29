@@ -1,10 +1,11 @@
 class User {
-    constructor(user, marketsIn, borrowBalance, collateralBalace, error) {
+    constructor(user, marketsIn, borrowBalance, collateralBalace, error, ignoredMarkets = Set()) {
         this.marketsIn = marketsIn
         this.borrowBalance = borrowBalance
         this.collateralBalace = collateralBalace
         this.error = error
         this.user = user
+        this.ignoredMarkets = ignoredMarkets
     }
 
     getUserNetValue(web3, prices) {
@@ -16,6 +17,9 @@ class User {
         const _1e18 = web3.utils.toBN(web3.utils.toWei("1"))
 
         for(const market of this.marketsIn) {
+            if (this.ignoredMarkets.has(market)){
+                continue;
+            }
             // ignore the account if no price or no collateral/debt values
             // in IB there are assets that no longer appear in the market assets. but are part of asset in (go figure...)
             if(this.collateralBalace[market] === undefined ||

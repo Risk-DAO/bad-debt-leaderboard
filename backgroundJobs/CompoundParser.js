@@ -51,6 +51,7 @@ class Compound {
       this.deployBlock = compoundInfo[network].deployBlock
       this.blockStepInInit = compoundInfo[network].blockStepInInit
       this.multicallSize = compoundInfo[network].multicallSize
+      this.ignoredMarkets = compoundInfo[network].ignoredMarkets == null ? Set() : new Set(compoundInfo[network].ignoredMarkets)
 
       this.prices = {}
       this.markets = []
@@ -304,7 +305,7 @@ class Compound {
         
         for(const [user, data] of Object.entries(this.users)) {
 
-            const userData = new User(user, data.marketsIn, data.borrowBalance, data.collateralBalace, data.error)
+            const userData = new User(user, data.marketsIn, data.borrowBalance, data.collateralBalace, data.error, this.ignoredMarkets)
             //console.log({user})
             const additionalCollateral = await this.additionalCollateralBalance(user)
             const userValue = userData.getUserNetValue(this.web3, this.prices)
@@ -413,7 +414,7 @@ class Compound {
                 globalIndex++
             }
 
-            const userData = new User(user, assetsIn, borrowBalances, collateralBalances, ! success)
+            const userData = new User(user, assetsIn, borrowBalances, collateralBalances, ! success, this.ignoredMarkets)
             this.users[user] = userData
         }
     }
