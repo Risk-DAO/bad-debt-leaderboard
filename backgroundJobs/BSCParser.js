@@ -5,6 +5,24 @@ const Web3 = require("web3")
 require('dotenv').config()
 
 
+async function retry(fn, params, retries = 0) {
+    try {
+        const res = await  fn(...params)
+        if(retries){
+            console.log(`retry success after ${retries} retries`)
+        } else {
+            console.log(`success on first try`)
+        }
+        return res
+    } catch (e) {
+        console.error(e)
+        retries++
+        console.log(`retry #${retries}`)
+        await new Promise(resolve => setTimeout(resolve, 1000 * 5 * retries))
+        return retry(fn, params, retries)
+    }
+}
+
 class BSCParser extends Compound {
     async collectAllUsers() {
         const currBlock = await this.web3.eth.getBlockNumber() - 10
@@ -23,7 +41,10 @@ class BSCParser extends Compound {
                 "&sender-address=" + comptrollerAddress + "&page-number="
                     + pageNumber.toString() + 
                     "&key=ckey_2d9319e5566c4c63b7b62ccf862"
-                const result = await axios.get(url)
+                    
+                const fn = (...args) => axios.get(...args)
+                const result = await retry(fn, [url])                    
+                //const result = await axios.get(url)
                 const data = result.data.data
                 for(const item of data.items) {
                     const user = this.web3.utils.toChecksumAddress("0x" + item.raw_log_data.slice(-40))
