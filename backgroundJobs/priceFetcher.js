@@ -35,7 +35,8 @@ const coinGeckoChainIdMap = {
   AVAX: 'avalanche',
   MATIC: 'polygon-pos',
   BSC: 'binance-smart-chain',
-  NEAR: 'aurora'
+  NEAR: 'aurora',
+  CRO: 'cronos'
 }
 
 const getChainlinkPrice = async (web3, feedAddress) => {
@@ -349,6 +350,15 @@ const chainTokenFetchers = {
   },
   FTM: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=fantom&vs_currencies=USD'])
+    const res = Object.values(data)[0].usd
+    console.log({res})
+    return {
+      price: res,
+      decimal: 18
+    }
+  }, 
+  CRO: async () => {
+    const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
     console.log({res})
     return {

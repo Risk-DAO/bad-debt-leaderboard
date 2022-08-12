@@ -44,10 +44,12 @@ const multicallAddress = { "ETH" : "0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696",
     "AVAX" : "0xcb6E2F66DF0493b4dD23ac7727D1677D1208b697",
     "MATIC" : "0xe539B93620570A92EF90eF7E60c79d9fAee91186", "NEAR": "0xcb6E2F66DF0493b4dD23ac7727D1677D1208b697",
     "FTM" : "0xab35D115974aC0A3C4Bd16A70DF77003c9f4C011",
-    "ARBITRUM" : "0x0c05e6968AED7Ca120464a78731144e75052CeB1" }
+    "ARBITRUM" : "0x0c05e6968AED7Ca120464a78731144e75052CeB1",
+    "CRO" : "0x5e954f5972EC6BFc7dECd75779F10d848230345F" }
 
 const usdcAddress = {"ETH" : "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "BSC" : "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
-    "AVAX" : "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E", "MATIC" : "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", "NEAR": "0xB12BFcA5A55806AaF64E99521918A4bf0fC40802"}
+    "AVAX" : "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E", "MATIC" : "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", "NEAR": "0xB12BFcA5A55806AaF64E99521918A4bf0fC40802",
+    "CRO": "0xc21223249CA28397B4B6541dfFaEcC539BfF0c59" }
 
 const compoundAddress = { "ETH" : { "comptroller" : "0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B", "cETH" : "0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5",    
     "deployBlock" : 7710671, "blockStepInInit" : 50000, "multicallSize" : 200} }
@@ -116,10 +118,14 @@ const granaryAddress =
     { "lendingPoolAddressesProviderAddress" : "0x8b9D58E2Dc5e9b5275b62b1F30b3c0AC87138130", "deployBlock" : 32461920, "blockStepInInit" : 5000,   "multicallSize" : 200 }
 }
 
+const tectonicAddress = { "CRO" : { "comptroller" : "0xb3831584acb95ED9cCb0C11f677B5AD01DeaeEc0", "cETH" : "0xeAdf7c01DA7E93FdB5f16B0aa9ee85f978e89E95",    
+    "deployBlock" : 570286, "blockStepInInit" : 2000, "multicallSize" : 20 }
+}
+
 module.exports = {
     oneInchOracleAbi, cTokenAbi, comptrollerAbi, multicallAbi, erc20Abi: erc20Abi, compoundOracleAbi,
     calderonAbi, bentoboxAbi, vatAbi, spotterAbi, lendingPoolAddressesProviderAbi, lendingPoolAbi,
     compoundAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress,
     ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, vatEthAddress, aurigamiAddress,
-    ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, aurigamiAddress, aaveAddress, creamAddress, granaryAddress
+    ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, aurigamiAddress, aaveAddress, creamAddress, granaryAddress, tectonicAddress
 }
