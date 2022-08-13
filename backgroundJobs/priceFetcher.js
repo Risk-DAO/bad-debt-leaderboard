@@ -243,6 +243,7 @@ const specialAssetPriceFetchers = {
 
 
 const getPrice = async (network, address, web3) => {
+  if(network === "MOONBEAM") return 0
   try {
     const { Contract } = web3.eth
     const token = new Contract(PriceAddresses.erc20Abi, address)
@@ -355,10 +356,11 @@ const chainTokenFetchers = {
       price: res,
       decimal: 18
     }
-  }, 
+  },
 }
 
 const getEthPrice = async (network) => {
+  if(network === "MOONBEAM") return toBN("0")
   try{
     const { price: apiPrice, decimal } = await chainTokenFetchers[`${network}`]()
     const normlizer = (18 - decimal).toString()
