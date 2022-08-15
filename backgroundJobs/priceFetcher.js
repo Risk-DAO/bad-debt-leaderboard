@@ -35,7 +35,8 @@ const coinGeckoChainIdMap = {
   AVAX: 'avalanche',
   MATIC: 'polygon-pos',
   BSC: 'binance-smart-chain',
-  NEAR: 'aurora'
+  NEAR: 'aurora',
+  CRO: 'cronos'
 }
 
 const getChainlinkPrice = async (web3, feedAddress) => {
@@ -238,6 +239,14 @@ const specialAssetPriceFetchers = {
     const {data} = await retry(axios.get, [coingeckoCall])
     const apiPrice = Object.values(data)[0].usd || 0
     return apiPrice
+  },
+  CRO_0x87EFB3ec1576Dec8ED47e58B832bEdCd86eE186e: async (web3, network, address) => {
+    // fetch TUSD price from coingecko simple price API
+    const coingeckoCall = "https://api.coingecko.com/api/v3/simple/price?ids=true-usd&vs_currencies=USD"
+
+    const {data} = await retry(axios.get, [coingeckoCall])
+    const apiPrice = Object.values(data)[0].usd || 0
+    return apiPrice    
   }
 }
 
@@ -281,11 +290,11 @@ const getPrice = async (network, address, web3) => {
       price = toBN(toWei(apiPrice.toString())).div(toBN('10').pow(toBN(normlizer)))
     }
     else {
-      const normlizer = 18 -decimal
-      price = toBN(toWei(apiPrice.toString())).mul(toBN('10').pow(toBN(normlizer)))
+      const normlizer = 18 - decimal
+      price = toBN(toWei(apiPrice.toFixed(17))).mul(toBN('10').pow(toBN(normlizer)))
     }
 
-    console.log({ apiPrice })
+    console.log("api price", apiPrice.toFixed(17) )
     
     console.log({
       address,
@@ -349,6 +358,15 @@ const chainTokenFetchers = {
   },
   FTM: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=fantom&vs_currencies=USD'])
+    const res = Object.values(data)[0].usd
+    console.log({res})
+    return {
+      price: res,
+      decimal: 18
+    }
+  }, 
+  CRO: async () => {
+    const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
     console.log({res})
     return {
