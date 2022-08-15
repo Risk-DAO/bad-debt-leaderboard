@@ -242,7 +242,7 @@ const specialAssetPriceFetchers = {
   },
   CRO_0x87EFB3ec1576Dec8ED47e58B832bEdCd86eE186e: async (web3, network, address) => {
     // fetch TUSD price from coingecko simple price API
-    const coingeckoCall = "https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=0x0000000000085d4780B73119b644AE5ecd22b376&vs_currencies=USD"
+    const coingeckoCall = "https://api.coingecko.com/api/v3/simple/price?ids=true-usd&vs_currencies=USD"
 
     const {data} = await retry(axios.get, [coingeckoCall])
     const apiPrice = Object.values(data)[0].usd || 0
