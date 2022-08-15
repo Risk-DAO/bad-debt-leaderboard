@@ -1,9 +1,9 @@
 const Addresses = require("./Addresses.js")
-const Tectonic = require("./TectonicParser")
+const Compound = require("./CompoundParser.js")
 const Web3 = require("web3")
 require('dotenv').config()
 
-class TectonicParser extends Tectonic {
+class TectonicParser extends Compound {
   constructor() {
     const tectonicInfo = Addresses.tectonicAddress
     const network = 'CRO'
@@ -13,3 +13,11 @@ class TectonicParser extends Tectonic {
 }
 
 module.exports = { Parser: TectonicParser }
+
+
+async function test() {
+  const x = new TectonicParser()
+  await x.main()
+}
+
+//test()
