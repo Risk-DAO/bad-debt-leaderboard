@@ -59,6 +59,10 @@ const jobs = [
     name: 'ethereum_maker'
   },
   {
+    file: 'ParseTectonic',
+    name: 'CRO_tectonic'
+  },
+  {
     file: 'ParseMim',
     name: 'ethereum_MIM',
     multiple: true
