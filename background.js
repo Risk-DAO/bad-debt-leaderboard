@@ -95,6 +95,10 @@ const jobs = [
     file: 'ParseCream',
     name: 'BSC_cream'
   },
+  {
+    file: 'ParseMoonwell',
+    name: 'MOONBEAN_Moonwell'
+  },  
 ]
 
 const runJob = (job) => {
