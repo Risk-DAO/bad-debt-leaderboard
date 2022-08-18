@@ -97,7 +97,7 @@ const jobs = [
   },
   {
     file: 'ParseMoonwell',
-    name: 'MOONBEAN_Moonwell'
+    name: 'MOONBEAM_Moonwell'
   },  
 ]
 
