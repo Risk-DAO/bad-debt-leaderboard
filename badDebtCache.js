@@ -1,7 +1,7 @@
 const {listJsonFiles, getJsonFile} = require('./githubClient')
 
-const badDebtCache = {}
-const badDebtSubJobsCache = {}
+let badDebtCache = {}
+let badDebtSubJobsCache = {}
 
 /**
  * reads bad debt from disk or s3 
@@ -10,6 +10,7 @@ const badDebtSubJobsCache = {}
 const init = async () => {
   try{
     const cache = {}
+    const sjCache = {}
     // fetching from S3
     const fileNames = await listJsonFiles()
     for(let fileName of fileNames){
@@ -19,11 +20,12 @@ const init = async () => {
       } else {
         const key = fileName.replace('.json', '').replace('subjob', '')
         const platform = key.split('_')[1]
-        const platformSubJobs = badDebtSubJobsCache[platform] = badDebtSubJobsCache[platform] || {}
+        const platformSubJobs = sjCache[platform] = sjCache[platform] || {}
         platformSubJobs[key] = file
       }
     }
     badDebtCache = cache
+    badDebtSubJobsCache = sjCache
     console.log('badDebtCache done')
   } catch (err) {
     console.error(err)
