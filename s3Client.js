@@ -46,7 +46,7 @@ const getJsonFile = (fileName) => {
             reject(err)
             return
         }
-        resolve(data)
+        resolve(JSON.parse(data.Body.toString()))
       });
 
   })

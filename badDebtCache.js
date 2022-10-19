@@ -14,12 +14,12 @@ const init = async () => {
     for(let fileName of fileNames){
       const file = await getJsonFile(fileName)
       if(fileName.indexOf('subjob') === -1){
-        badDebtCache[fileName.replace('.json', '')] = JSON.parse(file.Body.toString())
+        badDebtCache[fileName.replace('.json', '')] = file
       } else {
         const key = fileName.replace('.json', '').replace('subjob', '')
         const platform = key.split('_')[1]
         const platformSubJobs = badDebtSubJobsCache[platform] = badDebtSubJobsCache[platform] || {}
-        platformSubJobs[key] = JSON.parse(file.Body.toString())
+        platformSubJobs[key] = file
       }
     }
     console.log('badDebtCache done')
