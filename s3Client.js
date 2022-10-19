@@ -68,7 +68,7 @@ const listJsonFiles = () => {
         }
         resolve(data)
       });
-  })
+  }).then(({Contents}) => Contents.map(({Key}) => Key))
 }
 
 module.exports = {
