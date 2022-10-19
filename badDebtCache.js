@@ -9,12 +9,13 @@ const badDebtSubJobsCache = {}
  */
 const init = async () => {
   try{
+    const cache = {}
     // fetching from S3
     const fileNames = await listJsonFiles()
     for(let fileName of fileNames){
       const file = await getJsonFile(fileName)
       if(fileName.indexOf('subjob') === -1){
-        badDebtCache[fileName.replace('.json', '')] = file
+        cache[fileName.replace('.json', '')] = file
       } else {
         const key = fileName.replace('.json', '').replace('subjob', '')
         const platform = key.split('_')[1]
@@ -22,6 +23,7 @@ const init = async () => {
         platformSubJobs[key] = file
       }
     }
+    badDebtCache = cache
     console.log('badDebtCache done')
   } catch (err) {
     console.error(err)
