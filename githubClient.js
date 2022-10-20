@@ -50,9 +50,10 @@ const listJsonFiles = async () => {
 
 const getJsonFile = async (fileName) => {
   try{
-    const {data} = await axios.get(`https://raw.githubusercontent.com/Risk-DAO/simulation-results/main/bad-debt/latest/${fileName}`)
+    const {data} = await axios.get(`https://raw.githubusercontent.com/Risk-DAO/simulation-results/main/bad-debt/latest/${encodeURIComponent(fileName)}`)
     return data
   } catch (err) {
+    console.error(err)
     return null
   }
 }

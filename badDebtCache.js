@@ -15,6 +15,7 @@ const init = async () => {
     const fileNames = await listJsonFiles()
     for(let fileName of fileNames){
       const file = await getJsonFile(fileName)
+      if(!file) continue
       if(fileName.indexOf('subjob') === -1){
         cache[fileName.replace('.json', '')] = file
       } else {
