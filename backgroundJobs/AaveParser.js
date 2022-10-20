@@ -1,10 +1,9 @@
 const Web3 = require('web3')
-const { toBN, toWei, fromWei } = Web3.utils
-const axios = require('axios')
+const { toBN, toWei } = Web3.utils
 const Addresses = require("./Addresses.js")
 const { getPrice, getEthPrice, getCTokenPriceFromZapper } = require('./priceFetcher')
 const User = require("./User.js")
-
+const {waitForCpuToGoBelowThreshold} = require("../machineResources")
 /**
  * a small retry wrapper with an incrameting 5s sleep delay
  * @param {*} fn 
@@ -77,6 +76,7 @@ class Aave {
 
     async main() {
         try {
+            await waitForCpuToGoBelowThreshold()
             await this.initPrices()
 
             const currBlock = await this.web3.eth.getBlockNumber() - 10

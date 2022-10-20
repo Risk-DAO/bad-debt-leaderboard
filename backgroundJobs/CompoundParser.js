@@ -4,6 +4,7 @@ const axios = require('axios')
 const Addresses = require("./Addresses.js")
 const { getPrice, getEthPrice, getCTokenPriceFromZapper } = require('./priceFetcher')
 const User = require("./User.js")
+const {waitForCpuToGoBelowThreshold} = require("../machineResources")
 
 /**
  * a small retry wrapper with an incrameting 5s sleep delay
@@ -88,6 +89,7 @@ class Compound {
 
     async main() {
         try {
+            await waitForCpuToGoBelowThreshold()
             await this.initPrices()
                         
             const currBlock = await this.web3.eth.getBlockNumber() - 10
