@@ -127,7 +127,6 @@ const runJob = (job) => {
 
 const init = async () => {
   for(let job of jobs) {
-    await sleep(60)
     await waitForCpuToGoBelowThreshold()
     if(job.multiple){    
       console.log(`./backgroundJobs/${job.file}`)
@@ -137,6 +136,7 @@ const init = async () => {
     } else {
       runJob(job)
     }
+    await sleep(60) // before running the next process
   }
 }
 

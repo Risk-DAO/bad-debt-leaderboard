@@ -1,6 +1,6 @@
 const os = require('os-utils');
 const {sleep} = require('./utils');
-const cpuThreshold = 0.9
+const cpuThreshold = 0.85
 
 const checkCPU = async () => {
   return new Promise(resolve => os.cpuUsage(resolve))

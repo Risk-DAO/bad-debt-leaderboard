@@ -20,9 +20,20 @@ const getSha = async (fileName) => {
   }
 }
 
-const uploadJsonFile = async (jsonString, fileName) => {
+const getDay = () => {
+  const dateObj = new Date();
+  const month = dateObj.getUTCMonth() + 1; //months from 1-12
+  const day = dateObj.getUTCDate();
+  const year = dateObj.getUTCFullYear();
+  return day + '.' + month + '.' + year
+}
+
+const uploadJsonFile = async (jsonString, fileName, day) => {
   const sha = await getSha(fileName)
-  return octokit.request('PUT /repos/{owner}/{repo}/contents/bad-debt/latest/{path}', {
+  if(!day){
+    await uploadJsonFile(jsonString, fileName, getDay())
+  }
+  return octokit.request(`PUT /repos/{owner}/{repo}/contents/bad-debt/${day || 'latest'}/{path}`, {
     owner: 'Risk-DAO',
     repo: 'simulation-results',
     path: `${fileName}`,
