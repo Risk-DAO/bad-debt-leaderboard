@@ -46,7 +46,7 @@ const getJsonFile = (fileName) => {
             reject(err)
             return
         }
-        resolve(data)
+        resolve(JSON.parse(data.Body.toString()))
       });
 
   })
@@ -68,7 +68,7 @@ const listJsonFiles = () => {
         }
         resolve(data)
       });
-  })
+  }).then(({Contents}) => Contents.map(({Key}) => Key))
 }
 
 module.exports = {

@@ -1,5 +1,7 @@
 const { fork } = require('node:child_process');
 require('dotenv').config()
+const {waitForCpuToGoBelowThreshold} = require('./machineResources')
+const {sleep} = require('./utils');
 
 const jobs = [
   {
@@ -123,13 +125,19 @@ const runJob = (job) => {
   })
 }
 
-for(let job of jobs) {
-  if(job.multiple){    
-    console.log(`./backgroundJobs/${job.file}`)
-    let {subJobs} = require(`./backgroundJobs/${job.file}`)
-    subJobs = subJobs.map((subJob, i) => Object.assign({}, job, { name: job.name + '_' + subJob.name, i }))
-    subJobs.forEach(runJob);
-  } else {
-    runJob(job)
+const init = async () => {
+  for(let job of jobs) {
+    await waitForCpuToGoBelowThreshold()
+    if(job.multiple){    
+      console.log(`./backgroundJobs/${job.file}`)
+      let {subJobs} = require(`./backgroundJobs/${job.file}`)
+      subJobs = subJobs.map((subJob, i) => Object.assign({}, job, { name: job.name + '_' + subJob.name, i }))
+      subJobs.forEach(runJob);
+    } else {
+      runJob(job)
+    }
+    await sleep(60) // before running the next process
   }
 }
+
+init()

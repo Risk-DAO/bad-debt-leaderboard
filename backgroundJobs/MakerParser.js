@@ -4,6 +4,7 @@ const axios = require('axios')
 const Addresses = require("./Addresses.js")
 const { getPrice, getEthPrice, getCTokenPriceFromZapper } = require('./priceFetcher')
 const User = require("./User.js")
+const {waitForCpuToGoBelowThreshold} = require("../machineResources")
 
 /**
  * a small retry wrapper with an incrameting 5s sleep delay
@@ -62,6 +63,7 @@ class MakerParser {
 
     async main(onlyOnce = false) {
         try {
+            await waitForCpuToGoBelowThreshold()
             const currBlock = await this.web3.eth.getBlockNumber() - 10
             const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp
 

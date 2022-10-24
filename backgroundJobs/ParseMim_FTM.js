@@ -5,8 +5,8 @@ require('dotenv').config()
 
 
 const ftmCalderons = [
-    { "name" : "FTM/MIM Spirit", "address" : "0x7208d9F9398D7b02C5C22c334c2a7A3A98c0A45d", "deployBlock" : 31494241},
-    { "name" : "FTM/MIM Spooky", "address" : "0x4fdfFa59bf8dda3F4d5b38F260EAb8BFaC6d7bC1", "deployBlock" : 31497878},
+    { "name" : "FTM+MIM Spirit", "address" : "0x7208d9F9398D7b02C5C22c334c2a7A3A98c0A45d", "deployBlock" : 31494241},
+    { "name" : "FTM+MIM Spooky", "address" : "0x4fdfFa59bf8dda3F4d5b38F260EAb8BFaC6d7bC1", "deployBlock" : 31497878},
     { "name" : "wFTM (3.5% interest)", "address" : "0x8E45Af6743422e488aFAcDad842cE75A09eaEd34", "deployBlock" : 11536771},
     { "name" : "wFTM (1.8% interest)", "address" : "0xd4357d43545F793101b592bACaB89943DC89d11b", "deployBlock" : 11536803},
     { "name" : "yvWFTM", "address" : "0xed745b045f9495B8bfC7b58eeA8E0d0597884e12", "deployBlock" : 17494828},
