@@ -4,6 +4,7 @@ const axios = require('axios')
 const Addresses = require("./Addresses.js")
 const { getEthPrice } = require('./priceFetcher')
 const User = require("./User.js")
+const {waitForCpuToGoBelowThreshold} = require("../machineResources")
 
 require('dotenv').config()
 /**
@@ -99,6 +100,7 @@ class AaveV3 {
 
     async main() {
         try {
+            await waitForCpuToGoBelowThreshold()
             await this.init()
 
             const currBlock = await this.web3.eth.getBlockNumber() - 10
