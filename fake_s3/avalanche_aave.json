@@ -1,0 +1,267 @@
+{
+	"total": "-363850373557",
+	"updated": "1666359776",
+	"decimals": "18",
+	"users": [
+		{
+			"user": "0x3A7a0724A30be5aF9024A9228391DE030795e606",
+			"badDebt": "-26722993347"
+		},
+		{
+			"user": "0x09680e225e0310540DF56D6972eA6ff0278314C4",
+			"badDebt": "-54747510066"
+		},
+		{
+			"user": "0x8Bfe605081dEdF2C1133F653Cf0b511b90436991",
+			"badDebt": "-46704154"
+		},
+		{
+			"user": "0x5D30fD58df2ff7eb1eb28b7f55fA72AeEa2846a4",
+			"badDebt": "-33845355141"
+		},
+		{
+			"user": "0xf2bbd77D1Cc8175B8525cD6C43d8414E1dd5F628",
+			"badDebt": "-11820096402"
+		},
+		{
+			"user": "0x3dDD3152aa2fb59a59fE1923671BF328A73dF60d",
+			"badDebt": "-24218097993"
+		},
+		{
+			"user": "0x096329514D568b5BED63a433989ec8c5D5BD98fF",
+			"badDebt": "-16553866134"
+		},
+		{
+			"user": "0xE8bad7b49E6DAdF62e05AA710cD75685c581a435",
+			"badDebt": "-234733597"
+		},
+		{
+			"user": "0x4F352d852cf71CFb920338037fE571f61cFa7282",
+			"badDebt": "-657287"
+		},
+		{
+			"user": "0x379F29c017eC33E145D1fe721971Cc1B50a31253",
+			"badDebt": "-670045808"
+		},
+		{
+			"user": "0xa9508D3Ac7Af227394abD16D3102ef3D6F7055d1",
+			"badDebt": "-6403600643"
+		},
+		{
+			"user": "0x19368fD9aefc518023F212F64552855FF77aE101",
+			"badDebt": "-11019514470"
+		},
+		{
+			"user": "0x81671C9329D04eA818bD2c8e00D9eC500b48F55f",
+			"badDebt": "-2724331602"
+		},
+		{
+			"user": "0x857390Bc5275F8c58B30E8D46778dF2d9b882658",
+			"badDebt": "-17367888597"
+		},
+		{
+			"user": "0xe0863f014a3C34382EDc0f6ab0c6F94032D3Fb2c",
+			"badDebt": "-487312752"
+		},
+		{
+			"user": "0x02d57E3042a854E4256Aa17D5bDd4541D8C4d36C",
+			"badDebt": "-3048461"
+		},
+		{
+			"user": "0x44464a96975d6BeDC25017c0742955aEfc20AaAC",
+			"badDebt": "-10341048980"
+		},
+		{
+			"user": "0x0376991Ffad9C9342C0C826587BfcF0372530768",
+			"badDebt": "-614494233"
+		},
+		{
+			"user": "0xF7F7D74ce9Fc6626D629c6e90D9aaa359417Dcb5",
+			"badDebt": "-43127837"
+		},
+		{
+			"user": "0x93F1E4b0081cEa34b76CEDc5e6200486d629fef8",
+			"badDebt": "-3019761664"
+		},
+		{
+			"user": "0x223317649606E791210b14558D9690B6aE3e0D32",
+			"badDebt": "-628420360"
+		},
+		{
+			"user": "0x1BA85548aFFb8053b3520115fB2D1C437a5fbAaf",
+			"badDebt": "-158122302"
+		},
+		{
+			"user": "0xe86De10178acAe5c4bd5bce79e5e6a28AeB0C6e2",
+			"badDebt": "-64837141024"
+		},
+		{
+			"user": "0xcbb8fe862EAa2AaC3EeD5e64b6db955700FC8232",
+			"badDebt": "-15691629"
+		},
+		{
+			"user": "0x27f63e027B33A1EE2C1C32612D09c205E92F0141",
+			"badDebt": "-14469898"
+		},
+		{
+			"user": "0x2d9277967256e87361eA5aC185e1114aF9405b88",
+			"badDebt": "-48758"
+		},
+		{
+			"user": "0x4543Fd1f495FEbe3f12dF7623B91F9EC6cD5357A",
+			"badDebt": "-1810881154"
+		},
+		{
+			"user": "0x28492440d31C90F8Ca05CbC317eFF40fbb8Cb397",
+			"badDebt": "-2571022"
+		},
+		{
+			"user": "0x64E837D2fF7Fa7996F9e2D48238583466518ba3E",
+			"badDebt": "-1453524456"
+		},
+		{
+			"user": "0x3E7D5785c6105be028f46A9e20697A39094Ca8c4",
+			"badDebt": "-452753"
+		},
+		{
+			"user": "0x06f5ff0b560F94De2FBaB68181a8Fdd48fBbE08E",
+			"badDebt": "-4728344484"
+		},
+		{
+			"user": "0x4dfe2FC43c8C547A349Cb265c4Ca8471eaed5006",
+			"badDebt": "-54652222"
+		},
+		{
+			"user": "0x1c1325CCf70FAbfE9E496C5C9a409Db7598ba568",
+			"badDebt": "-9519123"
+		},
+		{
+			"user": "0xA38A986d5a0869D3631b3e18198C5Bcf494CCB45",
+			"badDebt": "-321557217"
+		},
+		{
+			"user": "0x74c52e38fB622329f596e573a4878Bf616EAb280",
+			"badDebt": "-2156414"
+		},
+		{
+			"user": "0xBd664d5722D6bE5F173d8177C0F360eCe426FC0E",
+			"badDebt": "-12499141754"
+		},
+		{
+			"user": "0x26f245eb1097dCA18F2982261A7e60E8Dc6c2Ba6",
+			"badDebt": "-31643504624"
+		},
+		{
+			"user": "0x2289991243979547D4fA31C3ef60D7ff4212711c",
+			"badDebt": "-2500"
+		},
+		{
+			"user": "0xaA251E8228afEB369f626258e54E3ADC754Cdf57",
+			"badDebt": "-17406612349"
+		},
+		{
+			"user": "0xdb3c2d180d2D62706239A717b80dF0C765E7abAa",
+			"badDebt": "-1362288877"
+		},
+		{
+			"user": "0xA9E1b8D4FcED0B9C9091B3fE3A3d723196f47Ac2",
+			"badDebt": "-4849072504"
+		},
+		{
+			"user": "0x611AFAcF4b845a905488290665bF7Aa267cA3E89",
+			"badDebt": "-6571"
+		},
+		{
+			"user": "0x0400083c67Fd63dB5F1ae087EFd9583430B663Cf",
+			"badDebt": "-535670956"
+		},
+		{
+			"user": "0x7962B0a5635B01F9419353E5e54b8B0dDC9F82e1",
+			"badDebt": "-33038715"
+		},
+		{
+			"user": "0xC2547D2Bf97EF959aCCD11a844DD3D45e06597d6",
+			"badDebt": "-794"
+		},
+		{
+			"user": "0xe548C0D06ec0D3A40F4157269ed35fbDB779dB1f",
+			"badDebt": "-2800"
+		},
+		{
+			"user": "0x7eb3853C8eF6Aac4658Dfd7075E043DA30193B49",
+			"badDebt": "-420"
+		},
+		{
+			"user": "0xe1a7aC89bBA0Da78E1aF94a340Cf80c91e93fe03",
+			"badDebt": "-417827"
+		},
+		{
+			"user": "0x1fca0Cc80107166B2Fdf104C821a2643829e1beb",
+			"badDebt": "-73979255"
+		},
+		{
+			"user": "0xEcD5C11fB497bF00aCA9180e556B21Ef3afc4706",
+			"badDebt": "-70240"
+		},
+		{
+			"user": "0x64ac5f11C9af6BBF8fc8747aFf4fF4ad94DBb507",
+			"badDebt": "-3279"
+		},
+		{
+			"user": "0xD04aFD098d763316F03a737d1ceD5BD1d04b7fF4",
+			"badDebt": "-20463"
+		},
+		{
+			"user": "0x108ac19FA07D24A49965DCcD53Dc505Ad3Bf5acD",
+			"badDebt": "-838"
+		},
+		{
+			"user": "0x125498E79Feb7879718579495EAa05E79223a663",
+			"badDebt": "-9606309"
+		},
+		{
+			"user": "0x8D4FeDE858768a0A8dC5dE9cF47799f90c21C20e",
+			"badDebt": "-36963549"
+		},
+		{
+			"user": "0x39b29567CCfDA6d1DE99021Aa31987cbcbE0Fa64",
+			"badDebt": "-142125"
+		},
+		{
+			"user": "0xACC733e8f0d61F891b72e563d590800f2BFf1E4A",
+			"badDebt": "-27530534"
+		},
+		{
+			"user": "0x000000dF34E2422bb7744BC93Ab7594d371E2D4E",
+			"badDebt": "-179"
+		},
+		{
+			"user": "0x08E8Bfa884159e97036A7a7508dA64f896e25011",
+			"badDebt": "-423532692"
+		},
+		{
+			"user": "0x51BD92bb30389fE8Ea6Ef60373fa90Be7068eFcE",
+			"badDebt": "-1991"
+		},
+		{
+			"user": "0x0ed7A2469834Fe7e26a5A2Db5ecaB4E23cbd585F",
+			"badDebt": "-200164"
+		},
+		{
+			"user": "0xc88571eDA5A8493c23c8bcB9707C356e1700e1d1",
+			"badDebt": "-21210005"
+		},
+		{
+			"user": "0xB0C47Feee8cF3D40A7D74E71F0eb187D58677D94",
+			"badDebt": "-3081006"
+		},
+		{
+			"user": "0x34fb6C6aD57C324E9f1D948f851031494Ba68934",
+			"badDebt": "-2528253"
+		}
+	],
+	"tvl": "725824669784863040",
+	"deposits": "1356548180008803622",
+	"borrows": "630723510223940582",
+	"calculatedBorrows": "0"
+}

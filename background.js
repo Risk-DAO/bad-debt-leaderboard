@@ -5,6 +5,14 @@ const {sleep} = require('./utils');
 
 const jobs = [
   {
+    file: 'ParseAaveV3_AVAX',
+    name: 'avalanche_aave'
+  }
+]
+
+/*
+const jobs = [
+  {
     file: 'ParseOvix',
     name: 'polygon_0vix'
   },  
@@ -102,7 +110,7 @@ const jobs = [
     name: 'MOONBEAM_Moonwell'
   },  
 ]
-
+*/
 const runJob = (job) => {
   const backgroundJob = fork('./backgroundJobs/jobRuner.js', [
       '-f', job.file, 

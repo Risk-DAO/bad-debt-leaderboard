@@ -4,6 +4,7 @@ const Web3 = require("web3")
 const { toBN, toWei, fromWei, toChecksumAddress } = Web3.utils
 const axios = require('axios')
 const assert = require('assert'); 
+require('dotenv').config()
 
 /**
  * a small retry wrapper with an incrameting 5s sleep delay
@@ -315,7 +316,7 @@ const chainTokenFetchers = {
   NEAR: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    console.log({res})
+    // console.log({res})
     return {
       price: res,
       decimal: 18
@@ -324,7 +325,7 @@ const chainTokenFetchers = {
   ETH: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    console.log({res})
+    // console.log({res})
     return {
       price: res,
       decimal: 18
@@ -333,7 +334,7 @@ const chainTokenFetchers = {
   AVAX: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=avalanche-2&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    console.log({res})
+    // console.log({res})
     return {
       price: res,
       decimal: 18
@@ -342,7 +343,7 @@ const chainTokenFetchers = {
   MATIC: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    console.log({res})
+    // console.log({res})
     return {
       price: res,
       decimal: 18
@@ -351,7 +352,7 @@ const chainTokenFetchers = {
   BSC: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    console.log({res})
+    // console.log({res})
     return {
       price: res,
       decimal: 18
@@ -360,7 +361,7 @@ const chainTokenFetchers = {
   FTM: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=fantom&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    console.log({res})
+    // console.log({res})
     return {
       price: res,
       decimal: 18
@@ -369,7 +370,7 @@ const chainTokenFetchers = {
   CRO: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    console.log({res})
+    // console.log({res})
     return {
       price: res,
       decimal: 18
@@ -382,7 +383,7 @@ const getEthPrice = async (network) => {
   try{
     const { price: apiPrice, decimal } = await chainTokenFetchers[`${network}`]()
     const normlizer = (18 - decimal).toString()
-    console.log({ apiPrice })
+    console.log(`${network} price: $${apiPrice}`)
     const price = toBN(toWei(apiPrice.toString())).mul(toBN('10').pow(toBN(normlizer)))
     return price
   } catch (e) {
