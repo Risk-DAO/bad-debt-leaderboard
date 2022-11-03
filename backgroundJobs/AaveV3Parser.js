@@ -96,7 +96,7 @@ class AaveV3 {
             // even is there is already some user in the user list
             // it does not take too much time to fetch new users that way
             || LOAD_USERS_FROM_DISK) {
-            await this.collectAllUsers();
+                await this.collectAllUsers();
         }
 
         await this.updateAllUsers()
