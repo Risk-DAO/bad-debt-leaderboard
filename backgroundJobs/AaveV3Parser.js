@@ -377,11 +377,11 @@ class AaveV3 {
 
 module.exports = AaveV3
 
-async function test() {
-    console.log('AaveV3Parser: start test');
-    const web3 = new Web3(process.env.AVAX_NODE_URL)
-    const aavev3 = new AaveV3(Addresses.aaveV3Configuration, "AVAX", web3)
-    await aavev3.main()
-}
+// async function test() {
+//     console.log('AaveV3Parser: start test');
+//     const web3 = new Web3(process.env.AVAX_NODE_URL)
+//     const aavev3 = new AaveV3(Addresses.aaveV3Configuration, "AVAX", web3)
+//     await aavev3.main()
+// }
 
-test()
+// test()
