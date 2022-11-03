@@ -218,6 +218,8 @@ class AaveV3 {
                 if(savedData.lastFetchedBlock && savedData.users) {
                     firstBlockToFetch = savedData.lastFetchedBlock+1;
                     this.userList = savedData.users;
+                    console.log(`collectAllUsers: Loaded user list from disk, next block to fetch: ${firstBlockToFetch}. Current userList.length: ${this.userList.length}.`)
+
                 }
             } else {
                 console.log(`Could not find saved data file saved_data/${dataFileName}, will fetch data from the begining`)
@@ -228,7 +230,10 @@ class AaveV3 {
         console.log('collectAllUsers: current block:', currBlock)
         console.log('collectAllUsers: fetching users from block:', firstBlockToFetch)
 
+        const dtStartFetch = Date.now();
+        let cptBlockFetched = 0;
         for(let startBlock = firstBlockToFetch ; startBlock < currBlock ; startBlock += this.blockStepInInit) {
+            const remaningBlockToFetch = currBlock - startBlock + this.blockStepInInit;
 
             const endBlock = (startBlock + this.blockStepInInit > currBlock) ? currBlock : startBlock + this.blockStepInInit
             let events
@@ -245,12 +250,18 @@ class AaveV3 {
             }
             for(const e of events) {
                 const a = e.returnValues.onBehalfOf
-                const dtStart = Date.now();
                 if(!this.userList.includes(a)) {
                     this.userList.push(a)
                 }
-                if((Date.now() - dtStart) > 1000)
-                    console.log(`collectAllUsers: add event to list took ${Date.now() - dtStart} ms`);
+            }
+
+            cptBlockFetched+= this.blockStepInInit;
+            // display time left every 100 fetches
+            if(cptBlockFetched % (100 * this.blockStepInInit) == 0) {
+                const currentDuration = Date.now() - dtStartFetch;
+                const blockFetchedPerMs = cptBlockFetched / currentDuration;
+                const msRemaning = remaningBlockToFetch / blockFetchedPerMs; 
+                console.log(`collectAllUsers: Avg time left: ${Math.round(msRemaning/1000)} seconds. Call left: ${Math.round(remaningBlockToFetch/this.blockStepInInit)}`)
             }
         }
 
@@ -377,11 +388,11 @@ class AaveV3 {
 
 module.exports = AaveV3
 
-// async function test() {
-//     console.log('AaveV3Parser: start test');
-//     const web3 = new Web3(process.env.AVAX_NODE_URL)
-//     const aavev3 = new AaveV3(Addresses.aaveV3Configuration, "AVAX", web3)
-//     await aavev3.main()
-// }
+async function test() {
+    console.log('AaveV3Parser: start test');
+    const web3 = new Web3(process.env.AVAX_NODE_URL)
+    const aavev3 = new AaveV3(Addresses.aaveV3Configuration, "AVAX", web3)
+    await aavev3.main()
+}
 
-// test()
+test()
