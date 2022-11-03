@@ -5,7 +5,11 @@ const Addresses = require("./Addresses.js")
 const { getEthPrice } = require('./priceFetcher')
 const User = require("./User.js")
 const {waitForCpuToGoBelowThreshold} = require("../machineResources")
+const fs = require('fs');
 
+// this param tell the script to load users from disk and also to save users into disk file 
+// when running heavy update
+const LOAD_USERS_FROM_DISK = process.env.AAVEV3_LOAD_USER_FROM_DISK && process.env.AAVEV3_LOAD_USER_FROM_DISK.toLowerCase() == 'true';
 require('dotenv').config()
 /**
  * a small retry wrapper with an incrameting 5s sleep delay
@@ -121,12 +125,13 @@ class AaveV3 {
             this.lastUpdateBlock = currBlock
 
             // don't  increase cntr, this way if heavy update is needed, it will be done again next time
-            console.log("sleeping", this.mainCntr++)
+            console.log("this.mainCntr:", this.mainCntr++)
         }
         catch(err) {
             console.log("main failed", {err})
         }
 
+        console.log("sleeping", 1000 * 60 * 60)
         setTimeout(this.main.bind(this), 1000 * 60 * 60) // sleep for 1 hour
     }
 
@@ -190,10 +195,30 @@ class AaveV3 {
 
     async collectAllUsers() {
         const dtCollectStart = Date.now();
-        const currBlock = /*this.deployBlock + 5000 * 5 //*/ await this.web3.eth.getBlockNumber() - 10
+        let currBlock = await this.web3.eth.getBlockNumber() - 10
+        let firstBlockToFetch = this.firstEventBlock;
+
+        if(LOAD_USERS_FROM_DISK) {
+            if(!fs.existsSync('saved_data')) {
+                fs.mkdirSync('saved_data');
+            }
+            const dataFileName = `aavev3_${this.network}_users.json`;
+            if(fs.existsSync(`saved_data/${dataFileName}`)) {
+                const savedData = JSON.parse(fs.readFileSync(`saved_data/${dataFileName}`));
+                if(savedData.lastFetchedBlock && savedData.users) {
+                    firstBlockToFetch = savedData.lastFetchedBlock+1;
+                    this.userList = savedData.users;
+                }
+            } else {
+                console.log(`Could not find saved data file saved_data/${dataFileName}, will fetch data from the begining`)
+            }
+        }
+
+        
         console.log('collectAllUsers: current block:', currBlock)
-        console.log('collectAllUsers: fetching users from block:', this.firstEventBlock)
-        for(let startBlock = this.firstEventBlock ; startBlock < currBlock ; startBlock += this.blockStepInInit) {
+        console.log('collectAllUsers: fetching users from block:', firstBlockToFetch)
+
+        for(let startBlock = firstBlockToFetch ; startBlock < currBlock ; startBlock += this.blockStepInInit) {
 
             const endBlock = (startBlock + this.blockStepInInit > currBlock) ? currBlock : startBlock + this.blockStepInInit
             let events
@@ -219,16 +244,26 @@ class AaveV3 {
             }
         }
 
+        if(LOAD_USERS_FROM_DISK) {
+            const savedUserData = {
+                lastFetchedBlock: currBlock,
+                users: this.userList
+            };
+
+            fs.writeFileSync(`saved_data/${dataFileName}`, JSON.stringify(savedUserData));
+        }
+
         console.log(`collectAllUsers: collecting ${this.userList.length} users took ${Math.round((Date.now() - dtCollectStart)/1000)} s`);
     }
 
     async updateAllUsers() {
+        const dtUpdateStart = Date.now();
         const users = this.userList //require('./my.json')
         const bulkSize = this.multicallSize
         for(let i = 0 ; i < users.length ; i+= bulkSize) {
             const start = i
             const end = i + bulkSize > users.length ? users.length : i + bulkSize
-            console.log("update", i.toString() + " / " + users.length.toString())
+            console.log("updateAllUsers:", i.toString() + " / " + users.length.toString())
             try {
                 await this.updateUsers(users.slice(start, end))
             }
@@ -237,6 +272,11 @@ class AaveV3 {
                 i -= bulkSize
             }
         }
+
+        const updateElapsedSeconds = Math.round((Date.now() - dtUpdateStart)/1000);
+        const userPerSec = this.userList.length / updateElapsedSeconds;
+        console.log(`updateAllUsers: updated ${this.userList.length} users took ${Math.round((Date.now() - dtUpdateStart)/1000)} s`);
+        console.log(`updateAllUsers: update rate ${userPerSec} user/s`);
     }
 
     async additionalCollateralBalance(userAddress) {
@@ -289,7 +329,7 @@ class AaveV3 {
         // need to get: 1) getUserAccountData
         
         const getUserAccountCalls = []
-        console.log("preparing getUserAccountCalls")
+        // console.log("preparing getUserAccountCalls")
         for(const user of userAddresses) {
             const call = {}
             call["target"] = this.lendingPool.options.address
@@ -297,7 +337,7 @@ class AaveV3 {
             getUserAccountCalls.push(call)
         }
 
-        console.log("getting getUserAccountCalls")
+        // console.log("getting getUserAccountCalls")
         const getUserAccountResults = await this.multicall.methods.tryAggregate(false, getUserAccountCalls).call()
 
         for(let i = 0 ; i < userAddresses.length ; i++) {
@@ -327,11 +367,11 @@ class AaveV3 {
 
 module.exports = AaveV3
 
-// async function test() {
-//     console.log('AaveV3Parser: start test');
-//     const web3 = new Web3("https://avalanche-mainnet.infura.io/v3/f6834d8e3435440b8ef5c8350c9fb66c")
-//     const aavev3 = new AaveV3(Addresses.aaveV3Configuration, "AVAX", web3)
-//     await aavev3.main()
-// }
+async function test() {
+    console.log('AaveV3Parser: start test');
+    const web3 = new Web3(process.env.AVAX_NODE_URL)
+    const aavev3 = new AaveV3(Addresses.aaveV3Configuration, "AVAX", web3)
+    await aavev3.main()
+}
 
-// test()
+test()
