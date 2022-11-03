@@ -22,9 +22,9 @@ async function retry(fn, params, retries = 0) {
     try {
         const res = await  fn(...params)
         if(retries){
-            console.log(`retry success after ${retries} retries`)
+            // console.log(`retry success after ${retries} retries`)
         } else {
-            console.log(`success on first try`)
+            // console.log(`success on first try`)
         }
         return res
     } catch (e) {
@@ -91,7 +91,11 @@ class AaveV3 {
     }
 
     async heavyUpdate() {
-        if(this.userList.length == 0) {
+        if(this.userList.length == 0
+            // if load users from disk, collect all users each time heavy update is called 
+            // even is there is already some user in the user list
+            // it does not take too much time to fetch new users that way
+            || LOAD_USERS_FROM_DISK) {
             await this.collectAllUsers();
         }
 
@@ -131,8 +135,9 @@ class AaveV3 {
             console.log("main failed", {err})
         }
 
-        console.log("sleeping", 1000 * 60 * 60)
-        setTimeout(this.main.bind(this), 1000 * 60 * 60) // sleep for 1 hour
+        const sleepTime = 1000 * 60 * 60;
+        console.log("sleeping sec", sleepTime/1000)
+        setTimeout(this.main.bind(this), sleepTime) // sleep for 1 hour
     }
 
     async getFallbackPrice(market) {
@@ -141,6 +146,7 @@ class AaveV3 {
 
     async getPastEventsInSteps(contract, key, from, to){
         let totalEvents = []
+        console.log(`getPastEventsInSteps[${key}]: getting events from ${from} to ${to}`);
         for (let i = from; i < to; i = i + this.blockStepInInit) {
             const fromBlock = i
             const toBlock = i + this.blockStepInInit > to ? to : i + this.blockStepInInit
@@ -148,6 +154,7 @@ class AaveV3 {
             const events = await retry(fn, [key, {fromBlock, toBlock}])
             totalEvents = totalEvents.concat(events)
         }
+        console.log(`getPastEventsInSteps[${key}]: found ${totalEvents.length} events from ${from} to ${to}`);
         return totalEvents
     }
 
@@ -164,10 +171,10 @@ class AaveV3 {
                         "LiquidationCall" : ["user", "liquidator"]}
 
         const keys = Object.keys(events)
-        console.log({keys})
+        console.log('periodicUpdateUsers: Fetching account updates from events:', keys);
         for (const key of keys) {
             const value = events[key]
-            console.log({key}, {value})
+            console.log(`periodicUpdateUsers: Fetching events '${key}' for fields ${value}`);
             const newEvents = await this.getPastEventsInSteps(this.lendingPool, key, lastUpdatedBlock, currBlock) 
             for(const e of newEvents) {
                 for(const field of value) {
@@ -179,10 +186,13 @@ class AaveV3 {
             }
         }
 
-        console.log({accountsToUpdate})
+        console.log(`periodicUpdateUsers: found a total of ${accountsToUpdate.length} to update`);
+        const userListPreviousLength = this.userList.length;
         for(const a of accountsToUpdate) {
             if(! this.userList.includes(a)) this.userList.push(a)            
         }
+        
+        console.log(`periodicUpdateUsers: Update userList from ${userListPreviousLength} to ${this.userList.length} users`);
         // updating users in slices
         const bulkSize = this.multicallSize
         for (let i = 0; i < accountsToUpdate.length; i = i + bulkSize) {
@@ -198,11 +208,11 @@ class AaveV3 {
         let currBlock = await this.web3.eth.getBlockNumber() - 10
         let firstBlockToFetch = this.firstEventBlock;
 
+        const dataFileName = `aavev3_${this.network}_users.json`;
         if(LOAD_USERS_FROM_DISK) {
             if(!fs.existsSync('saved_data')) {
                 fs.mkdirSync('saved_data');
             }
-            const dataFileName = `aavev3_${this.network}_users.json`;
             if(fs.existsSync(`saved_data/${dataFileName}`)) {
                 const savedData = JSON.parse(fs.readFileSync(`saved_data/${dataFileName}`));
                 if(savedData.lastFetchedBlock && savedData.users) {
@@ -360,7 +370,7 @@ class AaveV3 {
 
             this.users[user] = {"collateral" : toBN(collateral), "debt" : toBN(debt)}
 
-            if(user === "0x4846AEe6d7C9f176F3F329E01A014c2794E21B92") console.log(collateral.toString(), debt.toString())
+            // if(user === "0x4846AEe6d7C9f176F3F329E01A014c2794E21B92") console.log(collateral.toString(), debt.toString())
         }
     }
 }
