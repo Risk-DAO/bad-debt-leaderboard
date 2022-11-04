@@ -7,6 +7,14 @@ const jobs = [
   {
     file: 'ParseAaveV3_AVAX',
     name: 'avalanche_aave'
+  },
+  {
+    file: 'ParseAaveV3_Arbitrum',
+    name: 'arbitrum_aave'
+  },
+  {
+    file: 'ParseAaveV3_Optimism',
+    name: 'optimism_aave'
   }
 ]
 

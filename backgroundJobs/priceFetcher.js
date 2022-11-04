@@ -313,6 +313,24 @@ const getPrice = async (network, address, web3) => {
 
 
 const chainTokenFetchers = {
+  OPTIMISM:  async () => {
+    const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
+    const res = Object.values(data)[0].usd
+    // console.log({res})
+    return {
+      price: res,
+      decimal: 18
+    }
+  },
+  ARBITRUM:  async () => {
+    const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
+    const res = Object.values(data)[0].usd
+    // console.log({res})
+    return {
+      price: res,
+      decimal: 18
+    }
+  },  
   NEAR: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
     const res = Object.values(data)[0].usd

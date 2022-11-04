@@ -48,7 +48,8 @@ const multicallAddress = {
 	"FTM": "0xab35D115974aC0A3C4Bd16A70DF77003c9f4C011",
 	"ARBITRUM": "0x0c05e6968AED7Ca120464a78731144e75052CeB1",
 	"CRO": "0x5e954f5972EC6BFc7dECd75779F10d848230345F",
-	"MOONBEAM": "0x6477204E12A7236b9619385ea453F370aD897bb2"
+	"MOONBEAM": "0x6477204E12A7236b9619385ea453F370aD897bb2",
+    "OPTIMISM": "0xcA11bde05977b3631167028862bE2a173976CA11"
 }
 
 
@@ -141,6 +142,20 @@ const aaveV3Configuration =
 		"deployBlock": 11970175,
 		"blockStepInInit": 10000,
         "firstEventBlock": 12027175,
+		"multicallSize": 200
+	},
+	"ARBITRUM": {
+		"poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",
+		"deployBlock": 7736481,
+		"blockStepInInit": 25000,
+        "firstEventBlock": 7998481,
+		"multicallSize": 200
+	},
+	"OPTIMISM": {
+		"poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",
+		"deployBlock": 4365693,
+		"blockStepInInit": 25000,
+        "firstEventBlock": 4365693,
 		"multicallSize": 200
 	}
 }
