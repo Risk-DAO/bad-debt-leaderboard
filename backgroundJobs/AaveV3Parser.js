@@ -87,7 +87,7 @@ class AaveV3 {
         this.lendingPool = new this.web3.eth.Contract(Addresses.aaveV3PoolAbi, lendingPoolAddress)
 
         // get eth price
-        this.ethPrice = await getEthPrice(this.network)
+        // this.ethPrice = await getEthPrice(this.network)
     }
 
     async heavyUpdate() {
@@ -321,8 +321,10 @@ class AaveV3 {
         const userWithBadDebt = []
         
         for(const [user, data] of Object.entries(this.users)) {
-            const collateral = data.collateral.mul(toBN(this.ethPrice)).div(toBN(toWei("1")))
-            const debt = data.debt.mul(toBN(this.ethPrice)).div(toBN(toWei("1")))
+
+            // aave v3 collateral and debt are reported in USD with 8 decimals
+            const collateral = data.collateral;
+            const debt = data.debt;
 
             deposits = deposits.add(collateral)
             borrows = borrows.add(debt)
@@ -332,10 +334,10 @@ class AaveV3 {
 
             if(this.web3.utils.toBN(netValue).lt(this.web3.utils.toBN("0"))) {
                 //const result = await this.comptroller.methods.getAccountLiquidity(user).call()
-                console.log("bad debt for user", user, Number(netValue.toString())/1e6/*, {result}*/)
+                console.log("bad debt for user", user, Number(netValue.toString())/1e8/*, {result}*/)
                 this.sumOfBadDebt = this.sumOfBadDebt.add(this.web3.utils.toBN(netValue))
 
-                console.log("total bad debt", Number(this.sumOfBadDebt.toString()) / 1e6)
+                console.log("total bad debt", Number(this.sumOfBadDebt.toString()) / 1e8)
                 
                 userWithBadDebt.push({"user" : user, "badDebt" : netValue.toString()})
             }
@@ -343,13 +345,13 @@ class AaveV3 {
 
         this.tvl = tvl
 
-        this.output = { "total" :  this.sumOfBadDebt.toString(), "updated" : currTime.toString(), "decimals" : "18", "users" : userWithBadDebt,
+        this.output = { "total" :  this.sumOfBadDebt.toString(), "updated" : currTime.toString(), "decimals" : "8", "users" : userWithBadDebt,
                         "tvl" : this.tvl.toString(), "deposits" : deposits.toString(), "borrows" : borrows.toString(),
                         "calculatedBorrows" : this.totalBorrows.toString()}
 
         console.log(JSON.stringify(this.output))
 
-        console.log("total bad debt", this.sumOfBadDebt.toString(), {currTime})
+        console.log("total bad debt", Number(this.sumOfBadDebt.toString())/1e8, {currTime})
 
         return this.sumOfBadDebt
     }
@@ -374,9 +376,9 @@ class AaveV3 {
             const result = getUserAccountResults[i]
 
             /*
-            uint256 totalCollateralETH,
-            uint256 totalDebtETH,
-            uint256 availableBorrowsETH,
+            uint256 totalCollateralBase, --> in USD with 8 decimals
+            uint256 totalDebtBase, --> in USD with 8 decimals
+            uint256 availableBorrowsBase,
             uint256 currentLiquidationThreshold,
             uint256 ltv,
             uint256 healthFactor*/

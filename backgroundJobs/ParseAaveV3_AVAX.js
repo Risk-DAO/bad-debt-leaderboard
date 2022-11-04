@@ -12,3 +12,10 @@ class ParseAaveV3_AVAX extends AaveV3 {
 }
 
 module.exports = { Parser: ParseAaveV3_AVAX }
+
+// async function test() {
+//     const aavev3 = new ParseAaveV3_AVAX();
+//     await aavev3.main();
+// }
+
+// test()

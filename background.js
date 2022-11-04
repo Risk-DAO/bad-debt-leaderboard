@@ -18,7 +18,7 @@ const jobs = [
   },
   { 
     file: 'ParseAaveV3_MATIC',
-    name: 'polgygon_aave'
+    name: 'polygon_aave'
   },
   { 
     file: 'ParseAaveV3_FTM',
@@ -164,7 +164,7 @@ const init = async () => {
     } else {
       runJob(job)
     }
-    await sleep(60) // before running the next process
+    await sleep(600) // before running the next process
   }
 }
 
