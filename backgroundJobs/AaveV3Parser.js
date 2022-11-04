@@ -111,7 +111,7 @@ class AaveV3 {
             await waitForCpuToGoBelowThreshold()
             await this.init()
 
-            const currBlock = await this.web3.eth.getBlockNumber() - 10
+            const currBlock = (await this.web3.eth.getBlockNumber()) - 10
             const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp
 
             if(this.mainCntr % this.heavyUpdateInterval == 0) {
@@ -160,7 +160,7 @@ class AaveV3 {
 
     async periodicUpdateUsers(lastUpdatedBlock) {
         const accountsToUpdate = []
-        const currBlock = await this.web3.eth.getBlockNumber() - 10
+        const currBlock = (await this.web3.eth.getBlockNumber()) - 10
         console.log({currBlock})
 
         // we ignore atokens transfer, and catch it when doing the all users update
@@ -205,8 +205,8 @@ class AaveV3 {
 
     async collectAllUsers() {
         const dtCollectStart = Date.now();
-        let currBlock = await this.web3.eth.getBlockNumber() - 10
-        let firstBlockToFetch = this.firstEventBlock;
+        let currBlock = (await this.web3.eth.getBlockNumber()) - 10
+        let firstBlockToFetch = this.firstEventBlock - 1;
 
         const dataFileName = `aavev3_${this.network}_users.json`;
         if(LOAD_USERS_FROM_DISK) {
@@ -237,7 +237,7 @@ class AaveV3 {
         let lastBlockFetched = firstBlockToFetch;
         while(lastBlockFetched < currBlock) {
             const startBlock = lastBlockFetched + 1;
-            const endBlock = startBlock + currentStep > currBlock ? currBlock : startBlock + currentStep;
+            const endBlock = startBlock + currentStep - 1 > currBlock ? currBlock : startBlock + currentStep - 1;
 
             const remaningBlockToFetch = currBlock - startBlock + currentStep;
             let events;
