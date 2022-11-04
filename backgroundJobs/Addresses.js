@@ -157,7 +157,14 @@ const aaveV3Configuration =
 		"blockStepInInit": 25000,
         "firstEventBlock": 4365693,
 		"multicallSize": 200
-	}
+	},
+    "MATIC": {
+        "poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",
+		"deployBlock": 25826028,
+		"blockStepInInit": 3500,
+        "firstEventBlock": 25871528,
+		"multicallSize": 200
+    }
 }
 
 const aaveV3poolAddressesProviderRegistryAbi = [{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"addressesProvider","type":"address"},{"indexed":true,"internalType":"uint256","name":"id","type":"uint256"}],"name":"AddressesProviderRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"addressesProvider","type":"address"},{"indexed":true,"internalType":"uint256","name":"id","type":"uint256"}],"name":"AddressesProviderUnregistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"uint256","name":"id","type":"uint256"}],"name":"getAddressesProviderAddressById","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"addressesProvider","type":"address"}],"name":"getAddressesProviderIdByAddress","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getAddressesProvidersList","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"provider","type":"address"},{"internalType":"uint256","name":"id","type":"uint256"}],"name":"registerAddressesProvider","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"provider","type":"address"}],"name":"unregisterAddressesProvider","outputs":[],"stateMutability":"nonpayable","type":"function"}]
