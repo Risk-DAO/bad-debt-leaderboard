@@ -69,4 +69,5 @@ const startServer = async ()=> {
 
 startServer()
 
+// the next line launch the background jobs
 require('./background')
