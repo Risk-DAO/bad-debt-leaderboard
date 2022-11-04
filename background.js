@@ -23,6 +23,10 @@ const jobs = [
   { 
     file: 'ParseAaveV3_FTM',
     name: 'fantom_aave'
+  },
+  { 
+    file: 'ParseAaveV3_Harmony',
+    name: 'harmony_aave'
   }
 ]
 

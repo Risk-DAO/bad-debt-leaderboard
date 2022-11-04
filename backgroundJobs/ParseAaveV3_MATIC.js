@@ -11,11 +11,11 @@ class ParseAaveV3_MATIC extends AaveV3 {
   }
 }
 
-module.exports = { Parser: ParseAaveV3_MATIC }
+// module.exports = { Parser: ParseAaveV3_MATIC }
 
-async function test() {
-    const aavev3 = new ParseAaveV3_MATIC()
-    await aavev3.main()
-}
+// async function test() {
+//     const aavev3 = new ParseAaveV3_MATIC()
+//     await aavev3.main()
+// }
 
 test()

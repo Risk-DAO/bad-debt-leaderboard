@@ -3,18 +3,18 @@ const AaveV3 = require("./AaveV3Parser")
 const Web3 = require("web3")
 require('dotenv').config()
 
-class ParseAaveV3_FTM extends AaveV3 {
+class ParseAaveV3_HARMONY extends AaveV3 {
   constructor() {
-    const network = 'FTM'
-    const web3 = new Web3(process.env.FTM_NODE_URL)
+    const network = 'HARMONY'
+    const web3 = new Web3(process.env.HARMONY_NODE_URL)
     super(Addresses.aaveV3Configuration, network, web3)
   }
 }
 
-module.exports = { Parser: ParseAaveV3_FTM }
+module.exports = { Parser: ParseAaveV3_HARMONY }
 
 // async function test() {
-//     const aavev3 = new ParseAaveV3_FTM()
+//     const aavev3 = new ParseAaveV3_HARMONY()
 //     await aavev3.main()
 // }
 

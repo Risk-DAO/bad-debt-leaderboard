@@ -171,6 +171,13 @@ const aaveV3Configuration =
 		"blockStepInInit": 10000,
         "firstEventBlock": 33582113,
 		"multicallSize": 200
+    },
+    "HARMONY": {
+        "poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",
+		"deployBlock": 23930102,
+		"blockStepInInit": 100000,
+        "firstEventBlock": 23930102,
+		"multicallSize": 200
     }
 }
 
