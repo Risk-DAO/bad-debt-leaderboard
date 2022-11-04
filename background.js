@@ -17,8 +17,12 @@ const jobs = [
     name: 'optimism_aave'
   },
   { 
-    file: 'ParseAaveV3_Polygon',
+    file: 'ParseAaveV3_MATIC',
     name: 'polgygon_aave'
+  },
+  { 
+    file: 'ParseAaveV3_FTM',
+    name: 'fantom_aave'
   }
 ]
 

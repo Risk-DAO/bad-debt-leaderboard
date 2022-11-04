@@ -164,6 +164,13 @@ const aaveV3Configuration =
 		"blockStepInInit": 3500,
         "firstEventBlock": 25871528,
 		"multicallSize": 200
+    },
+    "FTM": {
+        "poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",
+		"deployBlock": 33142113,
+		"blockStepInInit": 10000,
+        "firstEventBlock": 33582113,
+		"multicallSize": 200
     }
 }
 
