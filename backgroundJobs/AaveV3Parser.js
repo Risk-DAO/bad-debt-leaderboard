@@ -216,10 +216,9 @@ class AaveV3 {
             if(fs.existsSync(`saved_data/${dataFileName}`)) {
                 const savedData = JSON.parse(fs.readFileSync(`saved_data/${dataFileName}`));
                 if(savedData.lastFetchedBlock && savedData.users) {
-                    firstBlockToFetch = savedData.lastFetchedBlock+1;
+                    firstBlockToFetch = savedData.lastFetchedBlock;
                     this.userList = savedData.users;
                     console.log(`collectAllUsers: Loaded user list from disk, next block to fetch: ${firstBlockToFetch}. Current userList.length: ${this.userList.length}.`)
-
                 }
             } else {
                 console.log(`Could not find saved data file saved_data/${dataFileName}, will fetch data from the begining`)
