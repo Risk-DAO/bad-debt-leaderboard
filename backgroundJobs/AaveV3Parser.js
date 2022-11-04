@@ -232,20 +232,24 @@ class AaveV3 {
 
         const dtStartFetch = Date.now();
         let cptBlockFetched = 0;
-        for(let startBlock = firstBlockToFetch ; startBlock < currBlock ; startBlock += this.blockStepInInit) {
-            const remaningBlockToFetch = currBlock - startBlock + this.blockStepInInit;
+        let currentStep = this.blockStepInInit;
 
-            const endBlock = (startBlock + this.blockStepInInit > currBlock) ? currBlock : startBlock + this.blockStepInInit
-            let events
+        let lastBlockFetched = firstBlockToFetch;
+        while(lastBlockFetched < currBlock) {
+            const startBlock = lastBlockFetched + 1;
+            const endBlock = startBlock + currentStep > currBlock ? currBlock : startBlock + currentStep;
+
+            const remaningBlockToFetch = currBlock - startBlock + currentStep;
+            let events;
             try {
-                // Try to run this code
                 events = await this.lendingPool.getPastEvents("Supply", {fromBlock: startBlock, toBlock:endBlock})
-                console.log(`collectAllUsers: block ${startBlock} -> ${endBlock}. Found ${events.length} events. Current userList.length: ${this.userList.length}.`)
+                console.log(`collectAllUsers: block ${startBlock} -> ${endBlock}. Found ${events.length} events in ${currentStep} blocks. Current userList.length: ${this.userList.length}.`)
             }
             catch(err) {
-                // if any error, Code throws the error
-                console.log("call failed, trying again", err.toString())
-                startBlock -= this.blockStepInInit // try again
+                console.log(`call failed when fetching events from block ${startBlock} -> ${endBlock}, trying again`, err.toString())
+                const newStepSize = Math.round(currentStep/2);
+                console.log(`Changing step size from ${currentStep} to ${newStepSize}`)
+                currentStep = newStepSize;
                 continue
             }
             for(const e of events) {
@@ -254,8 +258,9 @@ class AaveV3 {
                     this.userList.push(a)
                 }
             }
+            lastBlockFetched = endBlock;
+            cptBlockFetched+= currentStep;
 
-            cptBlockFetched+= this.blockStepInInit;
             // display time left every 100 fetches
             if(cptBlockFetched % (100 * this.blockStepInInit) == 0) {
                 const currentDuration = Date.now() - dtStartFetch;
@@ -263,7 +268,12 @@ class AaveV3 {
                 const msRemaning = remaningBlockToFetch / blockFetchedPerMs; 
                 console.log(`collectAllUsers: Avg time left: ${Math.round(msRemaning/1000)} seconds. Call left: ${Math.round(remaningBlockToFetch/this.blockStepInInit)}`)
             }
+            
+            // reset step size to default
+            currentStep = this.blockStepInInit;
         }
+
+        
 
         if(LOAD_USERS_FROM_DISK) {
             const savedUserData = {
@@ -273,7 +283,6 @@ class AaveV3 {
 
             fs.writeFileSync(`saved_data/${dataFileName}`, JSON.stringify(savedUserData));
         }
-
         console.log(`collectAllUsers: collecting ${this.userList.length} users took ${Math.round((Date.now() - dtCollectStart)/1000)} s`);
     }
 
@@ -388,11 +397,11 @@ class AaveV3 {
 
 module.exports = AaveV3
 
-async function test() {
-    console.log('AaveV3Parser: start test');
-    const web3 = new Web3(process.env.AVAX_NODE_URL)
-    const aavev3 = new AaveV3(Addresses.aaveV3Configuration, "AVAX", web3)
-    await aavev3.main()
-}
+// async function test() {
+//     console.log('AaveV3Parser: start test');
+//     const web3 = new Web3(process.env.AVAX_NODE_URL)
+//     const aavev3 = new AaveV3(Addresses.aaveV3Configuration, "AVAX", web3)
+//     await aavev3.main()
+// }
 
-test()
+// test()
