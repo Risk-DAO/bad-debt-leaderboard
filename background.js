@@ -5,9 +5,17 @@ const {sleep} = require('./utils');
 
 const jobs = [
   {
-    file: 'ParseOvix',
-    name: 'polygon_0vix'
-  },  
+    file: 'ParseAave',
+    name: 'ethereum_aave'
+  },
+  {
+    file: 'ParseMaker',
+    name: 'ethereum_maker'
+  },
+  {
+    file: 'ParseCompound',
+    name: 'ethereum_compound'
+  },
   {
     file: 'ParseVenus',
     name: 'BSC_venus'
@@ -17,13 +25,13 @@ const jobs = [
     name: 'ethereum_rari-capital'
   },  
   {
+    file: 'ParseOvix',
+    name: 'polygon_0vix'
+  },  
+  {
     file: 'ParseTraderJoe',
     name: 'avalanche_trader-joe'
   },  
-  {
-    file: 'ParseCompound',
-    name: 'ethereum_compound'
-  },
   {
     file: 'ParseIronBank',
     name: 'ethereum_iron-bank'
@@ -57,10 +65,6 @@ const jobs = [
     name: 'aurora_aurigami'
   },
   {
-    file: 'ParseMaker',
-    name: 'ethereum_maker'
-  },
-  {
     file: 'ParseTectonic',
     name: 'CRO_tectonic'
   },
@@ -90,17 +94,13 @@ const jobs = [
     multiple: true
   },
   {
-    file: 'ParseAave',
-    name: 'ethereum_aave'
-  },
-  {
     file: 'ParseCream',
     name: 'BSC_cream'
   },
   {
     file: 'ParseMoonwell',
     name: 'MOONBEAM_Moonwell'
-  },  
+  }, 
 ]
 
 const runJob = (job) => {

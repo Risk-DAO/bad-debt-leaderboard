@@ -4,6 +4,7 @@ const Addresses = require("./Addresses.js")
 const { getPrice, getEthPrice, getCTokenPriceFromZapper } = require('./priceFetcher')
 const User = require("./User.js")
 const {waitForCpuToGoBelowThreshold} = require("../machineResources")
+const hourInMs = 60 * 60 * 1000
 /**
  * a small retry wrapper with an incrameting 5s sleep delay
  * @param {*} fn 
@@ -24,7 +25,8 @@ async function retry(fn, params, retries = 0) {
         console.error(e)
         retries++
         console.log(`retry #${retries}`)
-        await new Promise(resolve => setTimeout(resolve, 1000 * 5 * retries))
+        const ms = (1000 * 5 * retries) > hourInMs ? hourInMs : (1000 * 5 * retries)
+        await new Promise(resolve => setTimeout(resolve, ms))
         return retry(fn, params, retries)
     }
 }
