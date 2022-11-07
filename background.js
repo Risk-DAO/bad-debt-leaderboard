@@ -165,7 +165,7 @@ const init = async () => {
     } else {
       runJob(job)
     }
-    await sleep(600) // before running the next process
+    await sleep(60) // before running the next process
   }
 }
 
