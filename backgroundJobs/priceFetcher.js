@@ -316,7 +316,7 @@ const chainTokenFetchers = {
   OPTIMISM:  async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    // console.log({res})
+    console.log({res})
     return {
       price: res,
       decimal: 18
@@ -325,7 +325,7 @@ const chainTokenFetchers = {
   ARBITRUM:  async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    // console.log({res})
+    console.log({res})
     return {
       price: res,
       decimal: 18
@@ -334,7 +334,7 @@ const chainTokenFetchers = {
   NEAR: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    // console.log({res})
+    console.log({res})
     return {
       price: res,
       decimal: 18
@@ -343,7 +343,7 @@ const chainTokenFetchers = {
   ETH: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    // console.log({res})
+    console.log({res})
     return {
       price: res,
       decimal: 18
@@ -352,7 +352,7 @@ const chainTokenFetchers = {
   AVAX: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=avalanche-2&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    // console.log({res})
+    console.log({res})
     return {
       price: res,
       decimal: 18
@@ -361,7 +361,7 @@ const chainTokenFetchers = {
   MATIC: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    // console.log({res})
+    console.log({res})
     return {
       price: res,
       decimal: 18
@@ -370,7 +370,7 @@ const chainTokenFetchers = {
   BSC: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    // console.log({res})
+    console.log({res})
     return {
       price: res,
       decimal: 18
@@ -379,7 +379,7 @@ const chainTokenFetchers = {
   FTM: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=fantom&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    // console.log({res})
+    console.log({res})
     return {
       price: res,
       decimal: 18
@@ -388,7 +388,7 @@ const chainTokenFetchers = {
   CRO: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
-    // console.log({res})
+    console.log({res})
     return {
       price: res,
       decimal: 18

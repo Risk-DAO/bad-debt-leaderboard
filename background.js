@@ -3,34 +3,7 @@ require('dotenv').config()
 const {waitForCpuToGoBelowThreshold} = require('./machineResources')
 const {sleep} = require('./utils');
 
-const jobs = [
-  {
-    file: 'ParseAaveV3_AVAX',
-    name: 'avalanche_aave'
-  },
-  {
-    file: 'ParseAaveV3_Arbitrum',
-    name: 'arbitrum_aave'
-  },
-  {
-    file: 'ParseAaveV3_Optimism',
-    name: 'optimism_aave'
-  },
-  { 
-    file: 'ParseAaveV3_MATIC',
-    name: 'polygon_aave'
-  },
-  // { 
-  //   file: 'ParseAaveV3_FTM',
-  //   name: 'fantom_aave'
-  // },
-  // { 
-  //   file: 'ParseAaveV3_Harmony',
-  //   name: 'harmony_aave'
-  // }
-]
 
-/*
 const jobs = [
   {
     file: 'ParseOvix',
@@ -129,8 +102,31 @@ const jobs = [
     file: 'ParseMoonwell',
     name: 'MOONBEAM_Moonwell'
   },  
+  {
+    file: 'ParseAaveV3_AVAX',
+    name: 'avalanche_aave'
+  },
+  {
+    file: 'ParseAaveV3_Arbitrum',
+    name: 'arbitrum_aave'
+  },
+  {
+    file: 'ParseAaveV3_Optimism',
+    name: 'optimism_aave'
+  },
+  { 
+    file: 'ParseAaveV3_MATIC',
+    name: 'polygon_aave'
+  },
+  // { 
+  //   file: 'ParseAaveV3_FTM',
+  //   name: 'fantom_aave'
+  // },
+  // { 
+  //   file: 'ParseAaveV3_Harmony',
+  //   name: 'harmony_aave'
+  // }
 ]
-*/
 const runJob = (job) => {
   const backgroundJob = fork('./backgroundJobs/jobRuner.js', [
       '-f', job.file, 
