@@ -7,6 +7,7 @@ const checkCPU = async () => {
 }
 
 const waitForCpuToGoBelowThreshold = async () => {
+  return true
   let cpuUsage = await checkCPU() 
   console.log({cpuUsage})
   while (cpuUsage > cpuThreshold) {
