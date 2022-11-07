@@ -161,7 +161,7 @@ class AaveV3 {
     async periodicUpdateUsers(lastUpdatedBlock) {
         const accountsToUpdate = []
         const currBlock = (await this.web3.eth.getBlockNumber()) - 10
-        console.log({currBlock})
+        console.log(`periodicUpdateUsers: start from block ${lastUpdatedBlock} to ${currBlock}`);
 
         // we ignore atokens transfer, and catch it when doing the all users update
         const events = {"Supply" : ["onBehalfOf"],
@@ -178,9 +178,9 @@ class AaveV3 {
             const newEvents = await this.getPastEventsInSteps(this.lendingPool, key, lastUpdatedBlock, currBlock) 
             for(const e of newEvents) {
                 for(const field of value) {
-                    console.log({field})
+                    // console.log({field})
                     const a = e.returnValues[field]
-                    console.log({a})
+                    // console.log({a})
                     if(! accountsToUpdate.includes(a)) accountsToUpdate.push(a)
                 }
             }
@@ -334,10 +334,10 @@ class AaveV3 {
 
             if(this.web3.utils.toBN(netValue).lt(this.web3.utils.toBN("0"))) {
                 //const result = await this.comptroller.methods.getAccountLiquidity(user).call()
-                console.log("bad debt for user", user, Number(netValue.toString())/1e8/*, {result}*/)
+                // console.log("bad debt for user", user, Number(netValue.toString())/1e8/*, {result}*/)
                 this.sumOfBadDebt = this.sumOfBadDebt.add(this.web3.utils.toBN(netValue))
 
-                console.log("total bad debt", Number(this.sumOfBadDebt.toString()) / 1e8)
+                // console.log("total bad debt", Number(this.sumOfBadDebt.toString()) / 1e8)
                 
                 userWithBadDebt.push({"user" : user, "badDebt" : netValue.toString()})
             }
@@ -351,7 +351,7 @@ class AaveV3 {
 
         console.log(JSON.stringify(this.output))
 
-        console.log("total bad debt", Number(this.sumOfBadDebt.toString())/1e8, {currTime})
+        // console.log("total bad debt", Number(this.sumOfBadDebt.toString())/1e8, {currTime})
 
         return this.sumOfBadDebt
     }
