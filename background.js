@@ -4,10 +4,6 @@ const {waitForCpuToGoBelowThreshold} = require('./machineResources')
 const {sleep} = require('./utils');
 
 const jobs = [
-  { 
-    file: 'ParseAaveV3_Harmony',
-    name: 'harmony_aave'
-  },
   {
     file: 'ParseAaveV3_AVAX',
     name: 'avalanche_aave'
@@ -24,10 +20,14 @@ const jobs = [
     file: 'ParseAaveV3_MATIC',
     name: 'polygon_aave'
   },
-  { 
-    file: 'ParseAaveV3_FTM',
-    name: 'fantom_aave'
-  }
+  // { 
+  //   file: 'ParseAaveV3_FTM',
+  //   name: 'fantom_aave'
+  // },
+  // { 
+  //   file: 'ParseAaveV3_Harmony',
+  //   name: 'harmony_aave'
+  // }
 ]
 
 /*
