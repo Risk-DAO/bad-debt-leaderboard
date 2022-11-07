@@ -103,7 +103,10 @@ const jobs = [
   }, 
 ]
 
-const runJob = (job) => {
+const runJob = (job, retries = 0) => {
+  if (retries > 10){
+    return 
+  }
   const backgroundJob = fork('./backgroundJobs/jobRuner.js', [
       '-f', job.file, 
       '-n', job.name,
@@ -121,7 +124,8 @@ const runJob = (job) => {
 
   backgroundJob.on('exit', code => {
     console.error(new Error(job.name + ' background job exited'))
-    process.exit(code)
+    console.log(`retrying background job: ${job.name} retry #${++retries}`)
+    runJob(job, retries)
   })
 }
 
