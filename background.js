@@ -104,27 +104,27 @@ const jobs = [
   },  
   {
     file: 'ParseAaveV3_AVAX',
-    name: 'avalanche_aave'
+    name: 'avalanche_aavev3'
   },
   {
     file: 'ParseAaveV3_Arbitrum',
-    name: 'arbitrum_aave'
+    name: 'arbitrum_aavev3'
   },
   {
     file: 'ParseAaveV3_Optimism',
-    name: 'optimism_aave'
+    name: 'optimism_aavev3'
   },
   { 
     file: 'ParseAaveV3_MATIC',
-    name: 'polygon_aave'
+    name: 'polygon_aavev3'
   },
   // { 
   //   file: 'ParseAaveV3_FTM',
-  //   name: 'fantom_aave'
+  //   name: 'fantom_aavev3'
   // },
   // { 
   //   file: 'ParseAaveV3_Harmony',
-  //   name: 'harmony_aave'
+  //   name: 'harmony_aavev3'
   // }
 ]
 const runJob = (job) => {
