@@ -2,6 +2,7 @@ require('dotenv').config()
 const { Octokit } = require('octokit')
 const base64 = require('base-64')
 const { default: axios } = require('axios')
+const {retry} = require('./utils') 
 
 const octokit = new Octokit({
   auth: process.env.GH_TOKEN
@@ -75,7 +76,7 @@ const getJsonFile = async (fileName) => {
 }
 
 module.exports = {
-  uploadJsonFile, 
-  listJsonFiles,
-  getJsonFile, 
+  uploadJsonFile: (...arguments) => retry(uploadJsonFile, arguments), 
+  listJsonFiles: (...arguments) => retry(listJsonFiles, arguments),
+  getJsonFile: (...arguments) => retry(getJsonFile, arguments), 
 }
