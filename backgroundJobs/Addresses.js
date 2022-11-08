@@ -140,44 +140,44 @@ const aaveV3Configuration =
 	"AVAX": {
 		"poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",
 		"deployBlock": 11970175,
-		"blockStepInInit": 10000,
+		"blockStepInInit": 1000,
         "firstEventBlock": 12027175,
-		"multicallSize": 200
+		"multicallSize": 100
 	},
 	"ARBITRUM": {
 		"poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",
 		"deployBlock": 7736481,
-		"blockStepInInit": 25000,
+		"blockStepInInit": 1000,
         "firstEventBlock": 7998481,
-		"multicallSize": 200
+		"multicallSize": 100
 	},
 	"OPTIMISM": {
 		"poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",
 		"deployBlock": 4365693,
-		"blockStepInInit": 25000,
+		"blockStepInInit": 10000,
         "firstEventBlock": 4365693,
 		"multicallSize": 200
 	},
     "MATIC": {
         "poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",
 		"deployBlock": 25826028,
-		"blockStepInInit": 3500,
+		"blockStepInInit": 1000,
         "firstEventBlock": 25871528,
-		"multicallSize": 200
+		"multicallSize": 100
     },
     "FTM": {
         "poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",
 		"deployBlock": 33142113,
-		"blockStepInInit": 10000,
+		"blockStepInInit": 1000,
         "firstEventBlock": 33582113,
-		"multicallSize": 200
+		"multicallSize": 100
     },
     "HARMONY": {
         "poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",
 		"deployBlock": 23930102,
 		"blockStepInInit": 1000,
         "firstEventBlock": 23930102,
-		"multicallSize": 200
+		"multicallSize": 100
     }
 }
 
