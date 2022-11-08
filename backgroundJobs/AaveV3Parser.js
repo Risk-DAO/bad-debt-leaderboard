@@ -229,8 +229,6 @@ class AaveV3 {
         console.log('collectAllUsers: current block:', currBlock)
         console.log('collectAllUsers: fetching users from block:', firstBlockToFetch)
 
-        const dtStartFetch = Date.now();
-        let cptBlockFetched = 0;
         let currentStep = this.blockStepInInit;
 
         let lastBlockFetched = firstBlockToFetch;
@@ -238,7 +236,6 @@ class AaveV3 {
             const startBlock = lastBlockFetched + 1;
             const endBlock = startBlock + currentStep - 1 > currBlock ? currBlock : startBlock + currentStep - 1;
 
-            const remaningBlockToFetch = currBlock - startBlock + currentStep;
             let events;
             try {
                 events = await this.lendingPool.getPastEvents("Supply", {fromBlock: startBlock, toBlock:endBlock})
@@ -258,15 +255,6 @@ class AaveV3 {
                 }
             }
             lastBlockFetched = endBlock;
-            cptBlockFetched+= currentStep;
-
-            // display time left every 100 fetches
-            if(cptBlockFetched % (100 * this.blockStepInInit) == 0) {
-                const currentDuration = Date.now() - dtStartFetch;
-                const blockFetchedPerMs = cptBlockFetched / currentDuration;
-                const msRemaning = remaningBlockToFetch / blockFetchedPerMs; 
-                console.log(`collectAllUsers: Avg time left: ${Math.round(msRemaning/1000)} seconds. Call left: ${Math.round(remaningBlockToFetch/this.blockStepInInit)}`)
-            }
             
             // reset step size to default
             currentStep = this.blockStepInInit;
