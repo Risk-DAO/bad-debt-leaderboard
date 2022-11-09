@@ -14,6 +14,20 @@ class IronBankParser extends Compound {
     const web3 = new Web3(web3Url ? web3Url : process.env.ETH_NODE_URL)
     super(compoundInfo, network, web3, 24 * 1)
   }
+/*
+  async collectAllUsers() {
+    
+    if(! this.userList.includes("0x560A8E3B79d23b0A525E15C6F3486c6A293DDAd2")) {
+      console.log("adding 0x560A8E3B79d23b0A525E15C6F3486c6A293DDAd2")
+      this.userList.push("0x560A8E3B79d23b0A525E15C6F3486c6A293DDAd2")
+    }
+    if(! this.userList.includes("0x5f5Cd91070960D13ee549C9CC47e7a4Cd00457bb")) {
+      console.log("adding 0x5f5Cd91070960D13ee549C9CC47e7a4Cd00457bb")
+      this.userList.push("0x5f5Cd91070960D13ee549C9CC47e7a4Cd00457bb")
+    }            
+
+    await super.collectAllUsers()
+  }  */
 
   async balanceValue(token, user) {
     const alphaTokenContract = new this.web3.eth.Contract(Addresses.erc20Abi, token)
@@ -26,7 +40,7 @@ class IronBankParser extends Compound {
 
   async additionalCollateralBalance(userAddress) {
     
-    if(userAddress === "0x5f5Cd91070960D13ee549C9CC47e7a4Cd00457bb") {
+    if(userAddress === "0x560A8E3B79d23b0A525E15C6F3486c6A293DDAd2") {
       console.log("alpha homora v1 incident")
       const alphaTokenAddress = "0xa1faa113cbE53436Df28FF0aEe54275c13B40975"
       const alphaEscrowAddress = "0xB80C75B574715404dB4B5097688B3338fE637953"
@@ -40,7 +54,7 @@ class IronBankParser extends Compound {
         }
       }
       const exploiterContractNetValue = exploiterContractData.getUserNetValue(this.web3, this.prices);
-      return alphaTokenCollateralValue.add(exploiterContractNetValue.netValue);
+      return alphaTokenCollateralValue//.add(exploiterContractNetValue.netValue);
     }
     else if(userAddress === "0xba5eBAf3fc1Fcca67147050Bf80462393814E54B") {
       console.log("alpha homora v2")

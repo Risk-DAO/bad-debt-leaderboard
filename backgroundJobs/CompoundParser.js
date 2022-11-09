@@ -391,9 +391,18 @@ class Compound {
                 globalIndex++
             }
 
-            const userData = new User(user, assetsIn, borrowBalances, collateralBalances, ! success)
+            const userData = new User(user, this.intersect(assetsIn, this.markets), borrowBalances, collateralBalances, ! success)
             this.users[user] = userData
         }
+    }
+
+    intersect(arr1, arr2) {
+        const result = []
+        for(const a of arr1) {
+            if(arr2.includes(a)) result.push(a)
+        }
+
+        return result
     }
   }
 
