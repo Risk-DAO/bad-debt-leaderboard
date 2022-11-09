@@ -104,19 +104,19 @@ const jobs = [
   },  
   {
     file: 'ParseAaveV3_AVAX',
-    name: 'avalanche_aavev3'
+    name: 'avalanche_aave v3'
   },
   {
     file: 'ParseAaveV3_Arbitrum',
-    name: 'arbitrum_aavev3'
+    name: 'arbitrum_aave v3'
   },
   {
     file: 'ParseAaveV3_Optimism',
-    name: 'optimism_aavev3'
+    name: 'optimism_aave v3'
   },
   { 
     file: 'ParseAaveV3_MATIC',
-    name: 'polygon_aavev3'
+    name: 'polygon_aave v3'
   },
   // { 
   //   file: 'ParseAaveV3_FTM',
