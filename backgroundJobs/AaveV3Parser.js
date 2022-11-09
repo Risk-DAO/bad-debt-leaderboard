@@ -2,7 +2,7 @@ const Web3 = require('web3')
 const { toBN, toWei, fromWei } = Web3.utils
 const axios = require('axios')
 const Addresses = require("./Addresses.js")
-const { getEthPrice } = require('./priceFetcher')
+const { getPriceUSD18Decimals } = require('./priceFetcher')
 const User = require("./User.js")
 const {waitForCpuToGoBelowThreshold} = require("../machineResources")
 const fs = require('fs');
@@ -48,8 +48,12 @@ class AaveV3 {
       this.firstEventBlock = AaveV3Info[network].firstEventBlock
       this.blockStepInInit = AaveV3Info[network].blockStepInInit
       this.multicallSize = AaveV3Info[network].multicallSize
-
-      this.ethPrice = 0
+      
+      // default base currency to USD for aave v3 pools
+      this.baseCurrencyAddress = '0x0000000000000000000000000000000000000000'
+      this.baseCurrencyDecimals = 8;
+      this.baseCurrencyIsUSD = true;
+      this.baseCurrencyPriceWith8Decimals = toBN('0');
       this.users = {}
       this.userList = []
 
@@ -86,8 +90,21 @@ class AaveV3 {
         console.log('lendingPoolAddress', lendingPoolAddress);
         this.lendingPool = new this.web3.eth.Contract(Addresses.aaveV3PoolAbi, lendingPoolAddress)
 
-        // get eth price
-        // this.ethPrice = await getEthPrice(this.network)
+        const priceOracleAddress = await poolAddressProviderV3Contract.methods.getPriceOracle().call();
+        console.log('priceOracleAddress', priceOracleAddress);
+        const priceOracleContract = new this.web3.eth.Contract(Addresses.aaveV3PriceOracleABI, priceOracleAddress); 
+        const baseCurrency = await priceOracleContract.methods.BASE_CURRENCY().call();
+        const baseCurrencyUnit = await priceOracleContract.methods.BASE_CURRENCY_UNIT().call();
+        const calculatedDecimals = (baseCurrencyUnit.match(/0/g)||[]).length;
+        console.log(`Found base currency: ${baseCurrency} and decimals ${calculatedDecimals}`);
+        if(baseCurrency != this.baseCurrencyAddress) {
+            console.log('BASE CURRENCY IS NOT USD on network:', this.network, ':', baseCurrency);
+            this.baseCurrencyAddress = baseCurrency;
+            this.baseCurrencyDecimals = calculatedDecimals;
+            this.baseCurrencyIsUSD = false;
+            this.basePriceUSD18Decimals = await getPriceUSD18Decimals(this.network, this.baseCurrencyAddress, this.web3);
+            console.log('basePriceUSD18Decimals:', this.baseCurrencyPrice.toString());
+        }
     }
 
     async heavyUpdate() {
@@ -310,9 +327,25 @@ class AaveV3 {
         
         for(const [user, data] of Object.entries(this.users)) {
 
-            // aave v3 collateral and debt are reported in USD with 8 decimals
-            const collateral = data.collateral;
-            const debt = data.debt;
+            
+            let collateral = toBN('0');
+            let debt = toBN('0');
+            
+            // if aave v3 collateral and debt are reported in USD with 8 decimals, just store the value as is
+            if(this.baseCurrencyIsUSD) {
+                collateral = data.collateral;
+                debt = data.debt;
+            }
+            // else, calculate the price in USD and keep the base decimal number
+            else {
+                collateral = data.collateral.mul(this.basePriceUSD18Decimals)
+                                            // divide by 10^18 because the price is with 18 decimals
+                                            .div(toBN('10').pow(toBN('18')));
+                debt = data.debt.mul(this.basePriceUSD18Decimals)
+                                            // divide by 10^18 because the price is with 18 decimals
+                                            .div(toBN('10').pow(toBN('18')));
+            }
+            
 
             deposits = deposits.add(collateral)
             borrows = borrows.add(debt)
@@ -388,9 +421,9 @@ module.exports = AaveV3
 
 // async function test() {
 //     console.log('AaveV3Parser: start test');
-//     const web3 = new Web3(process.env.AVAX_NODE_URL)
-//     const aavev3 = new AaveV3(Addresses.aaveV3Configuration, "AVAX", web3)
-//     await aavev3.main()
+//     let web3 = new Web3(process.env.AVAX_NODE_URL)
+//     let aavev3 = new AaveV3(Addresses.aaveV3Configuration, "AVAX", web3)
+//     await aavev3.init()
 // }
 
 // test()
