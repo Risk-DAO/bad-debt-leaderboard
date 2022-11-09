@@ -103,10 +103,7 @@ const jobs = [
   }, 
 ]
 
-const runJob = (job, retries = 0) => {
-  if (retries > 10){
-    return 
-  }
+const runJob = (job) => {
   const backgroundJob = fork('./backgroundJobs/jobRuner.js', [
       '-f', job.file, 
       '-n', job.name,
@@ -114,6 +111,7 @@ const runJob = (job, retries = 0) => {
     ],
     { silent: true }
   );
+  console.log(`--> job start "node ./backgroundJobs/jobRuner.js -f ${job.file} -n ${job.name} -i ${job.i}"`)
   backgroundJob.stdout.on('data', (data) => {
     console.log(`${job.name} ${new Date().toLocaleString()} : ${data}`);
   });
@@ -124,8 +122,7 @@ const runJob = (job, retries = 0) => {
 
   backgroundJob.on('exit', code => {
     console.error(new Error(job.name + ' background job exited'))
-    console.log(`retrying background job: ${job.name} retry #${++retries}`)
-    runJob(job, retries)
+    console.log(`--X job died "node ./backgroundJobs/jobRuner.js -f ${job.file} -n ${job.name} -i ${job.i}"`)
   })
 }
 
@@ -133,14 +130,14 @@ const init = async () => {
   for(let job of jobs) {
     await waitForCpuToGoBelowThreshold()
     if(job.multiple){    
-      console.log(`./backgroundJobs/${job.file}`)
       let {subJobs} = require(`./backgroundJobs/${job.file}`)
+      console.log({'subJobs.length': subJobs.length})
       subJobs = subJobs.map((subJob, i) => Object.assign({}, job, { name: job.name + '_' + subJob.name, i }))
       subJobs.forEach(runJob);
     } else {
       runJob(job)
     }
-    await sleep(60) // before running the next process
+    await sleep(5) // before running the next process
   }
 }
 
