@@ -3,25 +3,7 @@ const Addresses = require("./Addresses.js")
 const Compound = require("./CompoundParser")
 const Web3 = require("web3")
 require('dotenv').config()
-
-
-async function retry(fn, params, retries = 0) {
-    try {
-        const res = await  fn(...params)
-        if(retries){
-            console.log(`retry success after ${retries} retries`)
-        } else {
-            console.log(`success on first try`)
-        }
-        return res
-    } catch (e) {
-        console.error(e)
-        retries++
-        console.log(`retry #${retries}`)
-        await new Promise(resolve => setTimeout(resolve, 1000 * 5 * retries))
-        return retry(fn, params, retries)
-    }
-}
+const {retry} = require("../utils")
 
 class BSCParser extends Compound {
     async collectAllUsers() {

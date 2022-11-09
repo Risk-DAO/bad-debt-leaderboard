@@ -5,9 +5,17 @@ const {sleep} = require('./utils');
 
 const jobs = [
   {
-    file: 'ParseOvix',
-    name: 'polygon_0vix'
-  },  
+    file: 'ParseAave',
+    name: 'ethereum_aave'
+  },
+  {
+    file: 'ParseMaker',
+    name: 'ethereum_maker'
+  },
+  {
+    file: 'ParseCompound',
+    name: 'ethereum_compound'
+  },
   {
     file: 'ParseVenus',
     name: 'BSC_venus'
@@ -17,13 +25,13 @@ const jobs = [
     name: 'ethereum_rari-capital'
   },  
   {
+    file: 'ParseOvix',
+    name: 'polygon_0vix'
+  },  
+  {
     file: 'ParseTraderJoe',
     name: 'avalanche_trader-joe'
   },  
-  {
-    file: 'ParseCompound',
-    name: 'ethereum_compound'
-  },
   {
     file: 'ParseIronBank',
     name: 'ethereum_iron-bank'
@@ -57,10 +65,6 @@ const jobs = [
     name: 'aurora_aurigami'
   },
   {
-    file: 'ParseMaker',
-    name: 'ethereum_maker'
-  },
-  {
     file: 'ParseTectonic',
     name: 'CRO_tectonic'
   },
@@ -90,17 +94,13 @@ const jobs = [
     multiple: true
   },
   {
-    file: 'ParseAave',
-    name: 'ethereum_aave'
-  },
-  {
     file: 'ParseCream',
     name: 'BSC_cream'
   },
   {
     file: 'ParseMoonwell',
     name: 'MOONBEAM_Moonwell'
-  },  
+  }, 
 ]
 
 const runJob = (job) => {
@@ -111,6 +111,7 @@ const runJob = (job) => {
     ],
     { silent: true }
   );
+  console.log(`--> job start "node ./backgroundJobs/jobRuner.js -f ${job.file} -n ${job.name} -i ${job.i}"`)
   backgroundJob.stdout.on('data', (data) => {
     console.log(`${job.name} ${new Date().toLocaleString()} : ${data}`);
   });
@@ -121,7 +122,7 @@ const runJob = (job) => {
 
   backgroundJob.on('exit', code => {
     console.error(new Error(job.name + ' background job exited'))
-    process.exit(code)
+    console.log(`--X job died "node ./backgroundJobs/jobRuner.js -f ${job.file} -n ${job.name} -i ${job.i}"`)
   })
 }
 
@@ -129,14 +130,14 @@ const init = async () => {
   for(let job of jobs) {
     await waitForCpuToGoBelowThreshold()
     if(job.multiple){    
-      console.log(`./backgroundJobs/${job.file}`)
       let {subJobs} = require(`./backgroundJobs/${job.file}`)
+      console.log({'subJobs.length': subJobs.length})
       subJobs = subJobs.map((subJob, i) => Object.assign({}, job, { name: job.name + '_' + subJob.name, i }))
       subJobs.forEach(runJob);
     } else {
       runJob(job)
     }
-    await sleep(60) // before running the next process
+    await sleep(5) // before running the next process
   }
 }
 

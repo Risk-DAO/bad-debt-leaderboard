@@ -4,30 +4,7 @@ const Addresses = require("./Addresses.js")
 const { getPrice, getEthPrice, getCTokenPriceFromZapper } = require('./priceFetcher')
 const User = require("./User.js")
 const {waitForCpuToGoBelowThreshold} = require("../machineResources")
-/**
- * a small retry wrapper with an incrameting 5s sleep delay
- * @param {*} fn 
- * @param {*} params 
- * @param {*} retries 
- * @returns 
- */
-async function retry(fn, params, retries = 0) {
-    try {
-        const res = await  fn(...params)
-        if(retries){
-            console.log(`retry success after ${retries} retries`)
-        } else {
-            console.log(`success on first try`)
-        }
-        return res
-    } catch (e) {
-        console.error(e)
-        retries++
-        console.log(`retry #${retries}`)
-        await new Promise(resolve => setTimeout(resolve, 1000 * 5 * retries))
-        return retry(fn, params, retries)
-    }
-}
+const {retry} = require("../utils")
 
 class Aave {
     constructor(AaveInfo, network, web3, heavyUpdateInterval = 24) {

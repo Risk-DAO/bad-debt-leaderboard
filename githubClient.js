@@ -2,6 +2,7 @@ require('dotenv').config()
 const { Octokit } = require('octokit')
 const base64 = require('base-64')
 const { default: axios } = require('axios')
+const {retry} = require('./utils') 
 
 const octokit = new Octokit({
   auth: process.env.GH_TOKEN
@@ -29,22 +30,27 @@ const getDay = () => {
 }
 
 const uploadJsonFile = async (jsonString, fileName, day) => {
-  const sha = await getSha(fileName)
-  if(!day){
-    await uploadJsonFile(jsonString, fileName, getDay())
+  try {
+    const sha = await getSha(fileName)
+    if(!day){
+      await uploadJsonFile(jsonString, fileName, getDay())
+    }
+    return octokit.request(`PUT /repos/{owner}/{repo}/contents/bad-debt/${day || 'latest'}/{path}`, {
+      owner: 'Risk-DAO',
+      repo: 'simulation-results',
+      path: `${fileName}`,
+      message: `bad-debt push ${new Date().toString()}`,
+      sha,
+      committer: {
+        name: process.env.GH_HANDLE,
+        email: 'octocat@github.com'
+      },
+      content: base64.encode(jsonString)
+    })
+  } catch(err) {
+    console.error('failed to upload to github')
+    console.error(err)
   }
-  return octokit.request(`PUT /repos/{owner}/{repo}/contents/bad-debt/${day || 'latest'}/{path}`, {
-    owner: 'Risk-DAO',
-    repo: 'simulation-results',
-    path: `${fileName}`,
-    message: `bad-debt push ${new Date().toString()}`,
-    sha,
-    committer: {
-      name: process.env.GH_HANDLE,
-      email: 'octocat@github.com'
-    },
-    content: base64.encode(jsonString)
-  })
 }
 
 const listJsonFiles = async () => {
@@ -70,7 +76,7 @@ const getJsonFile = async (fileName) => {
 }
 
 module.exports = {
-  uploadJsonFile, 
-  listJsonFiles,
-  getJsonFile, 
+  uploadJsonFile: (...arguments) => retry(uploadJsonFile, arguments), 
+  listJsonFiles: (...arguments) => retry(listJsonFiles, arguments),
+  getJsonFile: (...arguments) => retry(getJsonFile, arguments), 
 }
