@@ -3,6 +3,7 @@ require('dotenv').config()
 const {waitForCpuToGoBelowThreshold} = require('./machineResources')
 const {sleep} = require('./utils');
 
+
 const jobs = [
   {
     file: 'ParseAave',
@@ -100,9 +101,32 @@ const jobs = [
   {
     file: 'ParseMoonwell',
     name: 'MOONBEAM_Moonwell'
-  }, 
+  },
+  {
+    file: 'ParseAaveV3_AVAX',
+    name: 'avalanche_aave v3'
+  },
+  {
+    file: 'ParseAaveV3_Arbitrum',
+    name: 'arbitrum_aave v3'
+  },
+  {
+    file: 'ParseAaveV3_Optimism',
+    name: 'optimism_aave v3'
+  },
+  { 
+    file: 'ParseAaveV3_MATIC',
+    name: 'polygon_aave v3'
+  },
+  // { 
+  //   file: 'ParseAaveV3_FTM',
+  //   name: 'fantom_aavev3'
+  // },
+  // { 
+  //   file: 'ParseAaveV3_Harmony',
+  //   name: 'harmony_aavev3'
+  // }
 ]
-
 const runJob = (job) => {
   const backgroundJob = fork('./backgroundJobs/jobRuner.js', [
       '-f', job.file, 
@@ -128,6 +152,7 @@ const runJob = (job) => {
 
 const init = async () => {
   for(let job of jobs) {
+    console.log(job);
     await waitForCpuToGoBelowThreshold()
     if(job.multiple){    
       let {subJobs} = require(`./backgroundJobs/${job.file}`)
