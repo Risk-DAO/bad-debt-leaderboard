@@ -27,7 +27,7 @@ const ethCalderons =[
     { "name" : "yvUSDC v2", "address" : "0x6cbAFEE1FaB76cA5B5e144c43B3B50d42b7C8c8f", "deployBlock" : 12558945},
     { "name" : "yvUSDT v2", "address" : "0x551a7CfF4de931F32893c928bBc3D25bF1Fc5147", "deployBlock" : 12558932},
     { "name" : "yvWETH", "address" : "0x6Ff9061bB8f97d948942cEF376d98b51fA38B91f", "deployBlock" : 12558932},
-    { "name" : "xSUSHI", "address" : "0xbb02A884621FB8F5BFd263A67F58B65df5b090f3", "deployBlock" : 12558960},
+    { "name" : "xSUSHI2", "address" : "0xbb02A884621FB8F5BFd263A67F58B65df5b090f3", "deployBlock" : 12558960},
     { "name" : "sSPELL", "address" : "0xC319EEa1e792577C319723b5e60a15dA3857E7da", "deployBlock" : 13239675},
     { "name" : "yvYFI", "address" : "0xFFbF4892822e0d552CFF317F65e1eE7b5D3d9aE6", "deployBlock" : 12558943},
     { "name" : "cvx3pool (old)", "address" : "0x806e16ec797c69afa8590A55723CE4CC1b54050E", "deployBlock" : 13148516},
