@@ -5,6 +5,7 @@ const { toBN, toWei, fromWei, toChecksumAddress } = Web3.utils
 const axios = require('axios')
 const assert = require('assert'); 
 const {retry} = require("../utils")
+require('dotenv').config()
 
 const coinGeckoChainIdMap = {
   ETH: 'ethereum',
@@ -226,7 +227,6 @@ const specialAssetPriceFetchers = {
   }
 }
 
-
 const getPrice = async (network, address, web3) => {
   if(network === "MOONBEAM") return 0
   try {
@@ -288,6 +288,24 @@ const getPrice = async (network, address, web3) => {
 
 
 const chainTokenFetchers = {
+  OPTIMISM:  async () => {
+    const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
+    const res = Object.values(data)[0].usd
+    console.log({res})
+    return {
+      price: res,
+      decimal: 18
+    }
+  },
+  ARBITRUM:  async () => {
+    const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
+    const res = Object.values(data)[0].usd
+    console.log({res})
+    return {
+      price: res,
+      decimal: 18
+    }
+  },  
   NEAR: async () => {
     const {data} = await retry(axios.get, ['https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD'])
     const res = Object.values(data)[0].usd
@@ -358,7 +376,7 @@ const getEthPrice = async (network) => {
   try{
     const { price: apiPrice, decimal } = await chainTokenFetchers[`${network}`]()
     const normlizer = (18 - decimal).toString()
-    console.log({ apiPrice })
+    console.log(`${network} price: $${apiPrice}`)
     const price = toBN(toWei(apiPrice.toString())).mul(toBN('10').pow(toBN(normlizer)))
     return price
   } catch (e) {
@@ -535,7 +553,7 @@ async function testCTokenFromZapper() {
 //testPrices()
 
 module.exports = {
-  getPrice, 
+  getPrice,
   getUniV2LPTokenPrice,
   getEthPrice,
   fetchZapperTotal,
