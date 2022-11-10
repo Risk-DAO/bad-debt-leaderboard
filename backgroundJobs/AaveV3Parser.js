@@ -2,15 +2,14 @@ const Web3 = require('web3')
 const { toBN, toWei, fromWei } = Web3.utils
 const axios = require('axios')
 const Addresses = require("./Addresses.js")
-const { getPriceUSD18Decimals } = require('./priceFetcher')
 const User = require("./User.js")
 const {waitForCpuToGoBelowThreshold} = require("../machineResources")
 const fs = require('fs');
+require('dotenv').config()
 
 // this param tell the script to load users from disk and also to save users into disk file 
 // when running heavy update
 const LOAD_USERS_FROM_DISK = process.env.AAVEV3_LOAD_USER_FROM_DISK && process.env.AAVEV3_LOAD_USER_FROM_DISK.toLowerCase() == 'true';
-require('dotenv').config()
 /**
  * a small retry wrapper with an incrameting 5s sleep delay
  * @param {*} fn 
@@ -49,11 +48,6 @@ class AaveV3 {
       this.blockStepInInit = AaveV3Info[network].blockStepInInit
       this.multicallSize = AaveV3Info[network].multicallSize
       
-      // default base currency to USD for aave v3 pools
-      this.baseCurrencyAddress = '0x0000000000000000000000000000000000000000'
-      this.baseCurrencyDecimals = 8;
-      this.baseCurrencyIsUSD = true;
-      this.baseCurrencyPriceWith8Decimals = toBN('0');
       this.users = {}
       this.userList = []
 
@@ -94,16 +88,9 @@ class AaveV3 {
         console.log('priceOracleAddress', priceOracleAddress);
         const priceOracleContract = new this.web3.eth.Contract(Addresses.aaveV3PriceOracleABI, priceOracleAddress); 
         const baseCurrency = await priceOracleContract.methods.BASE_CURRENCY().call();
-        const baseCurrencyUnit = await priceOracleContract.methods.BASE_CURRENCY_UNIT().call();
-        const calculatedDecimals = (baseCurrencyUnit.match(/0/g)||[]).length;
-        console.log(`Found base currency: ${baseCurrency} and decimals ${calculatedDecimals}`);
-        if(baseCurrency != this.baseCurrencyAddress) {
-            console.log('BASE CURRENCY IS NOT USD on network:', this.network, ':', baseCurrency);
-            this.baseCurrencyAddress = baseCurrency;
-            this.baseCurrencyDecimals = calculatedDecimals;
-            this.baseCurrencyIsUSD = false;
-            this.basePriceUSD18Decimals = await getPriceUSD18Decimals(this.network, this.baseCurrencyAddress, this.web3);
-            console.log('basePriceUSD18Decimals:', this.baseCurrencyPrice.toString());
+        console.log(`Found base currency for network ${this.network}: ${baseCurrency}`);
+        if(baseCurrency !== '0x0000000000000000000000000000000000000000') {
+            throw `BASE CURRENCY IS NOT USD on network: ${this.network}: ${baseCurrency}`;
         }
     }
 
@@ -328,24 +315,9 @@ class AaveV3 {
         for(const [user, data] of Object.entries(this.users)) {
 
             
-            let collateral = toBN('0');
-            let debt = toBN('0');
-            
-            // if aave v3 collateral and debt are reported in USD with 8 decimals, just store the value as is
-            if(this.baseCurrencyIsUSD) {
-                collateral = data.collateral;
-                debt = data.debt;
-            }
-            // else, calculate the price in USD and keep the base decimal number
-            else {
-                collateral = data.collateral.mul(this.basePriceUSD18Decimals)
-                                            // divide by 10^18 because the price is with 18 decimals
-                                            .div(toBN('10').pow(toBN('18')));
-                debt = data.debt.mul(this.basePriceUSD18Decimals)
-                                            // divide by 10^18 because the price is with 18 decimals
-                                            .div(toBN('10').pow(toBN('18')));
-            }
-            
+            // Aave v3 collateral and debt are reported in USD with 8 decimals, just store the value as is
+            const collateral = data.collateral;
+            const debt = data.debt;
 
             deposits = deposits.add(collateral)
             borrows = borrows.add(debt)
