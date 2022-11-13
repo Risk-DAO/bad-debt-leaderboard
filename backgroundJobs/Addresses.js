@@ -49,7 +49,8 @@ const multicallAddress = {
 	"ARBITRUM": "0x0c05e6968AED7Ca120464a78731144e75052CeB1",
 	"CRO": "0x5e954f5972EC6BFc7dECd75779F10d848230345F",
 	"MOONBEAM": "0x6477204E12A7236b9619385ea453F370aD897bb2",
-    "OPTIMISM": "0xcA11bde05977b3631167028862bE2a173976CA11"
+    "OPTIMISM": "0xcA11bde05977b3631167028862bE2a173976CA11",
+    "GNOSIS" : "0xB6E7BD43cd3832dDFB02fc03035A6471eac757cc"
 }
 
 
@@ -120,6 +121,14 @@ const creamAddress = { "BSC" : { "comptroller" : "0x589DE0F0Ccf905477646599bb3E5
 const aaveAddress =
 { "ETH":
     { "lendingPoolAddressesProviderAddress" : "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5", "deployBlock" : 11362579, "blockStepInInit" : 5000,   "multicallSize" : 200 }
+}
+
+const agaveAddress =
+{ "GNOSIS":
+    { "lendingPoolAddressesProviderAddress" : "0x3673C22153E363B1da69732c4E0aA71872Bbb87F",
+      "deployBlock" : 21726232,
+      "blockStepInInit" : 100000,
+      "multicallSize" : 200 }
 }
 
 
@@ -193,7 +202,7 @@ const aaveV3PriceOracleABI=[{"inputs":[{"internalType":"contract IPoolAddressesP
 module.exports = {
     oneInchOracleAbi, cTokenAbi, comptrollerAbi, multicallAbi, erc20Abi: erc20Abi, compoundOracleAbi,
     calderonAbi, bentoboxAbi, vatAbi, spotterAbi, lendingPoolAddressesProviderAbi, lendingPoolAbi,
-    compoundAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress, 
+    compoundAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress, agaveAddress,
     ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, vatEthAddress, aurigamiAddress,
     aaveAddress, creamAddress, granaryAddress, tectonicAddress, moonwellAddress, aaveV3Configuration, aaveV3poolAddressesProviderRegistryAbi, aaveV3poolAddressProviderAbi, aaveV3PoolAbi, aaveV3PriceOracleABI
 }
