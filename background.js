@@ -6,6 +6,10 @@ const {sleep} = require('./utils');
 
 const jobs = [
   {
+    file: 'ParseAgave',
+    name: 'gnosis_agave'
+  },  
+  {
     file: 'ParseAave',
     name: 'ethereum_aave'
   },

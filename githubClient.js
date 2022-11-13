@@ -11,9 +11,9 @@ const octokit = new Octokit({
   auth: process.env.GH_TOKEN
 })
 
-const getSha = async (fileName) => {
+const getSha = async (fileName, day) => {
   try{
-    const res = await octokit.request(`Get /repos/{owner}/{repo}/contents/${REPO_PATH}/latest/{path}`, {
+    const res = await octokit.request(`Get /repos/{owner}/{repo}/contents/${REPO_PATH}/${day || 'latest'}/{path}`, {
       owner: 'Risk-DAO',
       repo: 'simulation-results',
       path: `${fileName}`,
@@ -34,7 +34,7 @@ const getDay = () => {
 
 const uploadJsonFile = async (jsonString, fileName, day) => {
   try {
-    const sha = await getSha(fileName)
+    const sha = await getSha(fileName, day)
     if(!day){
       await uploadJsonFile(jsonString, fileName, getDay())
     }
@@ -54,19 +54,6 @@ const uploadJsonFile = async (jsonString, fileName, day) => {
     console.error('failed to upload to github')
     console.error(err)
   }
-
-  return octokit.request(`PUT /repos/{owner}/{repo}/contents/${REPO_PATH}/${day || 'latest'}/{path}`, {
-    owner: 'Risk-DAO',
-    repo: 'simulation-results',
-    path: `${fileName}`,
-    message: `bad-debt push ${new Date().toString()}`,
-    sha,
-    committer: {
-      name: process.env.GH_HANDLE,
-      email: 'octocat@github.com'
-    },
-    content: base64.encode(jsonString)
-  })
 }
 
 const listJsonFiles = async () => {
