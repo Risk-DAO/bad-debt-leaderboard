@@ -11,10 +11,11 @@ class ParseAgave extends Aave {
   }
 }
 
+module.exports = { Parser: ParseAgave }
 
- async function test() {
-     const agave = new ParseAave()
-     await agave.main()
- }
+//  async function test() {
+//      const agave = new ParseAave()
+//      await agave.main()
+//  }
 
-test()
+// test()
