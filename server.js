@@ -22,4 +22,4 @@ const startServer = async ()=> {
 
 startServer()
 
-// require('./background')
+require('./background')

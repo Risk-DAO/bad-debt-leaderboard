@@ -23,10 +23,10 @@ function run() {
     setInterval(writeOutput, every5Minutes)
 }
 
-function writeOutput (){
+async function writeOutput (){
   if(comp && comp.output && comp.output.updated && comp.output.updated != lastUpdate){
     const ghFileName = isSubJob ? 'subjob' + options.name + '.json' : options.name + '.json'
-    uploadJsonFile(JSON.stringify(comp.output), ghFileName)
+    await uploadJsonFile(JSON.stringify(comp.output), ghFileName)
     lastUpdate = comp.output.updated
     console.log('output uploaded to Github')
   } else {
