@@ -131,7 +131,7 @@ const jobs = [
   //   name: 'harmony_aavev3'
   // }
 ]
-const runJob = (job) => {
+const runJob = (job, retry = 0) => {
   const backgroundJob = fork('./backgroundJobs/jobRuner.js', [
       '-f', job.file, 
       '-n', job.name,
@@ -151,6 +151,12 @@ const runJob = (job) => {
   backgroundJob.on('exit', code => {
     console.error(new Error(job.name + ' background job exited'))
     console.log(`--X job died "node ./backgroundJobs/jobRuner.js -f ${job.file} -n ${job.name} -i ${job.i}"`)
+    if (retry < 100) { // preventing an infinite loop
+      retry++
+      console.log(`--> job restart #${retry} "node ./backgroundJobs/jobRuner.js -f ${job.file} -n ${job.name} -i ${job.i} "`)
+      // recursion
+      runJob(job, retry) // restarting the background job
+    }
   })
 }
 
