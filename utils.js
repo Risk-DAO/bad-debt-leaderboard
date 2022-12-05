@@ -1,3 +1,5 @@
+const MAX_RETRIES = 10
+
 const sleep = async seconds => {
   return new Promise(resolve => setTimeout(resolve, seconds * 1000))
 }
@@ -13,6 +15,10 @@ const halfHour = 1000 * 60 * 30
  */
  const retry = async (fn, params, retries = 0) => {
   try {
+      if (retries > MAX_RETRIES) {
+        console.log(`retry exit ${retries} retries` , fn.name)
+        process.exit(0)
+      }
       const res = await  fn(...params)
       if(retries){
           console.log(`retry success after ${retries} retries` , fn.name)
