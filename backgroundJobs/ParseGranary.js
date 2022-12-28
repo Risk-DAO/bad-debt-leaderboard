@@ -7,7 +7,7 @@ require('dotenv').config()
 class ParseGranary extends Aave {
   constructor() {
     const network = 'FTM'
-    const web3 = new Web3(process.env.FTM_NODE_URL)
+    const web3 = new Web3(process.env.FTM_NODE_URL) // https://rpc.fantom.network/
     super(Addresses.granaryAddress, network, web3)
   }
 
