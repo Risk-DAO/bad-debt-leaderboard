@@ -135,7 +135,7 @@ const agaveAddress =
 
 const granaryAddress =
 { "FTM":
-    { "lendingPoolAddressesProviderAddress" : "0x8b9D58E2Dc5e9b5275b62b1F30b3c0AC87138130", "deployBlock" : 32461920, "blockStepInInit" : 1000,   "multicallSize" : 200 }
+    { "lendingPoolAddressesProviderAddress" : "0x8b9D58E2Dc5e9b5275b62b1F30b3c0AC87138130", "deployBlock" : 32461920, "blockStepInInit" : 100000,   "multicallSize" : 200 }
 }
 
 const tectonicAddress = { "CRO" : { "comptroller" : "0xb3831584acb95ED9cCb0C11f677B5AD01DeaeEc0", "cETH" : "0xeAdf7c01DA7E93FdB5f16B0aa9ee85f978e89E95",    
