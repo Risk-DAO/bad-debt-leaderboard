@@ -15,7 +15,7 @@ class ParseGranary extends Aave {
     await super.initPrices()
 
     // override eth price - as in granary the result is in 8 decimals USD
-    this.ethPrice = toBN("10").pow(toBN("26"))
+    this.ethPrice = toBN("10").pow(toBN("28"))
 }  
 }
 
