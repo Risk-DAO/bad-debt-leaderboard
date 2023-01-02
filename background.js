@@ -161,27 +161,8 @@ const runJob = (job, retry = 0) => {
 }
 
 const init = async () => {
-
-  const jobsToStart = [];
-  for(let i = 2; i < process.argv.length; i++) {
-    jobsToStart.push(process.argv[i]);
-  }
-
-  if(jobsToStart.length > 0) {
-    console.log(`Will only start following jobs: ${jobsToStart.join(', ')}`);
-  }
-  else {
-    console.log(`Will start all jobs`);
-  }
-
   for(let job of jobs) {
     console.log(job);
-
-    if(jobsToStart.length > 0 && !jobsToStart.includes(job.file)) {
-      console.log(`Will not start ${job.file}`);
-      continue;
-    }
-
     await waitForCpuToGoBelowThreshold()
     if(job.multiple){    
       let {subJobs} = require(`./backgroundJobs/${job.file}`)
