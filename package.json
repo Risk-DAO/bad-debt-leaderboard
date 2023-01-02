@@ -23,7 +23,6 @@
     "command-line-args": "^5.2.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
-    "node-libcurl": "^2.3.4",
     "octokit": "^2.0.9",
     "os-utils": "^0.0.14",
     "web3": "^1.7.3"
