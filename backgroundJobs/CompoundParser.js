@@ -8,7 +8,15 @@ const {waitForCpuToGoBelowThreshold} = require("../machineResources")
 const {retry} = require("../utils")
 
 class Compound {
-    constructor(compoundInfo, network, web3, heavyUpdateInterval = 24) {
+    /**
+     * build a compound parser
+     * @param {*} compoundInfo addresses and other informations about the protocol
+     * @param {string} network the name of the network, must be the same as in the indexkey in compoundInfo
+     * @param {Web3} web3 web3 connector
+     * @param {number} heavyUpdateInterval defines the amount of fetch between two heavy updates
+     * @param {number} fetchDelayInHours defines the delay between 2 fetch, in hours
+     */
+    constructor(compoundInfo, network, web3, heavyUpdateInterval = 24, fetchDelayInHours = 1) {
       this.web3 = web3
       this.network = network
       this.comptroller = new web3.eth.Contract(Addresses.comptrollerAbi, compoundInfo[network].comptroller)
@@ -45,6 +53,7 @@ class Compound {
       this.totalBorrows = toBN("0")
 
       this.output = {}
+      this.fetchDelayInHours = fetchDelayInHours
     }
 
     async heavyUpdate() {
@@ -95,7 +104,7 @@ class Compound {
             console.log("main failed", {err})
         }
 
-        setTimeout(this.main.bind(this), 1000 * 60 * 60) // sleep for 1 hour
+        setTimeout(this.main.bind(this), this.fetchDelayInHours * 3600 * 1000) // sleep for 'this.fetchDelayInHours' hour
     }
 
     async getFallbackPrice(market) {

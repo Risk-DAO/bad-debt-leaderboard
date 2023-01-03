@@ -149,9 +149,9 @@ const aaveV3Configuration =
 	"AVAX": {
 		"poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",
 		"deployBlock": 11970175,
-		"blockStepInInit": 1000,
+		"blockStepInInit": 10000,
         "firstEventBlock": 12027175,
-		"multicallSize": 100
+		"multicallSize": 200
 	},
 	"ARBITRUM": {
 		"poolAddressesProviderRegistry": "0x770ef9f4fe897e59daCc474EF11238303F9552b6",

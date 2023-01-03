@@ -12,7 +12,7 @@ class IronBankParser extends Compound {
     const compoundInfo = Addresses.ironBankAddress
     const network = 'ETH'
     const web3 = new Web3(web3Url ? web3Url : process.env.ETH_NODE_URL)
-    super(compoundInfo, network, web3, 24 * 1)
+    super(compoundInfo, network, web3, 24 * 1, 24)
   }
 /*
   async collectAllUsers() {

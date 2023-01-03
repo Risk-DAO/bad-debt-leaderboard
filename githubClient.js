@@ -38,7 +38,7 @@ const uploadJsonFile = async (jsonString, fileName, day) => {
     if(!day){
       await uploadJsonFile(jsonString, fileName, getDay())
     }
-    return octokit.request(`PUT /repos/{owner}/{repo}/contents/bad-debt/${day || 'latest'}/{path}`, {
+    return octokit.request(`PUT /repos/{owner}/{repo}/contents/${REPO_PATH}/${day || 'latest'}/{path}`, {
       owner: 'Risk-DAO',
       repo: 'simulation-results',
       path: `${fileName}`,
