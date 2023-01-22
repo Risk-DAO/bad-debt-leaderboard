@@ -136,11 +136,11 @@ const specialAssetPriceFetchers = {
   },
   BSC_0x20bff4bbEDa07536FF00e073bd8359E5D80D733d: async (web3, network, stakedTokenAddress) => {
     //CAN (cannon)
-    return "0.0000000000000001"
+    return Number(1/1000000000)
   },
   ETH_0x43f11c02439e2736800433b4594994Bd43Cd066D:  async (web3, network, stakedTokenAddress) => {
     //FOLKI
-    return "0.0000000000000001"
+    return Number(1/1000000000)
   },
   ETH_0x26FA3fFFB6EfE8c1E69103aCb4044C26B9A106a9: async (web3, network, stakedTokenAddress) => {
     // sSPELL
