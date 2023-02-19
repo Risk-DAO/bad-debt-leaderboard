@@ -35,7 +35,7 @@ class Compound {
       this.usdcAddress = Addresses.usdcAddress[network]
       this.deployBlock = compoundInfo[network].deployBlock
       this.blockStepInInit = compoundInfo[network].blockStepInInit
-      this.multicallSize = compoundInfo[network].multicallSize
+      this.multicallSize = compoundInfo[network].multicallSize / 10
 
       this.prices = {}
       this.markets = []
@@ -57,9 +57,6 @@ class Compound {
     }
 
     async heavyUpdate() {
-        const currBlock = await this.web3.eth.getBlockNumber() - 10
-        const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp        
-
         if(this.userList.length == 0) await this.collectAllUsers()
         await this.updateAllUsers()
     }
@@ -75,8 +72,11 @@ class Compound {
     async main() {
         try {
             await waitForCpuToGoBelowThreshold()
-            await this.initPrices()
-                        
+            const fn = (...args) => this.initPrices(...args)
+            await retry(fn, [])            
+            //await this.initPrices()
+            
+            console.log("finished price update")
             const currBlock = await this.web3.eth.getBlockNumber() - 10
             const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp
 
@@ -227,25 +227,37 @@ class Compound {
         }
         // updating users in slices
         const bulkSize = this.multicallSize
+        let promiseArray = []
         for (let i = 0; i < accountsToUpdate.length; i = i + bulkSize) {
             const to = i + bulkSize > accountsToUpdate.length ? accountsToUpdate.length : i + bulkSize
             const slice = accountsToUpdate.slice(i, to)
             const fn = (...args) => this.updateUsers(...args)
-            await retry(fn, [slice])
+            promiseArray.push(retry(fn, [slice]))
+
+            console.log(promiseArray.length)
+
+            if(promiseArray.length >= 50) {
+                console.log("XXXXXXXXXXXXXXXXX waiting for promises to end")
+                await Promise.all(promiseArray)
+                console.log('XXXXXXXXXXXXXXXXX ended')
+                promiseArray = []
+            }
         }
     }
 
     async collectAllUsers() {
         const currBlock = await this.web3.eth.getBlockNumber() - 10
         console.log({currBlock})
+        let promiseArray = []
         for(let startBlock = this.deployBlock ; startBlock < currBlock ; startBlock += this.blockStepInInit) {
             console.log({startBlock}, this.userList.length, this.blockStepInInit)
 
             const endBlock = (startBlock + this.blockStepInInit > currBlock) ? currBlock : startBlock + this.blockStepInInit
-            let events
             try {
                 // Try to run this code
-                events = await this.comptroller.getPastEvents("MarketEntered", {fromBlock: startBlock, toBlock:endBlock})
+                //events = await this.comptroller.getPastEvents("MarketEntered", {fromBlock: startBlock, toBlock:endBlock})
+                const fn = (...args) => this.comptroller.getPastEvents(...args)
+                promiseArray.push(retry(fn, ["MarketEntered", {fromBlock: startBlock, toBlock:endBlock}]))
             }
             catch(err) {
                 // if any error, Code throws the error
@@ -253,28 +265,48 @@ class Compound {
                 startBlock -= this.blockStepInInit // try again
                 continue
             }
-            for(const e of events) {
-                const a = e.returnValues.account
-                if(! this.userList.includes(a)) this.userList.push(a)
+
+            if(promiseArray.length >= 50) {
+                const results = await Promise.all(promiseArray)
+                let events = []
+                promiseArray = []
+                for(const res of results) events = events.concat(res)
+
+                for(const e of events) {
+                    const a = e.returnValues.account
+                    if(! this.userList.includes(a)) this.userList.push(a)
+                }                
             }
         }
+
+        await Promise.all(promiseArray)        
     }
 
     async updateAllUsers() {
         const users = this.userList //require('./my.json')
         const bulkSize = this.multicallSize
+        let promiseArray = []
         for(let i = 0 ; i < users.length ; i+= bulkSize) {
             const start = i
             const end = i + bulkSize > users.length ? users.length : i + bulkSize
             console.log("update", i.toString() + " / " + users.length.toString())
-            try {
-                await this.updateUsers(users.slice(start, end))
+            
+            const fn = (...args) => this.updateUsers(...args)
+            promiseArray.push(retry(fn, [users.slice(start, end)]))
+
+            console.log(promiseArray.length)
+
+            if(promiseArray.length >= 100) {
+                console.log("XXXX calling all promises")
+                await Promise.all(promiseArray)
+                console.log("XXXX ended")
+                promiseArray = []
             }
-            catch(err) {
-                console.log("update user failed, trying again", err)
-                i -= bulkSize
-            }
+
+            //await this.updateUsers(users.slice(start, end))
         }
+
+        await Promise.all(promiseArray)
     }
 
     async additionalCollateralBalance(userAddress) {
