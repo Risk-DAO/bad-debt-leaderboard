@@ -32,7 +32,7 @@ class BSCParser extends Compound {
                 "starting-block=" + startBlock.toString() + "&ending-block=" + endBlock.toString() +
                 "&sender-address=" + comptrollerAddress + "&page-number="
                     + pageNumber.toString() + 
-                    "&key=ckey_2d9319e5566c4c63b7b62ccf862"
+                    `&key=${this.covalentApiKey}`
                     
                 const fn = (...args) => axios.get(...args)
                 const result = await retry(fn, [url])                    
