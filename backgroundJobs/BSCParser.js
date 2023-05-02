@@ -6,6 +6,16 @@ require('dotenv').config()
 const {retry} = require("../utils")
 
 class BSCParser extends Compound {
+    constructor(compoundInfo, network, web3, heavyUpdateInterval = 24, fetchDelayInHours = 1) {
+        super(compoundInfo, network, web3, heavyUpdateInterval, fetchDelayInHours)
+        this.covalentApiKey = process.env.COVALENT_API_KEY;
+        if(!this.covalentApiKey) {
+            throw new Error('Cannot work with BSCParser without covalent api key');
+        } else {
+            console.log(`Covalent api key is set with value: ${this.covalentApiKey.slice(0,6)}[...]${this.covalentApiKey.slice(-4)}`);
+        }
+    }
+
     async collectAllUsers() {
         const currBlock = await this.web3.eth.getBlockNumber() - 10
         const comptrollerAddress = this.comptroller.options.address
