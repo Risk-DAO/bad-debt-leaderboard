@@ -117,7 +117,7 @@ class CompoundV3 {
         console.log("get markets")
 
         // reset the markets otherwise we will always news markets added
-        // as duplicated to the array each times we init prices (every hours)
+        // (as duplicate) to the array each times we init prices (every hours)
         this.markets = [];
 
         // Add base token to markets
