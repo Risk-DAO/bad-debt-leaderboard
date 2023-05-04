@@ -116,16 +116,20 @@ class CompoundV3 {
     async initPrices() {
         console.log("get markets")
 
+        let readMarkets = [] 
+
         // Add base token to markets
+        console.log(this.comet.methods)
         this.baseTokenAddress = await this.comet.methods.baseToken().call()
-        this.markets.push(this.baseTokenAddress)
+        readMarkets.push(this.baseTokenAddress)
 
         this.numAssets = await this.comet.methods.numAssets().call()
 
         for(let i = 0 ; i < this.numAssets; i++) {
             const assetInfo = await this.comet.methods.getAssetInfo(i).call()
-            this.markets.push(assetInfo.asset)
+            readMarkets.push(assetInfo.asset)
         }
+        this.markets = readMarkets
         console.log(this.markets)
 
         let tvl = toBN("0")
