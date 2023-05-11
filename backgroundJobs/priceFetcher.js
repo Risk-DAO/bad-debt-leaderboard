@@ -4,7 +4,7 @@ const Web3 = require("web3")
 const { toBN, toWei, fromWei, toChecksumAddress } = Web3.utils
 const axios = require('axios')
 const assert = require('assert'); 
-const {retry} = require("../utils")
+const {retry, sleep} = require("../utils")
 require('dotenv').config()
 
 const coinGeckoChainIdMap = {
@@ -427,6 +427,81 @@ const getUniV2LPTokenPrice = async (network, address, web3) => {
 
 let base64ZapperKey = Buffer.from(process.env.ZAPPER_KEY).toString('base64')
 const fetchZapperTotal = async (address) => {
+  try { 
+    const headers = {
+      'Cache-Control': 'no-cache',
+        Authorization: `Basic ${base64ZapperKey}`,
+        accept: 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'
+    }
+    // post to zapper to force refresh data
+    const postOptions = {
+      method: 'post',
+      url: 'https://api.zapper.fi/v2/balances/apps',
+      params: {
+        'addresses[]': address,
+        'network[]': 'ethereum'
+      },
+      headers: headers
+    };
+    const postResponse = await retry(axios, [postOptions])
+    const jobId = postResponse.data.jobId;
+
+    // wait for job to complete by checking status every 5 seconds
+    let jobComplete = false;
+    while(!jobComplete) {
+      const getStatusOptions = {
+        method: 'get',
+        url: 'https://api.zapper.fi/v2/balances/job-status',
+        params: {
+          'jobId': jobId,
+        },
+        headers: headers
+      };
+
+      const getStatusResponse = await retry(axios, [getStatusOptions])
+      if(getStatusResponse.data.status == 'completed') {
+        console.log(`Job ${jobId} status is ${getStatusResponse.data.status}`)
+        jobComplete = true;
+      } else if (getStatusResponse.data.status == 'unknown') {
+        console.log(`Zapper status is 'unknown', restarting the process`)
+        return await fetchZapperTotal(address);
+      }
+      else {
+        console.log(`Job ${jobId} status is ${getStatusResponse.data.status}, waiting 5 seconds`)
+        await sleep(5);
+      }
+    }
+
+    // get the value
+    const getOptions = {
+      method: 'get',
+      url: 'https://api.zapper.fi/v2/balances/apps',
+      params: {
+        'addresses[]': address,
+        'network[]': 'ethereum'
+      },
+      headers: headers
+    };
+
+    const res = await retry(axios, [getOptions])
+
+    // sum balance usd of all data where network is ethereum
+    let sumBalanceUsd = 0;
+    for(const result of res.data) {
+      if(result.network == 'ethereum') {
+          sumBalanceUsd += result.balanceUSD
+      }
+    }
+    return sumBalanceUsd;
+  } catch (e) {
+    console.error(`fetchZapperTotal for ${address} failed`)
+    console.error(e)
+    return '0'
+  }
+}
+
+const fetchZapperTotalOld = async (address) => {
   try {    
     const options = {
       method: 'get',
@@ -468,6 +543,16 @@ const fetchZapperTotal = async (address) => {
     return '0'
   }
 }
+
+// compare zapper
+async function compareZapper() {
+  const tokenToFetch = '0x0D5Dc686d0a2ABBfDaFDFb4D0533E886517d4E83'
+  const newValue = await fetchZapperTotal(tokenToFetch);
+  const oldValue = await fetchZapperTotalOld(tokenToFetch);
+  console.log({newValue}, {oldValue})
+}
+
+// compareZapper();
 
 const get1InchPrice = async (network, address, web3) => {
   const oneInch = new web3.eth.Contract(Addresses.oneInchOracleAbi, Addresses.oneInchOracleAddress[network])
