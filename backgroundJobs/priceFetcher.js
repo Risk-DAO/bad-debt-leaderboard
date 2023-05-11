@@ -463,7 +463,11 @@ const fetchZapperTotal = async (address) => {
       if(getStatusResponse.data.status == 'completed') {
         console.log(`Job ${jobId} status is ${getStatusResponse.data.status}`)
         jobComplete = true;
-      } else {
+      } else if (getStatusResponse.data.status == 'unknown') {
+        console.log(`Zapper status is 'unknown', restarting the process`)
+        return await fetchZapperTotal(address);
+      }
+      else {
         console.log(`Job ${jobId} status is ${getStatusResponse.data.status}, waiting 5 seconds`)
         await sleep(5);
       }
