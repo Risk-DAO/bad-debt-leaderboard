@@ -13,7 +13,8 @@ const coinGeckoChainIdMap = {
   MATIC: 'polygon-pos',
   BSC: 'binance-smart-chain',
   NEAR: 'aurora',
-  CRO: 'cronos'
+  CRO: 'cronos',
+  OPTIMISM: 'optimistic-ethereum',
 }
 
 const getChainlinkPrice = async (web3, feedAddress) => {
