@@ -152,7 +152,7 @@ const tectonicAddress = { "CRO" : { "comptroller" : "0xb3831584acb95ED9cCb0C11f6
 
 
 const sonneAddress = { "OPTIMISM" : { "comptroller" : "0x60CF091cD3f50420d50fD7f707414d0DF4751C58", "cETH" : "0xf7B5965f5C117Eb1B5450187c9DcFccc3C317e8E",
-    "deployBlock" : 26050051, "blockStepInInit" : 100000, "multicallSize" : 200} }
+    "deployBlock" : 26050051, "blockStepInInit" : 10000, "multicallSize" : 200} }
 
 ///////////// AAVE V3 SPECIFICS //////////////////////////
 
