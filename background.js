@@ -122,6 +122,10 @@ const jobs = [
     file: 'ParseAaveV3_MATIC',
     name: 'polygon_aave v3'
   },
+  {
+    file: 'ParseSonne',
+    name: 'optimism_sonne'
+  },
   // { 
   //   file: 'ParseAaveV3_FTM',
   //   name: 'fantom_aavev3'

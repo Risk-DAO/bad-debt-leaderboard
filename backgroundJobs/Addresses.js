@@ -58,7 +58,7 @@ const multicallAddress = {
 
 const usdcAddress = {"ETH" : "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "BSC" : "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
     "AVAX" : "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E", "MATIC" : "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", "NEAR": "0xB12BFcA5A55806AaF64E99521918A4bf0fC40802",
-    "CRO": "0xc21223249CA28397B4B6541dfFaEcC539BfF0c59", "MOONBEAM" : "0x818ec0A7Fe18Ff94269904fCED6AE3DaE6d6dC0b" }
+    "CRO": "0xc21223249CA28397B4B6541dfFaEcC539BfF0c59", "MOONBEAM" : "0x818ec0A7Fe18Ff94269904fCED6AE3DaE6d6dC0b", "OPTIMISM": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607" }
 
 const compoundAddress = { "ETH" : { "comptroller" : "0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B", "cETH" : "0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5",
     "deployBlock" : 7710671, "blockStepInInit" : 50000, "multicallSize" : 200} }
@@ -150,6 +150,10 @@ const tectonicAddress = { "CRO" : { "comptroller" : "0xb3831584acb95ED9cCb0C11f6
     "deployBlock" : 570286, "blockStepInInit" : 2000, "multicallSize" : 20 }
 }
 
+
+const sonneAddress = { "OPTIMISM" : { "comptroller" : "0x60CF091cD3f50420d50fD7f707414d0DF4751C58", "cETH" : "0xf7B5965f5C117Eb1B5450187c9DcFccc3C317e8E",
+    "deployBlock" : 26050051, "blockStepInInit" : 10000, "multicallSize" : 200} }
+
 ///////////// AAVE V3 SPECIFICS //////////////////////////
 
 const aaveV3Configuration =
@@ -211,6 +215,6 @@ module.exports = {
     oneInchOracleAbi, cTokenAbi, comptrollerAbi, cometAbi, multicallAbi, erc20Abi: erc20Abi, compoundOracleAbi,
     calderonAbi, bentoboxAbi, vatAbi, spotterAbi, lendingPoolAddressesProviderAbi, lendingPoolAbi,
     compoundAddress, compoundV3WethAddress, compoundV3UsdcAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress, agaveAddress,
-    ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, vatEthAddress, aurigamiAddress,
+    ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, vatEthAddress, aurigamiAddress, sonneAddress,
     aaveAddress, creamAddress, granaryAddress, tectonicAddress, moonwellAddress, aaveV3Configuration, aaveV3poolAddressesProviderRegistryAbi, aaveV3poolAddressProviderAbi, aaveV3PoolAbi, aaveV3PriceOracleABI
 }
