@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,13 +19,20 @@
   },
   "homepage": "https://github.com/backstop-protocol/bad-debt-leaderboard#readme",
   "dependencies": {
+    "@morpho-labs/ethers-fallback-provider": "^1.1.0",
+    "@morpho-labs/ethers-utils": "^1.2.0",
+    "@morpho-labs/morpho-ethers-contract": "^1.18.0",
+    "@types/node": "^20.2.5",
     "axios": "^0.27.2",
     "base-64": "^1.0.0",
     "command-line-args": "^5.2.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
+    "ethers": "^5.7.2",
+    "ethers-multicall-provider": "^3.0.2",
     "octokit": "^2.0.9",
     "os-utils": "^0.0.14",
+    "typescript": "^5.0.4",
     "web3": "^1.7.3"
   }
 }
