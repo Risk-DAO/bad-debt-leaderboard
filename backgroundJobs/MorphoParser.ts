@@ -9,7 +9,7 @@ import {MorphoAaveV2, MorphoCompound} from "@morpho-labs/morpho-ethers-contract"
 
 export interface MorphoConfiguration {
     /**
-     * The deployment block of the MorphoAaveV2 contract
+     * The deployment block of the Morpho contract
      */
     deploymentBlock: number,
 
@@ -104,7 +104,7 @@ export abstract class MorphoParser<T> implements IParser {
         } catch (err) {
             console.log("main failed", {err})
         }
-        const waitTime = 10;
+        const waitTime = 60*60;
         console.log(`${this.filename.replace(".json", "")}: waiting ${waitTime} seconds before next run`);
         await this.utils.waitSeconds(waitTime);
         return this.main();
@@ -232,7 +232,7 @@ export abstract class MorphoParser<T> implements IParser {
     #dumpToDisk() {
         if(this.#usersList.length === 0) return;
         if(!fs.existsSync(this.utils.getPath(""))) fs.mkdirSync(this.utils.getPath(""), {recursive: true})
-        fs.writeFileSync(this.utils.getPath("MorphoAaveV2_users.json"), JSON.stringify({
+        fs.writeFileSync(this.utils.getPath(this.filename), JSON.stringify({
             lastFetchedBlock: this.lastFetchedBlock,
             users: this.#usersList,
         }, null, 2), {encoding: "utf-8"})
