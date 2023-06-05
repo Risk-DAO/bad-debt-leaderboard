@@ -88,4 +88,11 @@ class MorphoAaveV2Parser extends MorphoParserV1<Types.LiquidityDataStructOutput>
     }
 }
 
+// async function test() {
+//     const parser = new MorphoAaveV2Parser();
+//     await parser.main();
+// }
+
+// test();
+
 export const Parser = MorphoAaveV2Parser;

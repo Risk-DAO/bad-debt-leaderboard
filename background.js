@@ -144,14 +144,14 @@ const jobs = [
   // }
 ]
 const runJob = (job, retry = 0) => {
-  const backgroundJob = fork('./dist/backgroundJobs/jobRuner.js', [
+  const backgroundJob = fork('./backgroundJobs/jobRuner.js', [
       '-f', job.file, 
       '-n', job.name,
       '-i', job.i,
     ],
     { silent: true }
   );
-  console.log(`--> job start "node ./dist/backgroundJobs/jobRuner.js -f ${job.file} -n ${job.name} -i ${job.i}"`)
+  console.log(`--> job start "node ./backgroundJobs/jobRuner.js -f ${job.file} -n ${job.name} -i ${job.i}"`)
   backgroundJob.stdout.on('data', (data) => {
     console.log(`${job.name} ${new Date().toLocaleString()} : ${data}`);
   });
@@ -162,10 +162,10 @@ const runJob = (job, retry = 0) => {
 
   backgroundJob.on('exit', code => {
     console.error(new Error(job.name + ' background job exited'))
-    console.log(`--X job died "node ./dist/backgroundJobs/jobRuner.js -f ${job.file} -n ${job.name} -i ${job.i}"`)
+    console.log(`--X job died "node ./backgroundJobs/jobRuner.js -f ${job.file} -n ${job.name} -i ${job.i}"`)
     if (retry < 100) { // preventing an infinite loop
       retry++
-      console.log(`--> job restart #${retry} "node ./dist/backgroundJobs/jobRuner.js -f ${job.file} -n ${job.name} -i ${job.i} "`)
+      console.log(`--> job restart #${retry} "node ./backgroundJobs/jobRuner.js -f ${job.file} -n ${job.name} -i ${job.i} "`)
       // recursion
       runJob(job, retry) // restarting the background job
     }
@@ -196,7 +196,7 @@ const init = async () => {
 
     await waitForCpuToGoBelowThreshold()
     if(job.multiple){    
-      let {subJobs} = require(`./dist/backgroundJobs/${job.file}`)
+      let {subJobs} = require(`.//backgroundJobs/${job.file}`)
       console.log({'subJobs.length': subJobs.length})
       subJobs = subJobs.map((subJob, i) => Object.assign({}, job, { name: job.name + '_' + subJob.name, i }))
       subJobs.forEach(runJob);

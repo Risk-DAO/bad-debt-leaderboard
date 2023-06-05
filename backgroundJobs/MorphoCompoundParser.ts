@@ -61,4 +61,11 @@ class MorphoCompoundParser extends MorphoParserV1<CompoundBalanceState> {
     }
 }
 
+// async function test() {
+//     const parser = new MorphoCompoundParser();
+//     await parser.main();
+// }
+
+// test();
+
 export const Parser = MorphoCompoundParser;
