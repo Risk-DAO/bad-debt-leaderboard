@@ -6,6 +6,7 @@ const Addresses = require("./Addresses.js")
 const User = require("./User.js")
 const {waitForCpuToGoBelowThreshold} = require("../machineResources")
 const {retry} = require("../utils")
+const { assert } = require('console')
 
 
 class MaiParser {
@@ -30,12 +31,14 @@ class MaiParser {
       this.feedDecimals = 0
       this.tokenDecimals = 0
 
+      this.network = network
+
       this.output = {}
     }
 
     async heavyUpdate() {
-        await this.updateAllUsers()
         await this.initPrices()
+        await this.updateAllUsers()
     }
 
     async main(onlyOnce = false) {
@@ -55,6 +58,7 @@ class MaiParser {
             // don't  increase cntr, this way if heavy update is needed, it will be done again next time
             console.log("sleeping", this.mainCntr++)
         }
+        
         catch(err) {
             console.log("main failed", {err})
         }
@@ -67,10 +71,48 @@ class MaiParser {
     }
 
     async initPrices() {
-        this.price = await this.vault.methods.getEthPriceSource().call()
-        this.feedDecimals = await this.vault.methods.collateralDecimals().call()
-        
+        console.log("getting prices")
+        try {
+            this.price = await this.vault.methods.getEthPriceSource().call()
+        }
+        catch(err) {
+            if(err.toString().includes("Error: Returned error: execution reverted")) {
+                this.price = 0
+            }
+            else {
+                console.log("should revert")
+                throw new Error(err)
+            }            
+        }
+        console.log(this.price)
+
+        const rawTokenVaults = [
+            "0x88d84a85A87ED12B8f098e8953B322fF789fCD1a",
+            "0xa3Fa99A148fA48D14Ed51d610c367C61876997F1"
+        ]
+
+        if(this.network === "MATIC" && rawTokenVaults.includes(this.vault.options.address)) {
+            this.feedDecimals = 8
+            this.tokenDecimals = 18
+            return
+        }
+
+        if(this.network === "MATIC" && this.vault.options.address === "0x7dDA5e1A389E0C1892CaF55940F5fcE6588a9ae0") {
+            this.feedDecimals = 8
+            this.tokenDecimals = 8
+            return
+        }
+
+        console.log("get collateral decimals")
+        try {
+            this.feedDecimals = await this.vault.methods.collateralDecimals().call()
+        }
+        catch(err) {
+            this.feedDecimals = await this.vault.methods.priceSourceDecimals().call()            
+        }
+        console.log("get collateral")
         const tokenAddress = await this.vault.methods.collateral().call()
+
         const token = new this.web3.eth.Contract(Addresses.erc20Abi, tokenAddress)
         this.tokenDecimals = await token.methods.decimals().call()
     }
@@ -184,11 +226,56 @@ async function test() {
 
     const maiInfo = {
         "multicallSize" : 1000,
-        "address" : "0x3fd939B017b31eaADF9ae50C7fF7Fa5c0661d47C"
+        "address" : "0xa3Fa99A148fA48D14Ed51d610c367C61876997F1"
     }
 
-    const mai = new MaiParser(maiInfo, "MATIC", web3)
-    await mai.main()
+    const addresses = [
+        "0xa3fa99a148fa48d14ed51d610c367c61876997f1",
+        "0x3fd939B017b31eaADF9ae50C7fF7Fa5c0661d47C",
+        "0x61167073E31b1DAd85a3E531211c7B8F1E5cAE72",
+        "0x87ee36f780ae843A78D5735867bc1c13792b7b11",
+        "0x98B5F32dd9670191568b661a3e847Ed764943875",
+        "0x701A1824e5574B0b6b1c8dA808B184a7AB7A2867",
+        "0x649Aa6E6b6194250C077DF4fB37c23EE6c098513",
+        "0x37131aEDd3da288467B6EBe9A77C523A700E6Ca1",
+        "0xF086dEdf6a89e7B16145b03a6CB0C0a9979F1433",         
+        "0x88d84a85A87ED12B8f098e8953B322fF789fCD1a",
+        "0x11A33631a5B5349AF3F165d2B7901A4d67e561ad",
+        "0x578375c3af7d61586c2C3A7BA87d2eEd640EFA40",
+        "0x7dda5e1a389e0c1892caf55940f5fce6588a9ae0",
+        "0xD2FE44055b5C874feE029119f70336447c8e8827",
+        "0x57cbf36788113237d64e46f25a88855c3dff1691",
+        "0xff2c44fb819757225a176e825255a01b3b8bb051",        
+        "0x7CbF49E4214C7200AF986bc4aACF7bc79dd9C19a",        
+        "0x506533B9C16eE2472A6BF37cc320aE45a0a24F11",        
+        "0x7d36999a69f2b99bf3fb98866cbbe47af43696c8",
+        "0x1f0aa72b980d65518e88841ba1da075bd43fa933",
+        "0x178f1c95c85fe7221c7a6a3d6f12b7da3253eeae",
+        "0x305f113ff78255d4f8524c8f50c7300b91b10f6a",
+        "0x1dcc1f864a4bd0b8f4ad33594b758b68e9fa872c",
+        "0xaa19d0e397c964a35e6e80262c692dbfc9c23451",
+        "0x11826d20b6a16a22450978642404da95b4640123",
+        "0xa3b0A659f2147D77A443f70D96b3cC95E7A26390",
+        "0x7d75F83f0aBe2Ece0b9Daf41CCeDdF38Cb66146b",
+        "0x9A05b116b56304F5f4B3F1D5DA4641bFfFfae6Ab",        
+        "0xF1104493eC315aF2cb52f0c19605443334928D38",
+        "0x3bcbAC61456c9C9582132D1493A00E318EA9C122",
+        "0xb1f28350539b06d5a35d016908eef0424bd13c4b"
+    ]
+
+    let badDebt = 0.0
+
+    for(const addr of addresses) {
+        maiInfo["address"] = addr
+
+        console.log({maiInfo})
+
+        const mai = new MaiParser(maiInfo, "MATIC", web3)
+        badDebt += await mai.main(true)
+
+        console.log({badDebt})    
+    }
+
  }
 
 test()
