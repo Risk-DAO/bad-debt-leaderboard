@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
+    "firm": "node ./backgroundJobs/ParseInverseFirm.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
