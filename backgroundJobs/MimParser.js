@@ -51,6 +51,13 @@ class MimParser {
       this.totalBorrows = toBN("0")
 
       this.output = {}
+
+      this.covalentApiKey = process.env.COVALENT_API_KEY;
+      if(!this.covalentApiKey) {
+        throw new Error('Cannot work with MIMPARSER without covalent api key');
+      } else {
+        console.log(`Covalent api key is set with value: ${this.covalentApiKey.slice(0,6)}[...]${this.covalentApiKey.slice(-4)}`);
+      }
     }
 
     async heavyUpdate() {
@@ -172,7 +179,7 @@ class MimParser {
                 "starting-block=" + startBlock.toString() + "&ending-block=" + endBlock.toString() +
                 "&sender-address=" + calderonAddress + "&page-number="
                     + pageNumber.toString() + 
-                    "&key=ckey_2d9319e5566c4c63b7b62ccf862"                 
+                    `&key=${this.covalentApiKey}`                 
                 const result = await retry(axios.get, [url])
                 const data = result.data.data
                 for(const item of data.items) {

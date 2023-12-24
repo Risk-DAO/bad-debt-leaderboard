@@ -116,6 +116,10 @@ class CompoundV3 {
     async initPrices() {
         console.log("get markets")
 
+        // reset the markets otherwise we will always news markets added
+        // (as duplicate) to the array each times we init prices (every hours)
+        this.markets = [];
+
         // Add base token to markets
         this.baseTokenAddress = await this.comet.methods.baseToken().call()
         this.markets.push(this.baseTokenAddress)
@@ -433,8 +437,7 @@ async function test() {
     //const comp = new Compound(Addresses.ironBankAddress, "ETH", web3)
     //const comp = new Compound(Addresses.venusAddress, "BSC", web3)
 
-    const web3 = new Web3("https://eth-mainnet.g.alchemy.com/v2/PpTs2rj2yi3LyvGbEWdkjl1xLBkvVe_P")
-    // https://app.compound.finance/markets?market=weth-mainnet
+   // const web3 = require("web3")
 
    
     // const compoundInfo = {

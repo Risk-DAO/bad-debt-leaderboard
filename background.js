@@ -8,7 +8,7 @@ const jobs = [
   {
     file: 'ParseAgave',
     name: 'gnosis_agave'
-  },  
+  },
   {
     file: 'ParseAave',
     name: 'ethereum_aave'
@@ -24,39 +24,39 @@ const jobs = [
   {
     file: 'ParseVenus',
     name: 'BSC_venus'
-  },  
+  },
   {
     file: 'ParseRari',
     name: 'ethereum_rari-capital'
-  },  
+  },
   {
     file: 'ParseOvix',
     name: 'polygon_0vix'
-  },  
+  },
   {
     file: 'ParseTraderJoe',
     name: 'avalanche_trader-joe'
-  },  
+  },
   {
     file: 'ParseIronBank',
     name: 'ethereum_iron-bank'
-  },  
+  },
   {
     file: 'ParseGranary',
     name: 'FTM_granary'
-  },  
+  },
   {
     file: 'ParseBenqi',
     name: 'avalanche_benqi'
-  },  
+  },
   {
     file: 'ParseBastion',
     name: 'aurora_bastion'
-  },  
+  },
   {
     file: 'ParseRikki',
     name: 'BSC_rikki'
-  },  
+  },
   {
     file: 'ParseApeswap',
     name: 'BSC_apeswap'
@@ -77,22 +77,22 @@ const jobs = [
     file: 'ParseMim',
     name: 'ethereum_MIM',
     multiple: true
-  },  
+  },
   {
     file: 'ParseMim_BSC',
     name: 'BSC_MIM',
     multiple: true
-  },  
+  },
   {
     file: 'ParseMim_FTM',
     name: 'FTM_MIM',
     multiple: true
-  },  
+  },
   {
     file: 'ParseMim_Arbitrum',
     name: 'arbitrum_MIM',
     multiple: true
-  },  
+  },
   {
     file: 'ParseMim_AVAX',
     name: 'avalanche_MIM',
@@ -118,10 +118,22 @@ const jobs = [
     file: 'ParseAaveV3_Optimism',
     name: 'optimism_aave v3'
   },
-  { 
+  {
     file: 'ParseAaveV3_MATIC',
     name: 'polygon_aave v3'
   },
+  {
+    file: 'ParseSonne',
+    name: 'optimism_sonne'
+  },
+  {
+    file: "MorphoAaveV2Parser",
+    name: "Morpho AaveV2"
+  },
+  {
+    file: "MorphoCompoundParser",
+    name: "Morpho Compound"
+  }
   // { 
   //   file: 'ParseAaveV3_FTM',
   //   name: 'fantom_aavev3'
@@ -184,7 +196,7 @@ const init = async () => {
 
     await waitForCpuToGoBelowThreshold()
     if(job.multiple){    
-      let {subJobs} = require(`./backgroundJobs/${job.file}`)
+      let {subJobs} = require(`.//backgroundJobs/${job.file}`)
       console.log({'subJobs.length': subJobs.length})
       subJobs = subJobs.map((subJob, i) => Object.assign({}, job, { name: job.name + '_' + subJob.name, i }))
       subJobs.forEach(runJob);

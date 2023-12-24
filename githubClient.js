@@ -79,7 +79,7 @@ const getJsonFile = async (fileName) => {
 }
 
 module.exports = {
-  uploadJsonFile: (...arguments) => retry(uploadJsonFile, arguments), 
-  listJsonFiles: (...arguments) => retry(listJsonFiles, arguments),
-  getJsonFile: (...arguments) => retry(getJsonFile, arguments), 
+  uploadJsonFile: (file, filename) => retry(uploadJsonFile, [file, filename]),
+  listJsonFiles: () => retry(listJsonFiles, []),
+  getJsonFile: (filename) => retry(getJsonFile, [filename]),
 }
