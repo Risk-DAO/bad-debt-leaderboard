@@ -232,6 +232,15 @@ const specialAssetPriceFetchers = {
     const {data} = await retry(axios.get, [coingeckoCall])
     const apiPrice = Object.values(data)[0].usd || 0
     return apiPrice
+  },
+  GORELI_0x62bD2A599664D421132d7C54AB4DbE3233f4f0Ae: async (web3, network, address) => {
+    return 1.0
+  },
+  GORELI_0xD8134205b0328F5676aaeFb3B2a0DC15f4029d8C: async (web3, network, address) => {
+    return 1.01
+  },
+  GORELI_0x576e379FA7B899b4De1E251e935B31543Df3e954: async (web3, network, address) => {
+    return 1.0
   }
 }
 
