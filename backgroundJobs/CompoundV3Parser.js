@@ -21,21 +21,20 @@ class CompoundV3 {
     constructor(compoundInfo, network, web3, heavyUpdateInterval = 24, fetchDelayInHours = 1) {
       this.web3 = web3
       this.network = network
-
-      this.comet = new web3.eth.Contract(Addresses.cometAbi, compoundInfo[network].comet)
+      this.comet = new web3.eth.Contract(Addresses.cometAbi, compoundInfo.comet)
 
       this.nonBorrowableMarkets = []
-      if(compoundInfo[network].nonBorrowableMarkets) this.nonBorrowableMarkets = compoundInfo[network].nonBorrowableMarkets
+      if(compoundInfo.nonBorrowableMarkets) this.nonBorrowableMarkets = compoundInfo.nonBorrowableMarkets
 
       this.rektMarkets = []
-      if(compoundInfo[network].rektMarkets) this.rektMarkets = compoundInfo[network].rektMarkets
+      if(compoundInfo.rektMarkets) this.rektMarkets = compoundInfo.rektMarkets
 
       this.priceOracle = new web3.eth.Contract(Addresses.oneInchOracleAbi, Addresses.oneInchOracleAddress[network])
       this.multicall = new web3.eth.Contract(Addresses.multicallAbi, Addresses.multicallAddress[network])
       this.usdcAddress = Addresses.usdcAddress[network]
-      this.deployBlock = compoundInfo[network].deployBlock
-      this.blockStepInInit = compoundInfo[network].blockStepInInit
-      this.multicallSize = compoundInfo[network].multicallSize
+      this.deployBlock = compoundInfo.deployBlock
+      this.blockStepInInit = compoundInfo.blockStepInInit
+      this.multicallSize = compoundInfo.multicallSize
 
       this.prices = {}
       this.baseTokenAddress = "0x0"
@@ -83,7 +82,9 @@ class CompoundV3 {
             const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp
 
             const usdcContract = new this.web3.eth.Contract(Addresses.cTokenAbi, this.usdcAddress)
+
             this.usdcDecimals = Number(await usdcContract.methods.decimals().call())
+
             console.log("usdc decimals", this.usdcDecimals)
             if(this.mainCntr % this.heavyUpdateInterval == 0) {
                 console.log("heavyUpdate start")
