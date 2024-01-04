@@ -81,7 +81,7 @@ const compoundV3Address = {
         },
     },
     'BASE' : {
-        "USDC" : { 
+        "USDbC" : { 
             "comet" : "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
             "deployBlock" : 2197588 , "blockStepInInit" : 50000, "multicallSize" : 200
         },
