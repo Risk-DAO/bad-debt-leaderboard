@@ -82,9 +82,7 @@ class CompoundV3 {
             const currTime = (await this.web3.eth.getBlock(currBlock)).timestamp
 
             const usdcContract = new this.web3.eth.Contract(Addresses.cTokenAbi, this.usdcAddress)
-
             this.usdcDecimals = Number(await usdcContract.methods.decimals().call())
-
             console.log("usdc decimals", this.usdcDecimals)
             if(this.mainCntr % this.heavyUpdateInterval == 0) {
                 console.log("heavyUpdate start")

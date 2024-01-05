@@ -20,4 +20,4 @@ async function test() {
   await comp.main()
 }
 
- test()
+// test()
