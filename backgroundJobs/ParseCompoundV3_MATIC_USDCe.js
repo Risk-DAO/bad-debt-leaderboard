@@ -7,8 +7,7 @@ class CompoundVMATICUSDCeParser extends CompoundV3 {
   constructor() {
     const compoundInfo = Addresses.compoundV3Address['MATIC']['USDCe']
     const network = 'MATIC'
-    //const web3 = new Web3(process.env.MATIC_NODE_URL)
-       const web3 = new Web3("https://polygon-mainnet.g.alchemy.com/v2/CZC54IBGZxwvJoTaB7gD2ESSkHT_cQgp")
+    const web3 = new Web3(process.env.MATIC_NODE_URL)
     super(compoundInfo, network, web3, 24 * 5)
   }
 }
