@@ -52,22 +52,56 @@ const multicallAddress = {
 	"CRO": "0x5e954f5972EC6BFc7dECd75779F10d848230345F",
 	"MOONBEAM": "0x6477204E12A7236b9619385ea453F370aD897bb2",
     "OPTIMISM": "0xcA11bde05977b3631167028862bE2a173976CA11",
-    "GNOSIS" : "0xB6E7BD43cd3832dDFB02fc03035A6471eac757cc"
+    "GNOSIS" : "0xB6E7BD43cd3832dDFB02fc03035A6471eac757cc",
+    "BASE" : "0xcA11bde05977b3631167028862bE2a173976CA11",
 }
 
 
 const usdcAddress = {"ETH" : "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "BSC" : "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
     "AVAX" : "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E", "MATIC" : "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", "NEAR": "0xB12BFcA5A55806AaF64E99521918A4bf0fC40802",
-    "CRO": "0xc21223249CA28397B4B6541dfFaEcC539BfF0c59", "MOONBEAM" : "0x818ec0A7Fe18Ff94269904fCED6AE3DaE6d6dC0b", "OPTIMISM": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607" }
+    "CRO": "0xc21223249CA28397B4B6541dfFaEcC539BfF0c59", "MOONBEAM" : "0x818ec0A7Fe18Ff94269904fCED6AE3DaE6d6dC0b", "OPTIMISM": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607", "BASE" : "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "ARBITRUM" : "0xaf88d065e77c8cC2239327C5EDb3A432268e5831" }
 
 const compoundAddress = { "ETH" : { "comptroller" : "0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B", "cETH" : "0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5",
     "deployBlock" : 7710671, "blockStepInInit" : 50000, "multicallSize" : 200} }
 
-const compoundV3WethAddress = { "ETH" : { "comet" : "0xA17581A9E3356d9A858b789D68B4d866e593aE94",
-    "deployBlock" : 16400710, "blockStepInInit" : 50000, "multicallSize" : 200} }
-
-const compoundV3UsdcAddress = { "ETH" : { "comet" : "0xc3d688B66703497DAA19211EEdff47f25384cdc3",
-    "deployBlock" : 15331586, "blockStepInInit" : 50000, "multicallSize" : 200} }
+const compoundV3Address = {
+    'MATIC' : {
+        "USDCe" : { 
+            "comet" : "0xF25212E676D1F7F89Cd72fFEe66158f541246445",
+            "deployBlock" : 39412367, "blockStepInInit" : 50000, "multicallSize" : 200
+        },
+    },
+    'ETH' : {
+        "USDC" : { 
+            "comet" : "0xc3d688B66703497DAA19211EEdff47f25384cdc3",
+            "deployBlock" : 15331586, "blockStepInInit" : 50000, "multicallSize" : 200
+        },
+        "WETH" : { 
+            "comet" : "0xA17581A9E3356d9A858b789D68B4d866e593aE94",
+            "deployBlock" : 16400710, "blockStepInInit" : 50000, "multicallSize" : 200
+        },
+    },
+    'BASE' : {
+        "USDbC" : { 
+            "comet" : "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+            "deployBlock" : 2197588 , "blockStepInInit" : 50000, "multicallSize" : 200
+        },
+        "WETH" : { 
+            "comet" : "0x46e6b214b524310239732D51387075E0e70970bf",
+            "deployBlock" : 2495303 , "blockStepInInit" : 50000, "multicallSize" : 200
+        },
+    },
+    'ARBITRUM' : {
+        "USDC" : { 
+            "comet" : "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+            "deployBlock" : 122080500, "blockStepInInit" : 50000, "multicallSize" : 200
+        },
+        "USDCe" : { 
+            "comet" : "0xA5EDBDD9646f8dFF606d7448e414884C7d905dCA",
+            "deployBlock" : 87335214, "blockStepInInit" : 50000, "multicallSize" : 200
+        },
+    }
+}
 
 const rariTetranodeAddress = { "ETH" : { "comptroller" : "0x814b02C1ebc9164972D888495927fe1697F0Fb4c", "cETH" : "0xF6551C22276b9Bf62FaD09f6bD6Cad0264b89789",
     "deployBlock" : 12860109, "blockStepInInit" : 50000, "multicallSize" : 500}}
@@ -215,7 +249,7 @@ const aaveV3PriceOracleABI=[{"inputs":[{"internalType":"contract IPoolAddressesP
 module.exports = {
     oneInchOracleAbi, cTokenAbi, comptrollerAbi, cometAbi, multicallAbi, erc20Abi: erc20Abi, compoundOracleAbi,
     calderonAbi, bentoboxAbi, vatAbi, spotterAbi, lendingPoolAddressesProviderAbi, lendingPoolAbi,
-    compoundAddress, compoundV3WethAddress, compoundV3UsdcAddress, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress, agaveAddress,
+    compoundAddress, compoundV3Address, multicallAddress, oneInchOracleAddress, usdcAddress, venusAddress, rariTetranodeAddress, traderJoeAddress, benqiAddress, bastionAddress, agaveAddress,
     ironBankAddress, ovixAddress, apeSwapAddress, rikkiAddress, inverseAddress, vatEthAddress, aurigamiAddress, sonneAddress,
     aaveAddress, creamAddress, granaryAddress, tectonicAddress, moonwellAddress, aaveV3Configuration, aaveV3poolAddressesProviderRegistryAbi, aaveV3poolAddressProviderAbi, aaveV3PoolAbi, aaveV3PriceOracleABI
 }

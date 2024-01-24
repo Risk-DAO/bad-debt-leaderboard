@@ -15,6 +15,8 @@ const coinGeckoChainIdMap = {
   NEAR: 'aurora',
   CRO: 'cronos',
   OPTIMISM: 'optimistic-ethereum',
+  BASE: 'base',
+  ARBITRUM: 'arbitrum-one',
 }
 
 const getChainlinkPrice = async (web3, feedAddress) => {
@@ -257,6 +259,7 @@ const getPrice = async (network, address, web3) => {
         //console.log(data)
         apiPrice = data.marketData[0].price || 0
       } else {
+        await sleep(5); // due to Coingecko Polygon rate-limit
         const coinGeckoApiCall = `https://api.coingecko.com/api/v3/simple/token_price/${coinGeckoChainIdMap[network]}?contract_addresses=${address}&vs_currencies=USD`
         console.log({coinGeckoApiCall})
         const { data } = await retry(axios.get, [coinGeckoApiCall])
@@ -432,7 +435,6 @@ const getUniV2LPTokenPrice = async (network, address, web3) => {
     return toBN("0")
   }
 }
-
 let base64ZapperKey = Buffer.from(process.env.ZAPPER_KEY).toString('base64')
 const fetchZapperTotal = async (address) => {
   try { 

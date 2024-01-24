@@ -21,21 +21,20 @@ class CompoundV3 {
     constructor(compoundInfo, network, web3, heavyUpdateInterval = 24, fetchDelayInHours = 1) {
       this.web3 = web3
       this.network = network
-
-      this.comet = new web3.eth.Contract(Addresses.cometAbi, compoundInfo[network].comet)
+      this.comet = new web3.eth.Contract(Addresses.cometAbi, compoundInfo.comet)
 
       this.nonBorrowableMarkets = []
-      if(compoundInfo[network].nonBorrowableMarkets) this.nonBorrowableMarkets = compoundInfo[network].nonBorrowableMarkets
+      if(compoundInfo.nonBorrowableMarkets) this.nonBorrowableMarkets = compoundInfo.nonBorrowableMarkets
 
       this.rektMarkets = []
-      if(compoundInfo[network].rektMarkets) this.rektMarkets = compoundInfo[network].rektMarkets
+      if(compoundInfo.rektMarkets) this.rektMarkets = compoundInfo.rektMarkets
 
       this.priceOracle = new web3.eth.Contract(Addresses.oneInchOracleAbi, Addresses.oneInchOracleAddress[network])
       this.multicall = new web3.eth.Contract(Addresses.multicallAbi, Addresses.multicallAddress[network])
       this.usdcAddress = Addresses.usdcAddress[network]
-      this.deployBlock = compoundInfo[network].deployBlock
-      this.blockStepInInit = compoundInfo[network].blockStepInInit
-      this.multicallSize = compoundInfo[network].multicallSize
+      this.deployBlock = compoundInfo.deployBlock
+      this.blockStepInInit = compoundInfo.blockStepInInit
+      this.multicallSize = compoundInfo.multicallSize
 
       this.prices = {}
       this.baseTokenAddress = "0x0"
@@ -437,36 +436,20 @@ async function test() {
     //const comp = new Compound(Addresses.ironBankAddress, "ETH", web3)
     //const comp = new Compound(Addresses.venusAddress, "BSC", web3)
 
-   // const web3 = require("web3")
+    const web3 = require("web3")
 
+    // const compoundInfo = Addresses.compoundV3Address['ETH']['USDC']
+    const compoundInfo = Addresses.compoundV3Address['MATIC']['USDCe']
    
-    // const compoundInfo = {
-    //     "ETH" :
-    //         {
-    //           "comet" : Addresses.compoundV3WethAddress["ETH"].comet,
-    //           "deployBlock" : 16400710,
-    //           "blockStepInInit" : 50000,
-    //           "multicallSize" : 200
-    //         }
-    // }
-    //  const compoundInfo = {
-    //     "ETH" :
-    //         {
-    //           "comet" : Addresses.compoundV3UsdcAddress["ETH"].comet,
-    //           "deployBlock" : 16400710,
-    //           "blockStepInInit" : 50000,
-    //           "multicallSize" : 200
-    //         }
-    // }
-    const compoundInfo = Addresses.compoundV3UsdcAddress
+  
     const comp = new CompoundV3(
         compoundInfo,
-        "ETH",
+        "MATIC",
         web3
     )
 
     await comp.main()
-    const user = comp.users["0xF1f304DEF83D6CF4680a81C49cAC184a8119a538"]
+    //const user = comp.users["0xF1f304DEF83D6CF4680a81C49cAC184a8119a538"]
     //console.log(user.borrowBalance["0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"].toString())
     //console.log(user.collateralBalace["0xBe9895146f7AF43049ca1c1AE358B0541Ea49704"].toString())
     //console.log(user.collateralBalace["0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"].toString())
@@ -474,7 +457,7 @@ async function test() {
     //await comp.collectAllUsers()
     //await comp.updateUsers(["0xb3fbE25Be2e8CA097e9ac924e94aF000DD3A5663"])
     //await comp.updateAllUsers()
-    await comp.periodicUpdateUsers(16994426 - 1000)
+   // await comp.periodicUpdateUsers(16994426 - 1000)
     //await comp.calcBadDebt()
  }
 
