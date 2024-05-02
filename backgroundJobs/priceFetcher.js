@@ -17,6 +17,7 @@ const coinGeckoChainIdMap = {
   OPTIMISM: 'optimistic-ethereum',
   BASE: 'base',
   ARBITRUM: 'arbitrum-one',
+  MODE: 'mode',
 }
 
 const getChainlinkPrice = async (web3, feedAddress) => {

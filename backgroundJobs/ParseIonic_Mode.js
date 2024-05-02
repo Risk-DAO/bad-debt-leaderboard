@@ -20,4 +20,4 @@ async function test() {
   await x.main()
 }
 
-//test()
+test()

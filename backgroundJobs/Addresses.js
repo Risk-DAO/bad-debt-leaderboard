@@ -54,6 +54,7 @@ const multicallAddress = {
     "OPTIMISM": "0xcA11bde05977b3631167028862bE2a173976CA11",
     "GNOSIS" : "0xB6E7BD43cd3832dDFB02fc03035A6471eac757cc",
     "BASE" : "0xcA11bde05977b3631167028862bE2a173976CA11",
+    "MODE" : "0xcA11bde05977b3631167028862bE2a173976CA11",
 }
 
 
@@ -186,7 +187,7 @@ const tectonicAddress = { "CRO" : { "comptroller" : "0xb3831584acb95ED9cCb0C11f6
 }
 
 const ionicAddress = { "MODE" : { "comptroller" : "0xfb3323e24743caf4add0fdccfb268565c0685556",    
-    "deployBlock" : 2316948, "blockStepInInit" : 2000, "multicallSize" : 20 }
+    "deployBlock" : 2316948, "blockStepInInit" : 50000, "multicallSize" : 20 }
 }
 
 
