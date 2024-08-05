@@ -152,6 +152,11 @@ class MakerParser {
         for(const user of this.userList) {
             //console.log({user})
             const userObj = JSON.parse(user)
+            if(userObj.urn == '0xf6e72Db5454dd049d0788e411b06CfAF16853042') {
+                console.log('ignoring 0xf6e72Db5454dd049d0788e411b06CfAF16853042 DssLitePsm');
+                continue;
+            }
+            
             const ilk = userObj.ilk
             const ilkData = this.ilkData[ilk]
             const urnData = this.urnData[user]
