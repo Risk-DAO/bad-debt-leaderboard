@@ -133,7 +133,11 @@ const jobs = [
   {
     file: "MorphoCompoundParser",
     name: "Morpho Compound"
-  }
+  },
+  {
+    file: "ParseIonic_Mode",
+    name: "mode_ionic"
+  },
   // { 
   //   file: 'ParseAaveV3_FTM',
   //   name: 'fantom_aavev3'
