@@ -18,7 +18,7 @@ const bentoboxAbi = [{"inputs":[{"internalType":"contract IERC20","name":"wethTo
 const compoundOracleAbi =
 [{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"constant":false,"inputs":[{"internalType":"address","name":"owner_","type":"address"}],"name":"changeOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"feeds","outputs":[{"internalType":"address","name":"addr","type":"address"},{"internalType":"uint8","name":"tokenDecimals","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"fixedPrices","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"contract CToken","name":"cToken_","type":"address"}],"name":"getUnderlyingPrice","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"isPriceOracle","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"contract CToken","name":"cToken_","type":"address"}],"name":"removeFeed","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"contract CToken","name":"cToken_","type":"address"}],"name":"removeFixedPrice","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"contract CToken","name":"cToken_","type":"address"},{"internalType":"address","name":"feed_","type":"address"},{"internalType":"uint8","name":"tokenDecimals_","type":"uint8"}],"name":"setFeed","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"contract CToken","name":"cToken_","type":"address"},{"internalType":"uint256","name":"price","type":"uint256"}],"name":"setFixedPrice","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]
 
-const vatAbi = 
+const vatAbi =
 [{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":true,"inputs":[{"indexed":true,"internalType":"bytes4","name":"sig","type":"bytes4"},{"indexed":true,"internalType":"bytes32","name":"arg1","type":"bytes32"},{"indexed":true,"internalType":"bytes32","name":"arg2","type":"bytes32"},{"indexed":true,"internalType":"bytes32","name":"arg3","type":"bytes32"},{"indexed":false,"internalType":"bytes","name":"data","type":"bytes"}],"name":"LogNote","type":"event"},{"constant":true,"inputs":[],"name":"Line","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"cage","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"}],"name":"can","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"dai","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"debt","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"usr","type":"address"}],"name":"deny","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"ilk","type":"bytes32"},{"internalType":"bytes32","name":"what","type":"bytes32"},{"internalType":"uint256","name":"data","type":"uint256"}],"name":"file","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"what","type":"bytes32"},{"internalType":"uint256","name":"data","type":"uint256"}],"name":"file","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"ilk","type":"bytes32"},{"internalType":"address","name":"src","type":"address"},{"internalType":"address","name":"dst","type":"address"},{"internalType":"uint256","name":"wad","type":"uint256"}],"name":"flux","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"i","type":"bytes32"},{"internalType":"address","name":"u","type":"address"},{"internalType":"int256","name":"rate","type":"int256"}],"name":"fold","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"ilk","type":"bytes32"},{"internalType":"address","name":"src","type":"address"},{"internalType":"address","name":"dst","type":"address"},{"internalType":"int256","name":"dink","type":"int256"},{"internalType":"int256","name":"dart","type":"int256"}],"name":"fork","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"i","type":"bytes32"},{"internalType":"address","name":"u","type":"address"},{"internalType":"address","name":"v","type":"address"},{"internalType":"address","name":"w","type":"address"},{"internalType":"int256","name":"dink","type":"int256"},{"internalType":"int256","name":"dart","type":"int256"}],"name":"frob","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"},{"internalType":"address","name":"","type":"address"}],"name":"gem","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"i","type":"bytes32"},{"internalType":"address","name":"u","type":"address"},{"internalType":"address","name":"v","type":"address"},{"internalType":"address","name":"w","type":"address"},{"internalType":"int256","name":"dink","type":"int256"},{"internalType":"int256","name":"dart","type":"int256"}],"name":"grab","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"rad","type":"uint256"}],"name":"heal","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"usr","type":"address"}],"name":"hope","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"ilks","outputs":[{"internalType":"uint256","name":"Art","type":"uint256"},{"internalType":"uint256","name":"rate","type":"uint256"},{"internalType":"uint256","name":"spot","type":"uint256"},{"internalType":"uint256","name":"line","type":"uint256"},{"internalType":"uint256","name":"dust","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"ilk","type":"bytes32"}],"name":"init","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"live","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"src","type":"address"},{"internalType":"address","name":"dst","type":"address"},{"internalType":"uint256","name":"rad","type":"uint256"}],"name":"move","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"usr","type":"address"}],"name":"nope","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"usr","type":"address"}],"name":"rely","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"sin","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"ilk","type":"bytes32"},{"internalType":"address","name":"usr","type":"address"},{"internalType":"int256","name":"wad","type":"int256"}],"name":"slip","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"u","type":"address"},{"internalType":"address","name":"v","type":"address"},{"internalType":"uint256","name":"rad","type":"uint256"}],"name":"suck","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"},{"internalType":"address","name":"","type":"address"}],"name":"urns","outputs":[{"internalType":"uint256","name":"ink","type":"uint256"},{"internalType":"uint256","name":"art","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"vice","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"wards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]
 
 const spotterAbi =
@@ -66,39 +66,55 @@ const compoundAddress = { "ETH" : { "comptroller" : "0x3d9819210A31b4961b30EF54b
 
 const compoundV3Address = {
     'MATIC' : {
-        "USDCe" : { 
+        "USDCe" : {
             "comet" : "0xF25212E676D1F7F89Cd72fFEe66158f541246445",
             "deployBlock" : 39412367, "blockStepInInit" : 50000, "multicallSize" : 200
         },
     },
     'ETH' : {
-        "USDC" : { 
+        "USDC" : {
             "comet" : "0xc3d688B66703497DAA19211EEdff47f25384cdc3",
             "deployBlock" : 15331586, "blockStepInInit" : 50000, "multicallSize" : 200
         },
-        "WETH" : { 
+        "USDT": {
+            "comet" : "0x3Afdc9BCA9213A35503b077a6072F3D0d5AB0840",
+            "deployBlock" : 20190637, "blockStepInInit" : 50000, "multicallSize" : 200
+        },
+        "WETH" : {
             "comet" : "0xA17581A9E3356d9A858b789D68B4d866e593aE94",
             "deployBlock" : 16400710, "blockStepInInit" : 50000, "multicallSize" : 200
         },
+        "wstEHT": {
+            "comet" : "0x3D0bb1ccaB520A66e607822fC55BC921738fAFE3",
+            "deployBlock" : 20683535, "blockStepInInit" : 50000, "multicallSize" : 200
+        }
     },
     'BASE' : {
-        "USDbC" : { 
+        "USDbC" : {
             "comet" : "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
             "deployBlock" : 2197588 , "blockStepInInit" : 50000, "multicallSize" : 200
         },
-        "WETH" : { 
+        "WETH" : {
             "comet" : "0x46e6b214b524310239732D51387075E0e70970bf",
             "deployBlock" : 2495303 , "blockStepInInit" : 50000, "multicallSize" : 200
         },
     },
     'ARBITRUM' : {
-        "USDC" : { 
+        "USDC" : {
             "comet" : "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
             "deployBlock" : 122080500, "blockStepInInit" : 50000, "multicallSize" : 200
         },
-        "USDCe" : { 
+        "USDCe" : {
             "comet" : "0xA5EDBDD9646f8dFF606d7448e414884C7d905dCA",
             "deployBlock" : 87335214, "blockStepInInit" : 50000, "multicallSize" : 200
+        },
+        "USDT" : {
+            "comet" : "0xd98Be00b5D27fc98112BdE293e487f8D4cA57d07",
+            "deployBlock" : 223796350, "blockStepInInit" : 50000, "multicallSize" : 200
+        },
+        "WETH" : {
+            "comet" : "0x6f7D514bbD4aFf3BcD1140B7344b32f063dEe486",
+            "deployBlock" : 219386101, "blockStepInInit" : 50000, "multicallSize" : 200
         },
     }
 }
@@ -116,29 +132,29 @@ const benqiAddress = { "AVAX" : { "comptroller" : "0x486Af39519B4Dc9a7fCcd318217
     "deployBlock" : 3046286, "blockStepInInit" : 2048, "multicallSize" : 100}}
 
 const ironBankAddress = { "ETH" : { "comptroller" : "0xAB1c342C7bf5Ec5F02ADEA1c2270670bCa144CbB", "cETH" : "0xAB1c342C7bf5Ec5F02ADEA1c2270670bCa144CbB",
-    "deployBlock" : 11384868, "blockStepInInit" : 50000, "multicallSize" : 100}}    
-    
+    "deployBlock" : 11384868, "blockStepInInit" : 50000, "multicallSize" : 100}}
+
 const ovixAddress = { "MATIC" : { "comptroller" : "0x8849f1a0cB6b5D6076aB150546EddEe193754F1C", "cETH" : "0xE554E874c9c60E45F1Debd479389C76230ae25A8",
     "deployBlock" : 26312398, "blockStepInInit" : 10000, "multicallSize" : 100}}
-    
-const bastionAddress = { "NEAR" : { "comptroller": "0x6De54724e128274520606f038591A00C5E94a1F6", "cETH": "0x4E8fE8fd314cFC09BDb0942c5adCC37431abDCD0",    
+
+const bastionAddress = { "NEAR" : { "comptroller": "0x6De54724e128274520606f038591A00C5E94a1F6", "cETH": "0x4E8fE8fd314cFC09BDb0942c5adCC37431abDCD0",
     "deployBlock" : 60837829, "blockStepInInit" : 10000, "multicallSize" : 20}}
 
 const apeSwapAddress = { "BSC" : { "comptroller" : "0xAD48B2C9DC6709a560018c678e918253a65df86e", "cETH" : "0x34878F6a484005AA90E7188a546Ea9E52b538F6f",
     "deployBlock" :  12871489, "blockStepInInit" : 50000, "multicallSize" : 20}}
 
 const rikkiAddress = { "BSC" : { "comptroller" : "0x4f3e801Bd57dC3D641E72f2774280b21d31F64e4", "cETH" : "0x157822aC5fa0Efe98daa4b0A55450f4a182C10cA",
-    "deployBlock" :  15341030, "blockStepInInit" : 50000, "multicallSize" : 20}}      
+    "deployBlock" :  15341030, "blockStepInInit" : 50000, "multicallSize" : 20}}
 
-const inverseAddress = { "ETH" : { "comptroller" : "0x4dCf7407AE5C07f8681e1659f626E114A7667339", "cETH" : "0x8e103Eb7a0D01Ab2b2D29C91934A9aD17eB54b86", 
+const inverseAddress = { "ETH" : { "comptroller" : "0x4dCf7407AE5C07f8681e1659f626E114A7667339", "cETH" : "0x8e103Eb7a0D01Ab2b2D29C91934A9aD17eB54b86",
     "cETH2" : "0x697b4acAa24430F254224eB794d2a85ba1Fa1FB8",
-    "nonBorrowableMarkets" : ["0x65b35d6Eb7006e0e607BC54EB2dFD459923476fE", "0x1637e4e9941D55703a7A5E7807d6aDA3f7DCD61B"], 
+    "nonBorrowableMarkets" : ["0x65b35d6Eb7006e0e607BC54EB2dFD459923476fE", "0x1637e4e9941D55703a7A5E7807d6aDA3f7DCD61B"],
     "deployBlock" : 11915867, "blockStepInInit" : 50000, "multicallSize" : 200,
     "rektMarkets" : ["0x17786f3813E6bA35343211bd8Fe18EC4de14F28b",
                      "0xde2af899040536884e062D3a334F2dD36F34b4a4",
                      "0x697b4acAa24430F254224eB794d2a85ba1Fa1FB8"]} }
 
-const moonwellAddress = { "MOONBEAM" : { "comptroller" : "0x8E00D5e02E65A19337Cdba98bbA9F84d4186a180", "cETH" :         
+const moonwellAddress = { "MOONBEAM" : { "comptroller" : "0x8E00D5e02E65A19337Cdba98bbA9F84d4186a180", "cETH" :
 "0x091608f4e4a15335145be0A279483C0f8E4c7955", "deployBlock" : 1284556, "blockStepInInit" : 2000, "multicallSize" : 20}}
 
 const vatEthAddress = { "ETH":
@@ -176,12 +192,12 @@ const agaveAddress =
 
 
 const granaryAddress =
-{ 
+{
     "FANTOM": { "lendingPoolAddressesProviderAddress" : "0x8b9D58E2Dc5e9b5275b62b1F30b3c0AC87138130", "deployBlock" : 32461920, "blockStepInInit" : 100000,   "multicallSize" : 200 },
     "OPTIMISM": { "lendingPoolAddressesProviderAddress" : "0xdDE5dC81e40799750B92079723Da2acAF9e1C6D6", "deployBlock" : 9004440, "blockStepInInit" : 100000,   "multicallSize" : 200 }
 }
 
-const tectonicAddress = { "CRO" : { "comptroller" : "0xb3831584acb95ED9cCb0C11f677B5AD01DeaeEc0", "cETH" : "0xeAdf7c01DA7E93FdB5f16B0aa9ee85f978e89E95",    
+const tectonicAddress = { "CRO" : { "comptroller" : "0xb3831584acb95ED9cCb0C11f677B5AD01DeaeEc0", "cETH" : "0xeAdf7c01DA7E93FdB5f16B0aa9ee85f978e89E95",
     "deployBlock" : 570286, "blockStepInInit" : 2000, "multicallSize" : 20 }
 }
 
